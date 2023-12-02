@@ -1,0 +1,35 @@
+version: "2.1"
+
+orbs:
+  python: circleci/python@2.1.1
+
+jobs:
+  "3.11":
+    executor:
+      name: python/default
+      tag: "3.11"
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          name: Installing base packages
+          command: |
+            poetry install --only base
+      - run:
+          name: Linting
+          command: |
+            poetry run tox -e py311-lint
+      - run:
+          name: Docstring tests
+          command: |
+            poetry run tox -e py311-tests.doctest
+      - run:
+          name: Unit tests
+          command: |
+            poetry run tox -e py311-tests.unit
+
+workflows:
+  main:
+    jobs:
+      - "3.11"
