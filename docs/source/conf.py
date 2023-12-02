@@ -15,18 +15,12 @@ https://www.sphinx-doc.org/en/master/usage/configuration.html#project-informatio
 import os
 import sys
 
-try:
-    # Feud is installed
-    import feud
-except ImportError:
-    # Feud is run from its source checkout
-    sys.path.insert(0, os.path.abspath("../.."))
-    import feud
+sys.path.insert(0, os.path.abspath("../.."))
 
-project = feud.__name__
+project = "feud"
 copyright = "2023-2025, Feud Developers"  # noqa: A001
 author = "Edwin Onuonga (eonu)"
-release = feud.__version__
+release = "0.1.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
