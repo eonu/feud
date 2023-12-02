@@ -12,7 +12,16 @@ Project information:
 https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 """
 
-import feud
+import os
+import sys
+
+try:
+    # Feud is installed
+    import feud
+except ImportError:
+    # Feud is run from its source checkout
+    sys.path.insert(0, os.path.abspath("../.."))
+    import feud
 
 project = feud.__name__
 copyright = "2023-2025, Feud Developers"  # noqa: A001
