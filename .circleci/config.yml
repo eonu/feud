@@ -4,7 +4,7 @@ orbs:
   python: circleci/python@2.1.1
 
 jobs:
-  python:
+  linting:
     parameters:
       version:
         type: string
@@ -20,19 +20,51 @@ jobs:
           name: Linting
           command: |
             poetry run tox -e lint
+  docstring-tests:
+    parameters:
+      version:
+        type: string
+    executor:
+      name: python/default
+      tag: <<parameters.version>>
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+          args: --only base
       - run:
           name: Docstring tests
           command: |
             poetry run tox -e tests.doctest
+  unit-tests:
+    parameters:
+      version:
+        type: string
+    executor:
+      name: python/default
+      tag: <<parameters.version>>
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+          args: --only base
       - run:
           name: Unit tests
           command: |
             poetry run tox -e tests.unit
 
 workflows:
-  tests:
+  checks:
     jobs:
-      - python:
+      - linting:
+          matrix:
+            parameters:
+              version: ["3.11", "3.12"]
+      - docstring-tests:
+          matrix:
+            parameters:
+              version: ["3.11", "3.12"]
+      - unit-tests:
           matrix:
             parameters:
               version: ["3.11", "3.12"]
