@@ -8,8 +8,7 @@ build:
     post_install:
       - pip install poetry
       - poetry config virtualenvs.create false
-      - make base
-      - poetry run invoke docs.install
+      - poetry install --sync --only base,main,docs -E extra-types
 
 sphinx:
   configuration: docs/source/conf.py
