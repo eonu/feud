@@ -9,7 +9,7 @@
 
 # install invoke and tox
 .PHONY: base
-invoke: .check-poetry
+base: .check-poetry
 	poetry install --sync --only base
 
 # install development dependencies
