@@ -3,14 +3,18 @@ version: "2.1"
 orbs:
   python: circleci/python@2.1.1
 
+executors:
+  python:
+    name: python/default
+    tag: <<parameters.version>>
+    working_directory: /tmp
+
 jobs:
   linting:
     parameters:
       version:
         type: string
-    executor:
-      name: python/default
-      tag: <<parameters.version>>
+    executor: python
     steps:
       - checkout
       - python/install-packages:
@@ -24,9 +28,7 @@ jobs:
     parameters:
       version:
         type: string
-    executor:
-      name: python/default
-      tag: <<parameters.version>>
+    executor: python
     steps:
       - checkout
       - python/install-packages:
@@ -39,15 +41,18 @@ jobs:
       - run:
           name: Unit tests
           command: |
-            poetry run tox -e tests.unit
+            poetry run -- tox -e tests.unit -- --cov
+      - run:
+          name: Generate coverage report
+          command: |
+            mkdir -p coverage/<<parameters.version>>
+            cp coverage.xml coverage/<<parameters.version>>
+            cat coverage/<<parameters.version>>
 
 workflows:
   checks:
     jobs:
       - linting:
-          matrix:
-            parameters:
-              version: ["3.11", "3.12"]
       - tests:
           matrix:
             parameters:
