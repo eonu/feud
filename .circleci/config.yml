@@ -4,7 +4,7 @@ orbs:
   python: circleci/python@2.1.1
 
 jobs:
-  "3.11":
+  python-3.11:
     executor:
       name: python/default
       tag: "3.11"
@@ -32,4 +32,4 @@ jobs:
 workflows:
   main:
     jobs:
-      - "3.11"
+      - python-3.11
