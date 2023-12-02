@@ -12,10 +12,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: poetry
-      - run:
-          name: Installing base packages
-          command: |
-            poetry install --only base
+          args: --only base
       - run:
           name: Linting
           command: |
