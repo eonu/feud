@@ -5,6 +5,9 @@ orbs:
 
 jobs:
   test:
+    parameters:
+      version:
+        type: string
     executor:
       name: python/default
       tag: <<parameters.version>>
