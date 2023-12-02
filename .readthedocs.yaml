@@ -11,6 +11,7 @@ build:
       - asdf global poetry latest
       - poetry config virtualenvs.create false
     post_install:
+      - make base
       - poetry run -- tox -e docs -- --no-watch
 
 sphinx:
