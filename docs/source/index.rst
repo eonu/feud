@@ -8,7 +8,7 @@ Feud
 
 .. raw:: html
 
-   <img src="/_static/images/logo/logo.svg" align="right" width="100px">
+   <img src="https://svgur.com/i/zk4.svg" align="right" width="100px">
 
    <p align="center">
       <b>Not all arguments are bad.</b>
