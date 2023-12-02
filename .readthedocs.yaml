@@ -5,14 +5,10 @@ build:
   tools:
     python: "3.11"
   jobs:
-    pre_create_environment:
-      - asdf plugin add poetry
-      - asdf install poetry latest
-      - asdf global poetry latest
-      - poetry config virtualenvs.create false
     post_install:
+      - pip install poetry
       - make base
-      - poetry run invoke docs.install docs.build --no-watch
+      - poetry run invoke docs.install
 
 sphinx:
   configuration: docs/source/conf.py
