@@ -4,10 +4,10 @@ orbs:
   python: circleci/python@2.1.1
 
 jobs:
-  python-311:
+  test:
     executor:
       name: python/default
-      tag: "3.11"
+      tag: <<parameters.version>>
     steps:
       - checkout
       - python/install-packages:
@@ -16,17 +16,20 @@ jobs:
       - run:
           name: Linting
           command: |
-            poetry run tox -e py311-lint
+            poetry run tox -e lint
       - run:
           name: Docstring tests
           command: |
-            poetry run tox -e py311-tests.doctest
+            poetry run tox -e tests.doctest
       - run:
           name: Unit tests
           command: |
-            poetry run tox -e py311-tests.unit
+            poetry run tox -e tests.unit
 
 workflows:
-  main:
+  all-tests:
     jobs:
-      - python-311
+      - test:
+          matrix:
+            parameters:
+              version: ["3.10", "3.11"]
