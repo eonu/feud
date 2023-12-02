@@ -3,18 +3,15 @@ version: "2.1"
 orbs:
   python: circleci/python@2.1.1
 
-executors:
-  python:
-    name: python/default
-    tag: <<parameters.version>>
-    working_directory: /tmp
-
 jobs:
   linting:
     parameters:
       version:
         type: string
-    executor: python
+    executor:
+      name: python/default
+      tag: <<parameters.version>>
+      working_directory: /tmp
     steps:
       - checkout
       - python/install-packages:
@@ -28,7 +25,10 @@ jobs:
     parameters:
       version:
         type: string
-    executor: python
+    executor:
+      name: python/default
+      tag: <<parameters.version>>
+      working_directory: /tmp
     steps:
       - checkout
       - python/install-packages:
