@@ -1,0 +1,54 @@
+version: "2.1"
+
+orbs:
+  python: circleci/python@2.1.1
+
+jobs:
+  linting:
+    parameters:
+      version:
+        type: string
+    executor:
+      name: python/default
+      tag: <<parameters.version>>
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+          args: --only base
+      - run:
+          name: Linting
+          command: |
+            poetry run tox -e lint
+  tests:
+    parameters:
+      version:
+        type: string
+    executor:
+      name: python/default
+      tag: <<parameters.version>>
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+          args: --only base
+      - run:
+          name: Docstring tests
+          command: |
+            poetry run tox -e tests.doctest
+      - run:
+          name: Unit tests
+          command: |
+            poetry run tox -e tests.unit
+
+workflows:
+  checks:
+    jobs:
+      - linting:
+          matrix:
+            parameters:
+              version: ["3.11", "3.12"]
+      - tests:
+          matrix:
+            parameters:
+              version: ["3.11", "3.12"]
