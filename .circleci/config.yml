@@ -8,7 +8,6 @@ jobs:
     executor:
       name: python/default
       tag: "3.11"
-    working_directory: /tmp
     steps:
       - checkout
       - python/install-packages:
@@ -25,7 +24,7 @@ jobs:
     executor:
       name: python/default
       tag: <<parameters.version>>
-    working_directory: /tmp
+    working_directory: ~/repo
     steps:
       - checkout
       - python/install-packages:
@@ -43,8 +42,12 @@ jobs:
           name: Generate coverage report
           command: |
             mkdir -p coverage/<<parameters.version>>
-            cp coverage.xml coverage/<<parameters.version>>
+            mv coverage.xml coverage/<<parameters.version>>
             cat coverage/<<parameters.version>>
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - coverage
 
 workflows:
   checks:
