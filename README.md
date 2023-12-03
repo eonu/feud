@@ -73,9 +73,9 @@ library's [`argparse`](https://docs.python.org/3/library/argparse.html).
 Despite this, for even the simplest of CLIs, code written using Click can be
 somewhat verbose and often requires frequently looking up documentation.
 
-Consider the following command for serving local files on a HTTP server. In
-red is a typical Click implementation, and in green is a Feud implementation
-of the same command.
+Consider the following example command for serving local files on a HTTP server.
+
+In red is a typical Click implementation, and in green is the Feud equivalent.
 
 ```diff
 - import click
@@ -191,10 +191,8 @@ $ python serve.py --help
 </tr>
 </table>
 
-Drawing inspiration from [Typer](https://typer.tiangolo.com/) (another great
-CLI building package), the core design principle behind Feud is to make it as
-easy as possible for even beginner Python developers to quickly create
-sophisticated CLIs.
+The core design principle behind Feud is to make it as easy as possible
+for even beginner Python developers to quickly create sophisticated CLIs.
 
 The above function is written in idiomatic Python, adhering to language
 standards and using basic language features such as type hints and
