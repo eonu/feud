@@ -31,13 +31,14 @@ jobs:
         id: changelog
         run: |
           poetry run -q invoke release.install release.build -- -v ${{ github.event.inputs.version }} > entry.md
-          echo; cat entry.md; echo
+          echo; cat entry.md
           delimiter="$(openssl rand -hex 8)"
           {
             echo "body<<${delimiter}"
             cat entry.md
             echo "${delimiter}"
           } >> $GITHUB_OUTPUT
+          rm entry.md
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5.0.2
         with:
