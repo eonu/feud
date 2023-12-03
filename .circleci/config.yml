@@ -10,7 +10,7 @@ jobs:
         type: string
     executor:
       name: python/default
-      tag: <<parameters.version>>
+      tag: "3.11"
       working_directory: /tmp
     steps:
       - checkout
@@ -52,7 +52,7 @@ jobs:
 workflows:
   checks:
     jobs:
-      - linting:
+      - linting
       - tests:
           matrix:
             parameters:
