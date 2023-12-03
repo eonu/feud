@@ -882,6 +882,10 @@ lacks support for more complex types such as those offered by Pydantic.
 
 All contributions to this repository are greatly appreciated. Contribution guidelines can be found [here](/CONTRIBUTING.md).
 
+> [!NOTE]
+> <sup></b>We're living in an imperfect world!</b></sub><br/>
+> Test
+
 ## Licensing
 
 Feud is released under the [MIT](https://opensource.org/licenses/MIT) license.
