@@ -30,13 +30,13 @@ jobs:
       - name: Bump version and changelog
         id: changelog
         run: |
-          poetry run invoke release.install release.build -- -v ${{ github.event.inputs.version }} > entry.md
-          cat entry.md
-          body=$(cat entry.md)
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}" 
-          echo "body=$body" >> $GITHUB_OUTPUT
+          poetry run -q invoke release.install release.build -- -v ${{ github.event.inputs.version }} > entry.md
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "body<<${delimiter}"
+            cat entry.md
+            echo "${delimiter}"
+          } >> $GITHUB_OUTPUT
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5.0.2
         with:
