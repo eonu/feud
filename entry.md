@@ -1,7 +1,17 @@
-# Changelog
+Installing dependencies from lock file
 
-## v0.1.0a2 (2023-12-03)
+Package operations: 8 installs, 0 updates, 0 removals
 
+  • Installing smmap (5.0.1)
+  • Installing gitdb (4.0.11)
+  • Installing markupsafe (2.1.3)
+  • Installing click (8.1.7)
+  • Installing docopt (0.6.2)
+  • Installing gitpython (3.1.40)
+  • Installing jinja2 (3.1.2)
+  • Installing auto-changelog (0.6.0)
+
+Installing the current project: feud (0.1.0a1)
 #### New Features
 
 * (build): add `create-release-pr` workflow ([#26](https://github.com/eonu/feud/issues/26))
