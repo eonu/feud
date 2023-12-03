@@ -58,4 +58,5 @@ workflows:
             parameters:
               version: ["3.11", "3.12"]
       - coverage:
-          requires: tests
+          requires:
+            - tests
