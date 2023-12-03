@@ -28,7 +28,20 @@ jobs:
       - name: Install base dependencies
         run: poetry install --sync --only base
       - name: Bump version and changelog
+        id: changelog
         run: |
-          entry="$(poetry run invoke release.install release.build -- -v ${{ github.event.inputs.version }})"
-          echo "entry<<EOF"$'\n'"$entry"$'\n'EOF >> $GITHUB_OUTPUT
-          echo $GITHUB_OUTPUT
+          poetry run invoke release.install release.build -- -v ${{ github.event.inputs.version }}) > entry.md
+          cat entry.md
+          body=$(cat entry.md)
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}" 
+          echo "body=$body" >> $GITHUB_OUTPUT
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v5.0.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "release: v${{ github.event.inputs.version }}"
+          title: "release: v${{ github.event.inputs.version }}"
+          body: ${{ steps.changelog.outputs.body }}
+          branch: release/${{ github.event.inputs.version }}
