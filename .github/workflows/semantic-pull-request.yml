@@ -1,4 +1,4 @@
-name: Semantic Pull Request Titles
+name: Enforce semantic PR titles
 
 on:
   pull_request_target:
@@ -23,13 +23,14 @@ jobs:
             didn't match the configured pattern. Please ensure that the subject
             doesn't start with an uppercase character.
           types: |
-            build
             chore
             feat
             fix
             misc
             refactor
+            release
           scopes: |
+            build
             ci
             deps
             docs
