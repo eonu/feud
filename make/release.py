@@ -8,6 +8,7 @@
 import os
 import re
 from pathlib import Path
+from typing import Pattern
 
 from invoke.config import Config
 from invoke.tasks import task
@@ -17,6 +18,20 @@ from invoke.tasks import task
 def install(c: Config) -> None:
     """Install package with core and release dependencies."""
     c.run("poetry install --sync --only base,release")
+
+
+def get_changelog_entry(v: str, /) -> str:
+    """Get CHANGELOG.md entry with specified version."""
+    v: str = re.escape(v)
+
+    pattern: Pattern = rf"(?:^|\n)##\sv{v}[^\n]*\n(.*?)(?=\n##?\s|$)"
+
+    with open("CHANGELOG.md") as f:
+        changelog: str = f.read()
+
+    if entry := re.search(pattern, changelog, flags=re.DOTALL):
+        return entry.group(1).strip()
+    return "No changelog entry found."
 
 
 @task
@@ -39,7 +54,11 @@ def build(c: Config, *, v: str) -> None:
         f.write(re.sub(r'__version__ = ".*"', f'__version__ = "{v}"', init))
 
     # bump project version - pyproject.toml
-    c.run(f"poetry version {v}")
+    c.run(f"poetry version -q {v}")
 
     # auto-generate CHANGELOG.md entry
-    c.run("poetry run auto-changelog -- --tag-prefix v --github")
+    c.run(f"poetry run -q auto-changelog -- --tag-prefix v --github -v v{v}")
+
+    # print latest changelog entry
+    entry: str = get_changelog_entry(v)
+    print(entry)  # noqa: T201
