@@ -5,15 +5,11 @@ build:
   tools:
     python: "3.11"
   jobs:
-    pre_create_environment:
-      - asdf plugin add poetry
-      - asdf install poetry latest
-      - asdf global poetry latest
-      - poetry config virtualenvs.create false
     post_install:
-      - make base
-      - poetry run tox -e docs -- --no-watch
+      - pip install poetry
+      - poetry config virtualenvs.create false
+      - poetry install --only base,main,docs -E extra-types
 
 sphinx:
-  configuration: docs/conf.py
+  configuration: docs/source/conf.py
   fail_on_warning: false

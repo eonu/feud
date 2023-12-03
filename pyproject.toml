@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feud"
-version = "0.1.0"
+version = "0.1.0a1"
 license = "MIT"
 authors = ["Edwin Onuonga <ed@eonu.net>"]
 maintainers = ["Edwin Onuonga <ed@eonu.net>"]
@@ -93,6 +93,10 @@ autodoc-pydantic = { version = ">=2.0.0" }
 
 [tool.poetry.group.tests.dependencies]
 pytest = { version = "^7.4.0" }
+pytest-cov = { version = "^4.1.0" }
+
+[tool.poetry.group.release.dependencies]
+auto-changelog = { version = "^0.6.0" }
 
 [tool.ruff]
 required-version = "0.1.3"

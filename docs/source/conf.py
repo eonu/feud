@@ -12,12 +12,15 @@ Project information:
 https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 """
 
-import feud
+import os
+import sys
 
-project = feud.__name__
+sys.path.insert(0, os.path.abspath("../.."))
+
+project = "feud"
 copyright = "2023-2025, Feud Developers"  # noqa: A001
 author = "Edwin Onuonga (eonu)"
-release = feud.__version__
+release = "0.1.0a1"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

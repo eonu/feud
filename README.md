@@ -20,7 +20,10 @@
       <img src="https://img.shields.io/pypi/pyversions/feud?logo=python&style=flat-square" alt="PyPI - Python Version"/>
     </a>
     <a href="https://feud.readthedocs.io/en/latest">
-      <img src="https://img.shields.io/readthedocs/feud.svg?logo=read-the-docs&style=flat-square" alt="Read The Docs - Documentation">
+      <img src="https://img.shields.io/readthedocs/feud.svg?logo=read-the-docs&style=flat-square" alt="Read The Docs - Documentation"/>
+    </a>
+    <a href="https://coveralls.io/github/eonu/feud">
+      <img src="https://img.shields.io/coverallsCoverage/github/eonu/feud?logo=coveralls&style=flat-square" alt="Coveralls - Coverage"/>
     </a>
     <a href="https://raw.githubusercontent.com/eonu/feud/master/LICENSE">
       <img src="https://img.shields.io/pypi/l/feud?style=flat-square" alt="PyPI - License"/>
@@ -70,9 +73,9 @@ library's [`argparse`](https://docs.python.org/3/library/argparse.html).
 Despite this, for even the simplest of CLIs, code written using Click can be
 somewhat verbose and often requires frequently looking up documentation.
 
-Consider the following command for serving local files on a HTTP server. In
-red is a typical Click implementation, and in green is a Feud implementation
-of the same command.
+Consider the following example command for serving local files on a HTTP server.
+
+In red is a typical Click implementation, and in green is the Feud equivalent.
 
 ```diff
 - import click
@@ -188,15 +191,14 @@ $ python serve.py --help
 </tr>
 </table>
 
-Drawing inspiration from [Typer](https://typer.tiangolo.com/) (another great
-CLI building package), the core design principle behind Feud is to make it as
-easy as possible for even beginner Python developers to quickly create
-sophisticated CLIs.
+The core design principle behind Feud is to make it as easy as possible
+for even beginner Python developers to quickly create sophisticated CLIs.
 
 The above function is written in idiomatic Python, adhering to language
-standards and using basic language features such as type hints and
-docstrings, but relying on Feud to carry out the heavy lifting of
-converting these language elements into a fully-fledged CLI.
+standards and using basic core language features such as type hints and
+docstrings to declare all of the relevant information about the CLI,
+but relying on Feud to carry out the heavy lifting of converting these
+language elements into a fully-fledged CLI.
 
 #### Grouping commands
 
@@ -793,10 +795,10 @@ Without Rich
 
 - [API reference](https://docs.feud.wiki):
   Library documentation for public modules, classes and functions.
-- [Official website](https://feud.wiki):
-  High level information about the package.
 
 <!--
+- [Official website](https://feud.wiki):
+  High level information about the package.
 - [User guide](https://feud.wiki/guide):
   Detailed walkthrough of features, with examples of both simple and complex
   usage patterns.
@@ -878,6 +880,10 @@ lacks support for more complex types such as those offered by Pydantic.
 ## Contributing
 
 All contributions to this repository are greatly appreciated. Contribution guidelines can be found [here](/CONTRIBUTING.md).
+
+> <img src="https://i.postimg.cc/jq3MZSTD/avatar.png" align="left"/>
+> <b>We're living in an imperfect world!</b><br/>
+> <sup>Feud is in a public beta-test phase, likely with <em>lots</em> of bugs. Please leave feedback if you come across anything strange!</sup>
 
 ## Licensing
 

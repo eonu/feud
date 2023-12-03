@@ -1,0 +1,18 @@
+name: Tag version commit
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate tag
+        uses: christophebedard/tag-version-commit@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version_regex: 'release\: (v[0-9]+\.[0-9]+\.[0-9]+[a-z0-9]*)'
