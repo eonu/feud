@@ -11,7 +11,7 @@ from invoke.collection import Collection
 from invoke.config import Config
 from invoke.tasks import task
 
-from make import cov, docs, lint, tests
+from make import cov, docs, lint, release, tests
 
 
 @task
@@ -60,6 +60,6 @@ for t in (install, clean):
     namespace.add_task(t)
 
 # register namespaces
-for module in (docs, tests, cov, lint):
+for module in (docs, tests, cov, lint, release):
     collection = Collection.from_module(module)
     namespace.add_collection(collection)
