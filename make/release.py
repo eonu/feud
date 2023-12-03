@@ -42,4 +42,4 @@ def build(c: Config, *, v: str) -> None:
     c.run(f"poetry version {v}")
 
     # auto-generate CHANGELOG.md entry
-    c.run("poetry run auto-changelog -- --tag-prefix v --github")
+    c.run(f"poetry run auto-changelog -- --tag-prefix v --github -v {v}")
