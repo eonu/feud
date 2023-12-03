@@ -1,4 +1,4 @@
-name: semantic-pull-request
+name: Semantic Pull Request Titles
 
 on:
   pull_request_target:
