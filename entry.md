@@ -1,7 +1,3 @@
-# Changelog
-
-## v0.1.0a2 (2023-12-03)
-
 #### New Features
 
 * (build): add `create-release-pr` workflow ([#26](https://github.com/eonu/feud/issues/26))
