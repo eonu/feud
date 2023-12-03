@@ -5,4 +5,4 @@
 
 """Tasks for package development."""
 
-from . import cov, docs, lint, tests
+from . import cov, docs, lint, release, tests
