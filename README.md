@@ -795,10 +795,10 @@ Without Rich
 
 - [API reference](https://docs.feud.wiki):
   Library documentation for public modules, classes and functions.
-- [Official website](https://feud.wiki):
-  High level information about the package.
 
 <!--
+- [Official website](https://feud.wiki):
+  High level information about the package.
 - [User guide](https://feud.wiki/guide):
   Detailed walkthrough of features, with examples of both simple and complex
   usage patterns.
