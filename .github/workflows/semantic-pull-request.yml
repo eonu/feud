@@ -1,4 +1,4 @@
-name: Semantic Pull Request Titles
+name: Enforce semantic PR titles
 
 on:
   pull_request_target:

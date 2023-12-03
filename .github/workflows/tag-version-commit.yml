@@ -1,4 +1,4 @@
-name: "tag"
+name: Tag version commits
 on:
   push:
     branches:
