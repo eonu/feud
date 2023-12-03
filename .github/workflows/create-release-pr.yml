@@ -28,6 +28,7 @@ jobs:
       - name: Install base dependencies
         run: poetry install --sync --only base
       - name: Bump version and changelog
+        id: changelog
         run: |
           poetry run invoke release.install release.build -- -v ${{ github.event.inputs.version }}) > entry.md
           cat entry.md
@@ -42,5 +43,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "release: v${{ github.event.inputs.version }}"
           title: "release: v${{ github.event.inputs.version }}"
-          body: ${{ steps.vars.outputs.body }}
+          body: ${{ steps.changelog.outputs.body }}
           branch: release/${{ github.event.inputs.version }}
