@@ -7,10 +7,11 @@ on:
 
 jobs:
   tag:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - name: Generate tag
         uses: christophebedard/tag-version-commit@v1
         with:

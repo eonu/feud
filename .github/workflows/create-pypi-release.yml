@@ -9,6 +9,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - name: Build and publish to PyPI
         uses: JRubics/poetry-publish@v1.17
         with:
