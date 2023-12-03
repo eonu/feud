@@ -2,6 +2,7 @@ version: "2.1"
 
 orbs:
   python: circleci/python@2.1.1
+  coveralls: coveralls/coveralls@2.2.1
 
 jobs:
   linting:
@@ -24,7 +25,6 @@ jobs:
     executor:
       name: python/default
       tag: <<parameters.version>>
-    working_directory: ~/repo
     steps:
       - checkout
       - python/install-packages:
@@ -38,16 +38,16 @@ jobs:
           name: Unit tests
           command: |
             poetry run -- tox -e tests.unit -- --cov
-      - run:
-          name: Generate coverage report
-          command: |
-            mkdir -p coverage/<<parameters.version>>
-            mv coverage.xml coverage/<<parameters.version>>
-            cat coverage/<<parameters.version>>
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - coverage
+      - coveralls/upload:
+          flag_name: <<parameters.version>>
+          parallel: true
+  coverage:
+    executor:
+      name: python/default
+    steps:
+      - coveralls/upload:
+          carryforward: ["3.11", "3.12"]
+          parallel_finished: true
 
 workflows:
   checks:
@@ -57,3 +57,5 @@ workflows:
           matrix:
             parameters:
               version: ["3.11", "3.12"]
+      - coverage:
+          requires: tests
