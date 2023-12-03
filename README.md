@@ -196,8 +196,9 @@ for even beginner Python developers to quickly create sophisticated CLIs.
 
 The above function is written in idiomatic Python, adhering to language
 standards and using basic language features such as type hints and
-docstrings, but relying on Feud to carry out the heavy lifting of
-converting these language elements into a fully-fledged CLI.
+docstrings to declare all of the relevant information about the CLI,
+but relying on Feud to carry out the heavy lifting of converting these
+language elements into a fully-fledged CLI.
 
 #### Grouping commands
 
