@@ -33,10 +33,15 @@ def doctest(c: Config) -> None:
 
 
 @task
-def unit(c: Config) -> None:
+def unit(c: Config, *, cov: bool = False) -> None:
     """Run unit tests."""
-    c.run(
+    command: str = (
         "poetry run pytest tests/ "
         "--ignore tests/unit/test_internal/test_types/test_click/"
         "test_get_click_type/test_pydantic.py"
     )
+
+    if cov:
+        command = f"{command} --cov feud --cov-report xml"
+
+    c.run(command)

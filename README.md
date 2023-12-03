@@ -20,7 +20,10 @@
       <img src="https://img.shields.io/pypi/pyversions/feud?logo=python&style=flat-square" alt="PyPI - Python Version"/>
     </a>
     <a href="https://feud.readthedocs.io/en/latest">
-      <img src="https://img.shields.io/readthedocs/feud.svg?logo=read-the-docs&style=flat-square" alt="Read The Docs - Documentation">
+      <img src="https://img.shields.io/readthedocs/feud.svg?logo=read-the-docs&style=flat-square" alt="Read The Docs - Documentation"/>
+    </a>
+    <a href="https://coveralls.io/github/eonu/feud">
+      <img src="https://img.shields.io/coverallsCoverage/github/eonu/feud?logo=coveralls&style=flat-square" alt="Coveralls - Coverage"/>
     </a>
     <a href="https://raw.githubusercontent.com/eonu/feud/master/LICENSE">
       <img src="https://img.shields.io/pypi/l/feud?style=flat-square" alt="PyPI - License"/>
