@@ -46,7 +46,7 @@ jobs:
       name: python/default
     steps:
       - coveralls/upload:
-          carryforward: ["3.11", "3.12"]
+          carryforward: "3.11", "3.12"
           parallel_finished: true
 
 workflows:
