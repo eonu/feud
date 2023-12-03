@@ -17,7 +17,7 @@ from invoke.tasks import task
 @task
 def install(c: Config) -> None:
     """Install package with core and release dependencies."""
-    c.run("poetry install --sync --only base,release")
+    c.run("poetry install -q --sync --only base,release")
 
 
 def get_changelog_entry(v: str, /) -> str:
