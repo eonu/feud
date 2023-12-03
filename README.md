@@ -882,7 +882,7 @@ lacks support for more complex types such as those offered by Pydantic.
 
 All contributions to this repository are greatly appreciated. Contribution guidelines can be found [here](/CONTRIBUTING.md).
 
-> <img src="https://i.postimg.cc/jq3MZSTD/avatar.png" align="right"/>
+> <img src="https://i.postimg.cc/jq3MZSTD/avatar.png" align="left"/>
 > <b>We're living in an imperfect world!</b><br/>
 > <sup>Feud is in a public beta-test phase, likely with lots of bugs. Please create an issue if you come across anything unexpected!</sup>
 
