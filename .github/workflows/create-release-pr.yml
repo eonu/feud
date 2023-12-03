@@ -31,6 +31,7 @@ jobs:
         id: changelog
         run: |
           poetry run -q invoke release.install release.build -- -v ${{ github.event.inputs.version }} > entry.md
+          echo; cat entry.md; echo
           delimiter="$(openssl rand -hex 8)"
           {
             echo "body<<${delimiter}"
