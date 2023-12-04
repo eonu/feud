@@ -22,5 +22,5 @@ jobs:
           git fetch --unshallow
           git checkout dev
           git pull
-          git merge --no-ff master
+          git merge --no-ff master -m "chore(git): auto-merge master -> dev"
           git push
