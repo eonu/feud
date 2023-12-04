@@ -91,3 +91,6 @@ venv.bak/
 
 # Ruff
 .ruff_cache
+
+# Changelog entry
+ENTRY.md
