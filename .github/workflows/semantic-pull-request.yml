@@ -26,17 +26,19 @@ jobs:
             chore
             feat
             fix
-            misc
             refactor
             release
+            revert
           scopes: |
             build
             ci
             deps
             docs
             git
+            perf
             pkg
-            tests
+            test
+            style
             #\d+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
