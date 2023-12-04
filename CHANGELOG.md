@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.0a5](https://github.com/eonu/feud/releases/tag/v0.1.0a5) - 2023-12-04
+
+### Build System
+
+- add write permissions to auto-merge workflow ([#69](https://github.com/eonu/feud/issues/69))
+
+### Miscellaneous Tasks
+
+
+### Release
+
+- v0.1.0a4 ([#68](https://github.com/eonu/feud/issues/68))
+
 ## [v0.1.0a4](https://github.com/eonu/feud/releases/tag/v0.1.0a4) - 2023-12-04
 
 ### Build System
