@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0a3] - 2023-12-04
+
+### Build System
+
+- use cliff for changelog generation (#51)
+- correctly access changelog entry content (#53)
+- fix `tag-version-commit` workflow (#55)
+- tag in create-release-pr workflow (#56)
+- prefix tag with `v` (#57)
+
+### Miscellaneous Tasks
+
+- add `cliff.toml` (#50)
+
 ## [0.1.0a2] - 2023-12-04
 
 ### Bug Fixes
@@ -25,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ### Release
 
+
 - v0.1.0a2 (#49)
 
 ## [0.1.0a1] - 2023-12-03
@@ -42,6 +57,7 @@ All notable changes to this project will be documented in this file.
 - remove `pkg` scope from `tag-version-commit` workflow (#23)
 
 ### Release
+
 
 - v0.1.0a1 (#27)
 
