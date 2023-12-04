@@ -54,13 +54,16 @@ jobs:
           title: "release: v${{ github.event.inputs.version }}"
           body: "${{ steps.cliff-entry.outputs.content }}"
           branch: release/${{ github.event.inputs.version }}
-      - name: Create tag
-        uses: actions/github-script@v7
+      - uses: rickstaa/action-create-tag@v1
         with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/v${{ github.event.inputs.version }}',
-              sha: context.sha
-            })
+          tag: v${{ github.event.inputs.version }}
+      # - name: Create tag
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       github.rest.git.createRef({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         ref: 'refs/tags/v${{ github.event.inputs.version }}',
+      #         sha: context.sha
+      #       })
