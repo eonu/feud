@@ -2,8 +2,8 @@ name: Create PyPI release
 
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - master
 
 jobs:
   release:
