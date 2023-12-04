@@ -54,3 +54,13 @@ jobs:
           title: "release: v${{ github.event.inputs.version }}"
           body: "${{ steps.cliff-entry.outputs.content }}"
           branch: release/${{ github.event.inputs.version }}
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ github.event.inputs.version }}',
+              sha: context.sha
+            })
