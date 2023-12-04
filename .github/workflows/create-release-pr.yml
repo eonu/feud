@@ -52,5 +52,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "release: v${{ github.event.inputs.version }}"
           title: "release: v${{ github.event.inputs.version }}"
-          body: "${{ steps.cliff-entry.outputs.entry }}"
+          body: "${{ steps.cliff-entry.outputs.content }}"
           branch: release/${{ github.event.inputs.version }}
