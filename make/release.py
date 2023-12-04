@@ -7,6 +7,7 @@
 
 import os
 import re
+import subprocess
 from pathlib import Path
 from typing import Pattern
 
@@ -56,9 +57,25 @@ def build(c: Config, *, v: str) -> None:
     # bump project version - pyproject.toml
     c.run(f"poetry version -q {v}")
 
-    # auto-generate CHANGELOG.md entry
-    c.run(f"poetry run -q auto-changelog -- --tag-prefix v --github -v v{v}")
+    # get latest version tag
+    command: str = (
+        'git rev-list -1 $(git describe --tags --abbrev=0 --match "v*")',
+    )
+    tag: str = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        shell=True,  # noqa: S602
+        check=False,
+    ).stdout.strip()
 
-    # print latest changelog entry
+    # auto-generate CHANGELOG.md entry
+    c.run(
+        "poetry run -q auto-changelog -- "
+        f"--tag-prefix v --github -v v{v} "
+        f"--starting-commit dev --stopping-commit {tag}"
+    )
+
+    # # print latest changelog entry
     entry: str = get_changelog_entry(v)
     print(entry)  # noqa: T201
