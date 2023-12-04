@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
 
-"""Tasks for bumping the package version and updating CHANGELOG.md."""
+"""Tasks for bumping the package version."""
 
 import os
 import re
@@ -11,12 +11,6 @@ from pathlib import Path
 
 from invoke.config import Config
 from invoke.tasks import task
-
-
-@task
-def install(c: Config) -> None:
-    """Install package with core and release dependencies."""
-    c.run("poetry install --sync --only base,release")
 
 
 @task
@@ -39,7 +33,4 @@ def build(c: Config, *, v: str) -> None:
         f.write(re.sub(r'__version__ = ".*"', f'__version__ = "{v}"', init))
 
     # bump project version - pyproject.toml
-    c.run(f"poetry version {v}")
-
-    # auto-generate CHANGELOG.md entry
-    c.run("poetry run auto-changelog -- --tag-prefix v --github")
+    c.run(f"poetry version -q {v}")
