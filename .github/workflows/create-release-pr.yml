@@ -30,10 +30,27 @@ jobs:
       - name: Bump version
         run: |
           poetry run -q invoke release.build -- -v ${{ github.event.inputs.version }}
+      - name: Update changelog
+        uses: orhun/git-cliff-action@v2
+        id: cliff-changelog
+        with:
+          config: cliff.toml
+          args: --tag ${{ github.event.inputs.version }}
+        env:
+          OUTPUT: CHANGELOG.md
+      - name: Get changelog entry
+        uses: orhun/git-cliff-action@v2
+        id: cliff-entry
+        with:
+          config: cliff.toml
+          args: --unreleased --strip header
+        env:
+          OUTPUT: ENTRY.md
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5.0.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "release: v${{ github.event.inputs.version }}"
           title: "release: v${{ github.event.inputs.version }}"
+          body: "${{ steps.cliff-entry.outputs.entry }}"
           branch: release/${{ github.event.inputs.version }}

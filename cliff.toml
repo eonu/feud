@@ -22,7 +22,9 @@ body = """
 {% for group, commits in commits | group_by(attribute="group") %}
     ### {{ group | upper_first }}
     {% for commit in commits %}
-        - {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message | upper_first }}\
+{% if commit.message is matching("^.*\\(#\\d+\\)$") %}\
+        - {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message }}\
+{% endif %}\
     {% endfor %}
 {% endfor %}\n
 """
@@ -47,22 +49,20 @@ split_commits = false
 commit_preprocessors = [
   # { pattern = '\((\w+\s)?#([0-9]+)\)', replace = "([#${2}](<REPO>/issues/${2}))"}, # replace issue numbers
 ]
+
 # regex for parsing and grouping commits
 commit_parsers = [
+  { message = "^build", group = "Build System" },
+  { message = "^chore|ci", group = "Miscellaneous Tasks" },
+  { message = "^doc", group = "Documentation" },
   { message = "^feat", group = "Features" },
   { message = "^fix", group = "Bug Fixes" },
-  { message = "^doc", group = "Documentation" },
   { message = "^perf", group = "Performance" },
   { message = "^refactor", group = "Refactor" },
+  { message = "^release", group = "Release" },
+  { message = "^revert", group = "Reversions" },
   { message = "^style", group = "Styling" },
   { message = "^test", group = "Testing" },
-  { message = "^chore\\(release\\): prepare for", skip = true },
-  { message = "^chore\\(deps\\)", skip = true },
-  { message = "^chore\\(pr\\)", skip = true },
-  { message = "^chore\\(pull\\)", skip = true },
-  { message = "^chore|ci", group = "Miscellaneous Tasks" },
-  { body = ".*security", group = "Security" },
-  { message = "^revert", group = "Revert" },
 ]
 # protect breaking changes from being skipped due to matching a skipping commit_parser
 protect_breaking_commits = false

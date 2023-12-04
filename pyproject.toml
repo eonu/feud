@@ -45,6 +45,7 @@ include = [
     "feud",
     "make",
     "tests",
+    "CHANGELOG.md",
     "LICENSE",
     "Makefile",
     "pyproject.toml",

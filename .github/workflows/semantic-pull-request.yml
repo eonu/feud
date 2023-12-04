@@ -23,22 +23,21 @@ jobs:
             didn't match the configured pattern. Please ensure that the subject
             doesn't start with an uppercase character.
           types: |
+            build
             chore
+            ci
+            docs
             feat
             fix
+            perf
             refactor
             release
             revert
-          scopes: |
-            build
-            ci
-            deps
-            docs
-            git
-            perf
-            pkg
-            test
             style
-            #\d+
+            tests
+          scopes: |
+            deps
+            git
+            pkg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
