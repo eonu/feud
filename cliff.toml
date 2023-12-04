@@ -36,8 +36,11 @@ footer = """
 """
 # postprocessors
 postprocessors = [
-  # { pattern = '<REPO>', replace = "https://github.com/orhun/git-cliff" }, # replace repository URL
+  { pattern = '## \[([0-9]+\.[0-9]+\.[0-9]+[a-z0-9]*)\]', replace = "## [v${1}](https://github.com/eonu/feud/releases/tag/v${1})" },
+  { pattern = '\(#([0-9]+)\)', replace = "([#${1}](https://github.com/eonu/feud/issues/${1}))" },
+  { pattern = '\n\n\n', replace = "\n\n" },
 ]
+
 [git]
 # parse the commits based on https://www.conventionalcommits.org
 conventional_commits = true
