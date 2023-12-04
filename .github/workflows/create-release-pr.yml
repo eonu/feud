@@ -58,13 +58,3 @@ jobs:
         with:
           tag: v${{ github.event.inputs.version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Create tag
-      #   uses: actions/github-script@v7
-      #   with:
-      #     script: |
-      #       github.rest.git.createRef({
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         ref: 'refs/tags/v${{ github.event.inputs.version }}',
-      #         sha: context.sha
-      #       })
