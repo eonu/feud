@@ -9,6 +9,7 @@ jobs:
   auto-merge:
     if: github.event.pull_request.merged == true
     timeout-minutes: 2
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
