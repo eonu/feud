@@ -55,7 +55,7 @@ jobs:
           body: "${{ steps.cliff-entry.outputs.content }}"
           branch: release/${{ github.event.inputs.version }}
       - name: Create tag
-        uses: actions/github-script@v5
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.git.createRef({
