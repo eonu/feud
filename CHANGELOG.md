@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.0a9](https://github.com/eonu/feud/releases/tag/v0.1.0a9) - 2023-12-05
+
+### Build System
+
+- dont use `git fetch --unshallow` ([#78](https://github.com/eonu/feud/issues/78))
+
+### Miscellaneous Tasks
+
+
 ## [v0.1.0a8](https://github.com/eonu/feud/releases/tag/v0.1.0a8) - 2023-12-05
 
 ### Build System
