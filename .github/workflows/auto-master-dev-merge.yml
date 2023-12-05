@@ -25,7 +25,7 @@ jobs:
           git config --local user.name "Github Actions"
       - name: Create merge commit
         run: |
-          git fetch --unshallow
+          git fetch --all
           git checkout dev
           git pull
           git merge --no-ff master -m "chore(git): auto-merge master -> dev"
