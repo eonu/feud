@@ -12,19 +12,24 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
-      - uses: de-vri-es/setup-git-credentials@v2
-        with:
-          credentials: ${{secrets.AUTO_MERGE_SECRET}}
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
       - name: Set Git config
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
-      - name: Merge master back to dev
+      - name: Create merge commit
         run: |
           git fetch --unshallow
           git checkout dev
           git pull
           git merge --no-ff master -m "chore(git): auto-merge master -> dev"
-          git push
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.AUTO_MERGE_WORKFLOW_TOKEN }}
+          force_with_lease: true
+          branch: dev
