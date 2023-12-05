@@ -15,8 +15,10 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.AUTO_MERGE_WORKFLOW_TOKEN }}
           persist-credentials: false
           fetch-depth: 0
+          ref: master
       - name: Set Git config
         run: |
           git config --local user.email "actions@github.com"
