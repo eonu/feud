@@ -184,7 +184,7 @@ Common truth values that are accepted include any of the following (*case insens
 
     By default, a negated version of the flag (e.g. ``--no-opt``) is also generated
     to set the value to ``False``. The generation of this negated flag can be 
-    disabled by setting **(TODO @eonu: Link to negate_flags=False in configuration).**
+    disabled by changing the :ref:`Feud configuration parameters <configuration>`.
 
 .. dropdown:: Example
     :animate: fade-in
