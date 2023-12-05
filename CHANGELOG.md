@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.0a6](https://github.com/eonu/feud/releases/tag/v0.1.0a6) - 2023-12-05
+
+### Build System
+
+- use `setup-git-credentials` for auto-merge workflow ([#71](https://github.com/eonu/feud/issues/71))
+
+### Miscellaneous Tasks
+
+
+### Release
+
+- v0.1.0a5 ([#70](https://github.com/eonu/feud/issues/70))
+
 ## [v0.1.0a5](https://github.com/eonu/feud/releases/tag/v0.1.0a5) - 2023-12-04
 
 ### Build System
