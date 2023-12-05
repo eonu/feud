@@ -17,6 +17,10 @@ jobs:
           credentials: ${{secrets.AUTO_MERGE_SECRET}}
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Set Git config
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
       - name: Merge master back to dev
         run: |
           git fetch --unshallow
