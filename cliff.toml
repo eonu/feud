@@ -62,7 +62,7 @@ commit_parsers = [
   { message = "^fix", group = "Bug Fixes" },
   { message = "^perf", group = "Performance" },
   { message = "^refactor", group = "Refactor" },
-  { message = "^release", group = "Release" },
+  # { message = "^release", group = "Release" },
   { message = "^revert", group = "Reversions" },
   { message = "^style", group = "Styling" },
   { message = "^test", group = "Testing" },
@@ -70,7 +70,7 @@ commit_parsers = [
 # protect breaking changes from being skipped due to matching a skipping commit_parser
 protect_breaking_commits = false
 # filter out the commits that are not matched by commit parsers
-filter_commits = false
+filter_commits = true
 # regex for matching git tags
 tag_pattern = "v[0-9].*"
 
