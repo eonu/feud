@@ -2,13 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v0.1.0a7](https://github.com/eonu/feud/releases/tag/v0.1.0a7) - 2023-12-05
+## [v0.1.0a8](https://github.com/eonu/feud/releases/tag/v0.1.0a8) - 2023-12-05
 
 ### Build System
 
 - hide release PRs from `CHANGELOG.md` ([#73](https://github.com/eonu/feud/issues/73))
+- use `github-push-action` for auto-merge ([#75](https://github.com/eonu/feud/issues/75))
+- use PAT for actions/checkout ([#76](https://github.com/eonu/feud/issues/76))
 
 ### Miscellaneous Tasks
+
 
 
 ## [v0.1.0a6](https://github.com/eonu/feud/releases/tag/v0.1.0a6) - 2023-12-04
