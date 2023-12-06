@@ -3,18 +3,16 @@ description: If you came across something unexpected, let us know here!
 labels: [bug, pending]
 
 body:
-  - type: markdown
+  - type: textarea
+    id: expected-behaviour
     attributes:
-      value: Thank you for contributing to pydantic! ✊
+      label: Expected behaviour
+      description: |
+        Please describe the behaviour that you expected to see.
 
-  # - type: checkboxes
-  #   id: checks
-  #   attributes:
-  #     label: Initial Checks
-  #     description: Just making sure you're really using Pydantic V2
-  #     options:
-  #       - label: I confirm that I'm using Pydantic V2
-  #         required: true
+        If appropriate, provide any links to official Feud documentation that indicate this is the behaviour that is expected.
+    validations:
+      required: true
 
   - type: textarea
     id: observed-behaviour
@@ -24,17 +22,6 @@ body:
         Please describe the unexpected behaviour that you observed.
 
         Make sure to provide as much information as possible, so that we can investigate as thoroughly as we can!
-    validations:
-      required: true
-
-  - type: textarea
-    id: expected-behaviour
-    attributes:
-      label: Expected behaviour
-      description: |
-        Please describe the behaviour that you expected to see.
-
-        If appropriate, provide any links to official Feud documentation that indicate this is the behaviour that is expected.
     validations:
       required: true
 
