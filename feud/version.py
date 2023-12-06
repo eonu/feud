@@ -27,7 +27,8 @@ def version_info() -> str:
         "docstring-parser",
         "rich-click",
         "rich",
-        "emailvalidator" "pydantic-extra-types",
+        "email-validator",
+        "pydantic-extra-types",
         "phonenumbers",
         "pycountry",
     }
