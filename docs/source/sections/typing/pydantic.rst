@@ -107,6 +107,15 @@ URL types
 Email types
 -----------
 
+.. important::
+
+    In order to use email types, you must install Feud with the optional 
+    ``email-validator`` dependency (see `here <https://github.com/JoshData/python-email-validator>`__).
+
+    .. code:: console
+
+        $ pip install feud[email]
+
 - :py:obj:`pydantic.networks.EmailStr`
 - :py:obj:`pydantic.networks.NameEmail`
 

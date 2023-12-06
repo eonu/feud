@@ -7,7 +7,9 @@
 Not all arguments are bad.
 """
 
-__version__ = "0.1.0"
+import feud.version
+
+__version__ = feud.version.VERSION
 
 from feud import click as click
 from feud import exceptions as exceptions
