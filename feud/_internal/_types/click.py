@@ -355,22 +355,22 @@ def resolve_annotated(
     arg_list = list(parent_args.values())  # noqa: F841
     two_field_subtype = t.Annotated[*arg_list[:2]]
     # integer types
-    if two_field_subtype is pyd.PositiveInt:
+    if two_field_subtype == pyd.PositiveInt:
         return click.IntRange(min=0, min_open=True)
-    if two_field_subtype is pyd.NonNegativeInt:
+    if two_field_subtype == pyd.NonNegativeInt:
         return click.IntRange(min=0, min_open=False)
-    if two_field_subtype is pyd.NegativeInt:
+    if two_field_subtype == pyd.NegativeInt:
         return click.IntRange(max=0, max_open=True)
-    if two_field_subtype is pyd.NonPositiveInt:
+    if two_field_subtype == pyd.NonPositiveInt:
         return click.IntRange(max=0, max_open=False)
     # float types
-    if two_field_subtype is pyd.PositiveFloat:
+    if two_field_subtype == pyd.PositiveFloat:
         return click.FloatRange(min=0, min_open=True)
-    if two_field_subtype is pyd.NonNegativeFloat:
+    if two_field_subtype == pyd.NonNegativeFloat:
         return click.FloatRange(min=0, min_open=False)
-    if two_field_subtype is pyd.NegativeFloat:
+    if two_field_subtype == pyd.NegativeFloat:
         return click.FloatRange(max=0, max_open=True)
-    if two_field_subtype is pyd.NonPositiveFloat:
+    if two_field_subtype == pyd.NonPositiveFloat:
         return click.FloatRange(max=0, max_open=False)
     # int / float range types
     if is_pyd_conint(base_type, parent_args):
@@ -380,9 +380,9 @@ def resolve_annotated(
     if is_pyd_condecimal(base_type, parent_args):
         return get_click_range_type(parent_args, range_type=click.FloatRange)
     # file / directory types
-    if two_field_subtype is pyd.FilePath:
+    if two_field_subtype == pyd.FilePath:
         return click.Path(exists=True, dir_okay=False)
-    if two_field_subtype is pyd.DirectoryPath:
+    if two_field_subtype == pyd.DirectoryPath:
         return click.Path(exists=True, file_okay=False)
     if base_type in PATH_TYPES:
         return click.Path()
