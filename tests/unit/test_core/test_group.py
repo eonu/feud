@@ -769,6 +769,18 @@ def test_inheritance_multiple() -> None:
     }
 
 
+def test_inheritance_overwrite_command() -> None:
+    class Parent(feud.Group):
+        def f(*, arg: str = "From the parent!") -> int:
+            return arg
+
+    class Child(Parent):
+        def f(*, arg: str = "From the child!") -> str:
+            return arg
+
+    assert Child.f([], standalone_mode=False) == "From the child!"
+
+
 def test_register_deregister_compile() -> None:
     class Parent(
         feud.Group,
