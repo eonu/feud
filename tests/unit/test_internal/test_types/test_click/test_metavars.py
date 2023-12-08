@@ -37,13 +37,13 @@ def test_union(capsys: pytest.CaptureFixture) -> None:
 Usage: pytest [OPTIONS]
 
 Options:
-  --opt1 INTEGER | FLOAT         [required]
-  --opt2 INTEGER | FLOAT         [required]
-  --opt3 TEXT | INTEGER          [required]
-  --opt4 TEXT | INTEGER          [required]
-  --opt5 INTEGER | FLOAT | TEXT  [required]
-  --opt6 INTEGER                 [required]
-  --opt7 TEXT                    [required]
-  --help                         Show this message and exit.
+  --opt1 TEXT  [required]
+  --opt2 TEXT  [required]
+  --opt3 TEXT  [required]
+  --opt4 TEXT  [required]
+  --opt5 TEXT  [required]
+  --opt6 TEXT  [required]
+  --opt7 TEXT  [required]
+  --help       Show this message and exit.
     """.strip()
     )
