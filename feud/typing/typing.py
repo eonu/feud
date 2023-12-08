@@ -14,6 +14,7 @@ from typing import (
     Literal,
     NamedTuple,
     Optional,
+    Pattern,
     Set,
     Text,
     Tuple,
