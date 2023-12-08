@@ -26,7 +26,7 @@ def doctest(c: Config) -> None:
     # - feud/click/context.py
     # - feud/decorators.py
     files: list[str] = [
-        "feud/config/__init__.py",
+        "feud/config.py",
         "feud/core/__init__.py",
         "feud/core/command.py",
         "feud/core/group.py",
