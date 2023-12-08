@@ -24,8 +24,9 @@ from feud.config import Config
         (t.AnyUrl, None),
         (
             t.AwareDatetime,
-            lambda x: isinstance(x, DateTime)
-            and x.name == t.datetime.__name__,
+            lambda x: (
+                isinstance(x, DateTime) and x.name == t.datetime.__name__
+            ),
         ),
         (t.Base64Bytes, None),
         (t.Base64Str, click.STRING),
@@ -36,7 +37,10 @@ from feud.config import Config
             lambda x: isinstance(x, click.Path) and x.exists is True,
         ),
         (t.EmailStr, None),
-        (t.FilePath, lambda x: isinstance(x, click.Path) and x.exists is True),
+        (
+            t.FilePath,
+            lambda x: isinstance(x, click.Path) and x.exists is True,
+        ),
         (t.FileUrl, None),
         (t.FiniteFloat, click.FLOAT),
         (
@@ -45,8 +49,9 @@ from feud.config import Config
         ),
         (
             t.FutureDatetime,
-            lambda x: isinstance(x, DateTime)
-            and x.name == t.datetime.__name__,
+            lambda x: (
+                isinstance(x, DateTime) and x.name == t.datetime.__name__
+            ),
         ),
         (t.HttpUrl, None),
         (t.IPvAnyAddress, None),
@@ -60,84 +65,89 @@ from feud.config import Config
         (t.MySQLDsn, None),
         (
             t.NaiveDatetime,
-            lambda x: isinstance(x, DateTime)
-            and x.name == t.datetime.__name__,
+            lambda x: (
+                isinstance(x, DateTime) and x.name == t.datetime.__name__
+            ),
         ),
         (t.NameEmail, None),
-        # (
-        #     t.NegativeFloat,
-        #     lambda x: isinstance(x, click.FloatRange)
-        #     and x.min is None
-        #     and x.min_open is False
-        #     and x.max == 0
-        #     and x.max_open is True,
-        # ),
-        # (
-        #     t.NegativeInt,
-        #     lambda x: isinstance(x, click.IntRange)
-        #     and x.min is None
-        #     and x.min_open is False
-        #     and x.max == 0
-        #     and x.max_open is True,
-        # ),
-        (t.NewPath, lambda x: isinstance(x, click.Path) and x.exists is False),
-        # (
-        #     t.NonNegativeFloat,
-        #     lambda x: isinstance(x, click.FloatRange)
-        #     and x.min == 0
-        #     and x.min_open is False
-        #     and x.max is None
-        #     and x.max_open is False,
-        # ),
-        # (
-        #     t.NonNegativeInt,
-        #     lambda x: isinstance(x, click.IntRange)
-        #     and x.min == 0
-        #     and x.min_open is False
-        #     and x.max is None
-        #     and x.max_open is False,
-        # ),
-        # (
-        #     t.NonPositiveFloat,
-        #     lambda x: isinstance(x, click.FloatRange)
-        #     and x.min is None
-        #     and x.min_open is False
-        #     and x.max == 0
-        #     and x.max_open is False,
-        # ),
-        # (
-        #     t.NonPositiveInt,
-        #     lambda x: isinstance(x, click.IntRange)
-        #     and x.min is None
-        #     and x.min_open is False
-        #     and x.max == 0
-        #     and x.max_open is False,
-        # ),
+        (
+            t.NegativeFloat,
+            lambda x: isinstance(x, click.FloatRange)
+            and x.min is None
+            and x.min_open is False
+            and x.max == 0
+            and x.max_open is True,
+        ),
+        (
+            t.NegativeInt,
+            lambda x: isinstance(x, click.IntRange)
+            and x.min is None
+            and x.min_open is False
+            and x.max == 0
+            and x.max_open is True,
+        ),
+        (
+            t.NewPath,
+            lambda x: isinstance(x, click.Path) and x.exists is False,
+        ),
+        (
+            t.NonNegativeFloat,
+            lambda x: isinstance(x, click.FloatRange)
+            and x.min == 0
+            and x.min_open is False
+            and x.max is None
+            and x.max_open is False,
+        ),
+        (
+            t.NonNegativeInt,
+            lambda x: isinstance(x, click.IntRange)
+            and x.min == 0
+            and x.min_open is False
+            and x.max is None
+            and x.max_open is False,
+        ),
+        (
+            t.NonPositiveFloat,
+            lambda x: isinstance(x, click.FloatRange)
+            and x.min is None
+            and x.min_open is False
+            and x.max == 0
+            and x.max_open is False,
+        ),
+        (
+            t.NonPositiveInt,
+            lambda x: isinstance(x, click.IntRange)
+            and x.min is None
+            and x.min_open is False
+            and x.max == 0
+            and x.max_open is False,
+        ),
         (
             t.PastDate,
             lambda x: isinstance(x, DateTime) and x.name == t.date.__name__,
         ),
         (
             t.PastDatetime,
-            lambda x: isinstance(x, DateTime)
-            and x.name == t.datetime.__name__,
+            lambda x: (
+                isinstance(x, DateTime) and x.name == t.datetime.__name__
+            ),
         ),
-        # (
-        #     t.PositiveFloat,
-        #     lambda x: isinstance(x, click.FloatRange)
-        #     and x.min == 0
-        #     and x.min_open is True
-        #     and x.max is None
-        #     and x.max_open is False,
-        # ),
-        # (
-        #     t.PositiveInt,
-        #     lambda x: isinstance(x, click.IntRange)
-        #     and x.min == 0
-        #     and x.min_open is True
-        #     and x.max is None
-        #     and x.max_open is False,
-        # ),
+        (
+            t.PositiveFloat,
+            lambda x: isinstance(x, click.FloatRange)
+            and x.min == 0
+            and x.min_open is True
+            and x.max is None
+            and x.max_open is False,
+        ),
+        (
+            t.PositiveInt,
+            lambda x: isinstance(x, click.IntRange)
+            and x.min == 0
+            and x.min_open is True
+            and x.max is None
+            and x.max_open is False,
+        ),
         (t.PostgresDsn, None),
         (t.RedisDsn, None),
         (t.SecretBytes, None),
@@ -153,10 +163,10 @@ from feud.config import Config
         (t.UUID4, click.UUID),
         (t.UUID5, click.UUID),
         (t.conbytes(max_length=1), None),
-        # (
-        #     t.condate(lt=t.date.today()),
-        #     lambda x: isinstance(x, DateTime) and x.name == t.date.__name__,
-        # ),
+        (
+            t.condate(lt=t.date.today()),
+            lambda x: isinstance(x, DateTime) and x.name == t.date.__name__,
+        ),
         (
             t.condecimal(lt=t.Decimal("3.14"), ge=t.Decimal("0.01")),
             lambda x: isinstance(x, click.FloatRange)
@@ -165,25 +175,25 @@ from feud.config import Config
             and x.max == t.Decimal("3.14")
             and x.max_open is True,
         ),
-        # (
-        #     t.confloat(lt=3.14, ge=0.01),
-        #     lambda x: isinstance(x, click.FloatRange)
-        #     and x.min == 0.01
-        #     and x.min_open is False
-        #     and x.max == 3.14
-        #     and x.max_open is True,
-        # ),
-        # (t.confrozenset(int, max_length=1), click.INT),
-        # (
-        #     t.conint(lt=3, ge=0),
-        #     lambda x: isinstance(x, click.IntRange)
-        #     and x.min == 0
-        #     and x.min_open is False
-        #     and x.max == 3
-        #     and x.max_open is True,
-        # ),
-        # (t.conlist(int, max_length=1), click.INT),
-        # (t.conset(int, max_length=1), click.INT),
+        (
+            t.confloat(lt=3.14, ge=0.01),
+            lambda x: isinstance(x, click.FloatRange)
+            and x.min == 0.01
+            and x.min_open is False
+            and x.max == 3.14
+            and x.max_open is True,
+        ),
+        (t.confrozenset(int, max_length=1), click.INT),
+        (
+            t.conint(lt=3, ge=0),
+            lambda x: isinstance(x, click.IntRange)
+            and x.min == 0
+            and x.min_open is False
+            and x.max == 3
+            and x.max_open is True,
+        ),
+        (t.conlist(int, max_length=1), click.INT),
+        (t.conset(int, max_length=1), click.INT),
         (t.constr(max_length=1), click.STRING),
         (t.Annotated[int, pyd.AfterValidator(lambda x: x + 1)], click.INT),
     ],
