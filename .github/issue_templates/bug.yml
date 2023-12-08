@@ -4,7 +4,7 @@ labels: [bug, pending]
 
 body:
   - type: checkboxes
-    id: checks
+    id: exists
     attributes:
       label: Has this already been reported?
       description: If you haven't already, please look other existing issues to see if this bug has already been reported.

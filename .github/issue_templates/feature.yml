@@ -4,7 +4,7 @@ labels: [feature, pending]
 
 body:
   - type: checkboxes
-    id: checks
+    id: exists
     attributes:
       label: Does this suggestion already exist?
       description: If you haven't already, please look through the documentation and other existing issues to see if this feature is already implemented.
@@ -13,7 +13,7 @@ body:
           required: true
 
   - type: textarea
-    id: expected-behaviour
+    id: feature-description
     attributes:
       label: Feature description
       description: Please describe the new feature or improvement that you would like.
