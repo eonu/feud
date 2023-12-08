@@ -20,6 +20,7 @@ from ..utils import annotate  # noqa: TID252
     [
         (t.Any, None),
         (t.Text, click.STRING),
+        (t.Pattern, None),
         (t.Optional[int], click.INT),
         (t.Optional[annotate(int)], click.INT),
         (
