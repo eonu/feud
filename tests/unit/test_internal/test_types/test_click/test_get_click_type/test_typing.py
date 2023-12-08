@@ -9,6 +9,7 @@ import click
 import pytest
 
 from feud import typing as t
+from feud._internal._types.click import Union
 from feud.config import Config
 
 from ..utils import annotate  # noqa: TID252
@@ -51,7 +52,11 @@ from ..utils import annotate  # noqa: TID252
             t.NamedTuple("Point", x=annotate(int), y=annotate(str)),
             (click.INT, click.STRING),
         ),
-        (t.Union[int, str], None),
+        (
+            t.Union[int, str],
+            lambda x: isinstance(x, Union)
+            and x.types == [click.INT, click.STRING],
+        ),
     ],
 )
 def test_typing(

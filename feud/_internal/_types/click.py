@@ -148,6 +148,35 @@ class DateTime(click.DateTime):
             return None
 
 
+class Union(click.ParamType):
+    def __init__(
+        self: DateTime,
+        *args: t.Any,
+        types: list[click.ParamType],
+        **kwargs: t.Any,
+    ) -> DateTime:
+        self.types = types
+        super().__init__(*args, **kwargs)
+
+    @staticmethod
+    def _get_metavar(
+        click_type: click.ParamType | None,
+        param: click.Parameter,
+    ) -> str:
+        if click_type:
+            return click_type.get_metavar(param) or click_type.name.upper()
+        return None
+
+    def get_metavar(self: DateTime, param: click.Parameter) -> str:
+        metavars = [
+            metavar
+            for click_type in self.types
+            if (metavar := self._get_metavar(click_type, param))
+        ]
+        unique_metavars = list(dict.fromkeys(metavars))
+        return " | ".join(unique_metavars)
+
+
 def get_click_type(hint: t.Any, *, config: Config) -> ClickType | None:
     base_type, base_args, _, _ = get_base_type(hint)
     origin_type = t.get_origin(base_type)
@@ -178,6 +207,14 @@ def resolve_type(hint: t.Any, *, config: Config) -> ClickType:
         if len(base_args) == 2 and type(None) in arg_values:
             non_none = next(arg for arg in arg_values if arg is not type(None))
             return get_click_type(non_none, config=config)
+        # t.Union with more than one non-None argument
+        base_types = list(
+            map(
+                ft.partial(get_click_type, config=config),
+                base_args.values(),
+            )
+        )
+        return Union(types=base_types)
     if inspect.isclass(base_type):
         if issubclass(base_type, enum.Enum):
             return click.Choice([str(e.value) for e in base_type])
