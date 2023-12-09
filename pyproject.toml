@@ -169,7 +169,7 @@ allow-star-arg-any = true
 "__init__.py" = ["PLC0414", "F403", "F401", "F405"]
 "feud/typing/*.py" = ["PLC0414", "F403", "F401"]
 "tests/**/*.py" = ["D100", "D100", "D101", "D102", "D103", "D104"] # temporary
-"tests/**/test_*.py" = ["ARG001", "S101", "D", "FA100"]
+"tests/**/test_*.py" = ["ARG001", "S101", "D", "FA100", "FA102"]
 
 [tool.pydoclint]
 style = "numpy"

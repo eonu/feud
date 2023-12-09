@@ -14,13 +14,13 @@ def test_union(capsys: pytest.CaptureFixture) -> None:
     @feud.command
     def f(
         *,
-        opt1: int | float,  # noqa: FA102
-        opt2: t.Union[int, float],  # noqa: FA100
-        opt3: str | int | None,  # noqa: FA102
-        opt4: t.Optional[t.Union[str, int]],  # noqa: FA100
-        opt5: t.Union[int, t.Union[float, str]],  # noqa: FA100
-        opt6: int | None,  # noqa: FA102
-        opt7: str | t.Annotated[str, "annotated"],  # noqa: FA102
+        opt1: int | float,
+        opt2: t.Union[int, float],
+        opt3: str | int | None,
+        opt4: t.Optional[t.Union[str, int]],
+        opt5: t.Union[int, t.Union[float, str]],
+        opt6: int | None,
+        opt7: str | t.Annotated[str, "annotated"],
     ) -> None:
         pass
 

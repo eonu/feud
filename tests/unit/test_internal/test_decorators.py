@@ -87,7 +87,7 @@ def test_validate_call_list() -> None:
     sensitive_vars = {"0": False}
     pydantic_kwargs = {}
 
-    def f(arg1: list[t.conint(multiple_of=2)]) -> None:  # noqa: FA102
+    def f(arg1: list[t.conint(multiple_of=2)]) -> None:
         pass
 
     with pytest.raises(click.UsageError) as e:
