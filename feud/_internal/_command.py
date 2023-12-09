@@ -38,8 +38,8 @@ class ParameterSpec:
 class CommandState:
     config: Config
     click_kwargs: dict[str, t.Any]
-    context: bool
     is_group: bool
+    pass_context: bool = False
     # below keys are parameter name
     arguments: dict[str, ParameterSpec] = dataclasses.field(
         default_factory=dict
@@ -55,45 +55,47 @@ class CommandState:
         sensitive_vars: dict[str, bool] = {}
         params: list[click.Parameter] = []
 
-        if self.is_group:
-            for param in self.overrides.values():
-                params.append(param)  # noqa: PERF402
+        sig: inspect.signature = inspect.signature(func)
 
-            command = func
-        else:
-            for i, param_name in enumerate(inspect.signature(func).parameters):
-                sensitive: bool = False
-                if self.context and i == 0:
-                    continue
-                if param_name in self.overrides:
-                    param: click.Parameter = self.overrides[param_name]
-                    sensitive = param.hide_input
-                elif param_name in self.arguments:
-                    spec = self.arguments[param_name]
-                    spec.kwargs["type"] = _types.click.get_click_type(
-                        spec.hint, config=self.config
-                    )
-                    param = click.Argument(spec.args, **spec.kwargs)
-                elif param_name in self.options:
-                    spec = self.options[param_name]
-                    spec.kwargs["type"] = _types.click.get_click_type(
-                        spec.hint, config=self.config
-                    )
-                    param = click.Option(spec.args, **spec.kwargs)
-                meta_vars[param_name] = self.get_meta_var(param)
-                sensitive_vars[param_name] = sensitive
+        for i, param_name in enumerate(sig.parameters):
+            sensitive: bool = False
+            if self.pass_context and i == 0:
+                continue
+            if param_name in self.overrides:
+                param: click.Parameter = self.overrides[param_name]
+                sensitive = param.hide_input
+            elif param_name in self.arguments:
+                spec = self.arguments[param_name]
+                spec.kwargs["type"] = _types.click.get_click_type(
+                    spec.hint, config=self.config
+                )
+                param = click.Argument(spec.args, **spec.kwargs)
+            elif param_name in self.options:
+                spec = self.options[param_name]
+                spec.kwargs["type"] = _types.click.get_click_type(
+                    spec.hint, config=self.config
+                )
+                param = click.Option(spec.args, **spec.kwargs)
+            meta_vars[param_name] = self.get_meta_var(param)
+            sensitive_vars[param_name] = sensitive
+            params.append(param)
+
+        # add any overrides that don't appear in function signature
+        # e.g. version_option or anything else
+        for param_name, param in self.overrides.items():
+            if param_name not in sig.parameters:
                 params.append(param)
 
-            command = _decorators.validate_call(
-                func,
-                name=self.click_kwargs["name"],
-                meta_vars=meta_vars,
-                sensitive_vars=sensitive_vars,
-                pydantic_kwargs=self.config.pydantic_kwargs,
-            )
+        command = _decorators.validate_call(
+            func,
+            name=self.click_kwargs["name"],
+            meta_vars=meta_vars,
+            sensitive_vars=sensitive_vars,
+            pydantic_kwargs=self.config.pydantic_kwargs,
+        )
 
-            if self.context:
-                command = click.pass_context(command)
+        if self.pass_context:
+            command = click.pass_context(command)
 
         constructor = click.group if self.is_group else click.command
         command = constructor(**self.click_kwargs)(command)
@@ -159,7 +161,7 @@ def get_alias(alias: str, *, hint: type, negate_flags: bool) -> str:
 
 
 def sanitize_click_kwargs(
-    click_kwargs: dict[str, t.Any], *, name: str
+    click_kwargs: dict[str, t.Any], *, name: str, help_: str | None = None
 ) -> None:
     """Sanitize click command/group arguments.
 
@@ -170,3 +172,6 @@ def sanitize_click_kwargs(
     # sanitize the provided name
     # (only necessary for auto-naming a Group by class name)
     click_kwargs["name"] = click_kwargs.get("name", _inflect.sanitize(name))
+    # set help if provided
+    if help_:
+        click_kwargs["help"] = help_

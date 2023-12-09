@@ -99,7 +99,7 @@ def alias(**aliases: str | list[str]) -> t.Callable:
         received = {
             p.name for p in sig.parameters.values() if p.kind == p.KEYWORD_ONLY
         }
-        if specified > received:
+        if len(specified - received) > 0:
             msg = (
                 f"Arguments provided to 'alias' decorator must "
                 f"also be keyword parameters for function {f.__name__!r}. "

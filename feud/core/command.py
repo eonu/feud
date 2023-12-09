@@ -114,39 +114,24 @@ def command(
     return decorate(func) if func else decorate
 
 
-def get_command(
-    func: typing.Callable,
-    /,
-    *,
-    config: Config,
-    click_kwargs: dict[str, typing.Any],
-) -> click.Command:
-    if isinstance(func, staticmethod):
-        func = func.__func__
+def build_command_state(
+    state: _command.CommandState, *, func: callable, config: Config
+) -> None:
+    doc: docstring_parser.Docstring
+    if state.is_group:
+        doc = docstring_parser.parse(state.click_kwargs.get("help", ""))
+    else:
+        doc = docstring_parser.parse_from_object(func)
 
-    doc: docstring_parser.Docstring = docstring_parser.parse_from_object(func)
     sig: inspect.Signature = inspect.signature(func)
-    pass_context: bool = _command.pass_context(sig)
-
-    state = _command.CommandState(
-        config=config,
-        click_kwargs=click_kwargs,
-        context=pass_context,
-        is_group=False,
-        aliases=getattr(func, "__feud_aliases__", {}),
-        overrides={
-            override.name: override
-            for override in getattr(func, "__click_params__", [])
-        },
-    )
 
     for param, spec in sig.parameters.items():
         meta = _command.ParameterSpec()
         meta.hint: type = spec.annotation
 
-        if pass_context and param == _command.CONTEXT_PARAM:
+        if _command.pass_context(sig) and param == _command.CONTEXT_PARAM:
             # skip handling for click.Context argument
-            continue
+            state.pass_context = True
 
         if spec.kind in (spec.POSITIONAL_ONLY, spec.POSITIONAL_OR_KEYWORD):
             # function positional arguments correspond to CLI arguments
@@ -230,6 +215,31 @@ def get_command(
             state.arguments[param] = meta
         elif meta.type == _command.ParameterType.OPTION:
             state.options[param] = meta
+
+
+def get_command(
+    func: typing.Callable,
+    /,
+    *,
+    config: Config,
+    click_kwargs: dict[str, typing.Any],
+) -> click.Command:
+    if isinstance(func, staticmethod):
+        func = func.__func__
+
+    state = _command.CommandState(
+        config=config,
+        click_kwargs=click_kwargs,
+        is_group=False,
+        aliases=getattr(func, "__feud_aliases__", {}),
+        overrides={
+            override.name: override
+            for override in getattr(func, "__click_params__", [])
+        },
+    )
+
+    # construct command state from signature
+    build_command_state(state, func=func, config=config)
 
     # generate click.Command and attach original function reference
     command = state.decorate(func)
