@@ -16,14 +16,11 @@ from collections import OrderedDict
 
 import pydantic as pyd
 
-try:
-    import rich_click as click
-except ImportError:
-    import click
-
 import feud.exceptions
+from feud import click
 from feud._internal import _command, _metaclass
 from feud.config import Config
+from feud.core.command import build_command_state
 
 __all__ = ["Group", "compile"]
 
@@ -421,6 +418,9 @@ class Group(metaclass=_metaclass.GroupBase):
             # deregister all subgroups
             cls.__feud_subgroups__ = []
 
+    def __main__() -> None:  # noqa: D105
+        pass
+
 
 @pyd.validate_call(config=pyd.ConfigDict(arbitrary_types_allowed=True))
 def compile(group: type[Group], /) -> click.Group:  # noqa: A001
@@ -448,21 +448,23 @@ def compile(group: type[Group], /) -> click.Group:  # noqa: A001
 
 
 def get_group(__cls: type[Group], /) -> click.Group:
+    func: callable = __cls.__main__
+
     state = _command.CommandState(
         config=__cls.__feud_config__,
         click_kwargs=__cls.__feud_click_kwargs__,
-        context=False,
         is_group=True,
-        aliases=getattr(__cls, "__feud_aliases__", {}),
+        aliases=getattr(func, "__feud_aliases__", {}),
         overrides={
             override.name: override
-            for override in getattr(__cls, "__click_params__", [])
+            for override in getattr(func, "__click_params__", [])
         },
     )
 
-    def wrapper() -> None:
-        pass
+    # construct command state from signature
+    build_command_state(state, func=func, config=__cls.__feud_config__)
 
-    wrapper.__doc__ = __cls.__doc__
-
-    return state.decorate(wrapper)
+    # generate click.Group and attach original function reference
+    command = state.decorate(func)
+    command.__func__ = func
+    return command
