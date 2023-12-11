@@ -757,7 +757,7 @@ This installs Feud with the optional dependencies:
 To install Feud without any optional dependencies, simply run `pip install feud`.
 
 > [!CAUTION]
-> Feud will break if used with postponed type hint evaluation ([PEP563](https://peps.python.org/pep-0563/)), i.e. `from __future__ import annotations`.
+> Feud **will break** if used with postponed type hint evaluation ([PEP563](https://peps.python.org/pep-0563/)), i.e. `from __future__ import annotations`.
 >
 > This is because Feud relies on type hint evaluation in order to determine the expected input type for command parameters.
 
