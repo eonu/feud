@@ -48,7 +48,7 @@
 
 ## About
 
-> [!CAUTION]  
+> [!WARNING]  
 > _Writing command-line interfaces can get messy!_
 
 It is not uncommon for CLIs to consist of many commands,
@@ -756,14 +756,14 @@ This installs Feud with the optional dependencies:
 
 To install Feud without any optional dependencies, simply run `pip install feud`.
 
-> [!IMPORTANT]
-> Feud will break if used with postponed type hint evaluation, i.e. `from __future__ import annotations` (i.e. [PEP563](https://peps.python.org/pep-0563/)).
+> [!CAUTION]
+> Feud will break if used with postponed type hint evaluation ([PEP563](https://peps.python.org/pep-0563/)), i.e. `from __future__ import annotations`.
 >
 > This is because Feud relies on type hint evaluation in order to determine the expected input type for command parameters.
 
 ### Improved formatting with Rich
 
-Below is a demonstration of the difference between using Feud with and without `rich-click`.
+Below is a comparison of Feud with and without `rich-click`.
 
 <table>
 <tr>
