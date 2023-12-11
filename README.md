@@ -768,10 +768,10 @@ Below is a comparison of Feud with and without `rich-click`.
 <table>
 <tr>
 <th>
-With Rich
+With Rich-formatted output
 </th>
 <th>
-Without Rich
+Without Rich-formatted output
 </th>
 </tr>
 <tr>
