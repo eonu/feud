@@ -45,7 +45,10 @@ class CommandState:
         default_factory=dict
     )
     options: dict[str, ParameterSpec] = dataclasses.field(default_factory=dict)
-    aliases: dict[str, str] = dataclasses.field(default_factory=dict)
+    aliases: dict[str, str | list[str]] = dataclasses.field(
+        default_factory=dict
+    )
+    envs: dict[str, str] = dataclasses.field(default_factory=dict)
     overrides: dict[str, click.Parameter] = dataclasses.field(
         default_factory=dict
     )
@@ -63,7 +66,7 @@ class CommandState:
                 continue
             if param_name in self.overrides:
                 param: click.Parameter = self.overrides[param_name]
-                sensitive = param.hide_input
+                sensitive = param.hide_input or param.envvar
             elif param_name in self.arguments:
                 spec = self.arguments[param_name]
                 spec.kwargs["type"] = _types.click.get_click_type(
@@ -76,6 +79,9 @@ class CommandState:
                     spec.hint, config=self.config
                 )
                 param = click.Option(spec.args, **spec.kwargs)
+                hide_input = spec.kwargs.get("hide_input")
+                envvar = spec.kwargs.get("envvar")
+                sensitive = hide_input or envvar
             meta_vars[param_name] = self.get_meta_var(param)
             sensitive_vars[param_name] = sensitive
             params.append(param)
