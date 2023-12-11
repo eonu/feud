@@ -16,7 +16,7 @@ import pydantic as pyd
 
 from feud.exceptions import CompilationError
 
-__all__ = ["alias"]
+__all__ = ["alias", "env"]
 
 
 @pyd.validate_call
@@ -36,8 +36,8 @@ def alias(**aliases: str | list[str]) -> t.Callable:
 
         Mapping of option names to aliases.
 
-        Option names must be keyword-only parameters defined in
-        the signature of the decorated function.
+        Option names must be keyword-only parameters in the decorated
+        function signature.
 
     Returns
     -------
@@ -135,6 +135,76 @@ def alias(**aliases: str | list[str]) -> t.Callable:
         return f
 
     return partial(decorator, aliases=aliases)
+
+
+def env(**envs: str) -> t.Callable:
+    """Specify environment variable inputs for command options.
+
+    Decorates a function by attaching command option environment variable
+    metadata, to be used at compile time by py:class:`click.Option` objects.
+
+    Environment variables may only be defined for command-line options, not
+    arguments. This translates to keyword-only parameters, i.e. those
+    positioned after the ``*`` operator in a function signature.
+
+    Parameters
+    ----------
+    **envs:
+
+        Mapping of option names to environment variables.
+
+        Option names must be keyword-only parameters in the decorated
+        function signature.
+
+    Returns
+    -------
+    Function decorated with command option environment variable metadata.
+
+    Examples
+    --------
+    Using an environment variable for a single option.
+
+    >>> import os
+    >>> import feud
+    >>> @feud.env(token="TOKEN")
+    ... def func(*, token: str) -> str:
+    ...     return token
+    >>> os.environ["TOKEN"] = "Hello world!"
+    >>> feud.run(func, [], standalone_mode=False)
+    "Hello World!"
+
+    Using environment variables for multiple options.
+
+    >>> import os
+    >>> import feud
+    >>> @feud.env(token="TOKEN", key="API_KEY")
+    >>> def func(*, token: str, key: str) -> tuple[str, str]:
+    ...     return token, key
+    >>> os.environ["TOKEN"] = "Hello world!"
+    >>> os.environ["API_KEY"] = "This is a secret key."
+    >>> feud.run(func, [], standalone_mode=False)
+    ("Hello world!", "This is a secret key.")
+    """
+
+    def decorator(f: t.Callable, *, envs: dict[str, str]) -> t.Callable:
+        # check provided envs and parameters match
+        sig = inspect.signature(f)
+        specified = set(envs.keys())
+        received = {
+            p.name for p in sig.parameters.values() if p.kind == p.KEYWORD_ONLY
+        }
+        if len(specified - received) > 0:
+            msg = (
+                f"Arguments provided to 'env' decorator must "
+                f"also be keyword parameters for function {f.__name__!r}. "
+                f"Received extra arguments: {specified - received!r}."
+            )
+            raise CompilationError(msg)
+
+        f.__feud_envs__ = envs
+        return f
+
+    return partial(decorator, envs=envs)
 
 
 # def rename(command: str | None = None, /, **params: str) -> t.Callable:

@@ -38,6 +38,7 @@ def command(
     negate_flags: bool | None = None,
     show_help_defaults: bool | None = None,
     show_help_datetime_formats: bool | None = None,
+    show_help_envvars: bool | None = None,
     pydantic_kwargs: dict[str, typing.Any] | None = None,
     config: Config | None = None,
     **click_kwargs: typing.Any,
@@ -59,6 +60,9 @@ def command(
 
     show_help_datetime_formats:
         Whether to display datetime parameter formats in command help.
+
+    show_help_envvars:
+        Whether to display environment variable names in command help.
 
     pydantic_kwargs:
         Validation settings for
@@ -106,6 +110,7 @@ def command(
             negate_flags=negate_flags,
             show_help_defaults=show_help_defaults,
             show_help_datetime_formats=show_help_datetime_formats,
+            show_help_envvars=show_help_envvars,
             pydantic_kwargs=pydantic_kwargs,
         )
         # decorate function
@@ -191,6 +196,11 @@ def build_command_state(
                     )
                 )
 
+            # add env var - if specified by feud.env decorator
+            if env := state.envs.get(param):
+                meta.kwargs["envvar"] = env
+                meta.kwargs["show_envvar"] = config.show_help_envvars
+
             # add help - fetch parameter description from docstring
             if doc_param := next(
                 (p for p in doc.params if p.arg_name == param), None
@@ -232,6 +242,7 @@ def get_command(
         click_kwargs=click_kwargs,
         is_group=False,
         aliases=getattr(func, "__feud_aliases__", {}),
+        envs=getattr(func, "__feud_envs__", {}),
         overrides={
             override.name: override
             for override in getattr(func, "__click_params__", [])
