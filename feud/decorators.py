@@ -141,7 +141,7 @@ def env(**envs: str) -> t.Callable:
     """Specify environment variable inputs for command options.
 
     Decorates a function by attaching command option environment variable
-    metadata, to be used at compile time by py:class:`click.Option` objects.
+    metadata, to be used at compile time by :py:class:`click.Option` objects.
 
     Environment variables may only be defined for command-line options, not
     arguments. This translates to keyword-only parameters, i.e. those
