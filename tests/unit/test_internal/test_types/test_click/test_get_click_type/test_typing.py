@@ -12,7 +12,9 @@ from feud import typing as t
 from feud._internal._types.click import Union
 from feud.config import Config
 
-from ..utils import annotate  # noqa: TID252
+
+def annotate(hint: t.Any) -> t.Annotated[t.Any, "annotation"]:
+    return t.Annotated[hint, "annotation"]
 
 
 @pytest.mark.parametrize("annotated", [False, True])
