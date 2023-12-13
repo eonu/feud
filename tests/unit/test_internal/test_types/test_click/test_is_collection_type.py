@@ -12,7 +12,9 @@ import pytest
 
 from feud._internal import _types
 
-from .utils import annotate
+
+def annotate(hint: t.Any) -> t.Annotated[t.Any, "annotation"]:
+    return t.Annotated[hint, "annotation"]
 
 
 @pytest.fixture(scope="module")
