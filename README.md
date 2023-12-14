@@ -75,7 +75,7 @@ somewhat verbose and often requires frequently looking up documentation.
 
 Consider the following example command for serving local files on a HTTP server.
 
-In red is a typical Click implementation, and in green is the Feud equivalent.
+**In red is a typical Click implementation, and in green is the Feud equivalent.**
 
 ```diff
 - import click
