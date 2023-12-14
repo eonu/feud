@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.1](https://github.com/eonu/feud/releases/tag/v0.1.1) - 2023-12-14
+
+### Bug Fixes
+
+- change `feud.config` from package to module ([#86](https://github.com/eonu/feud/issues/86))
+- use `==` instead of `is` for `typing.Annotated` comparison ([#88](https://github.com/eonu/feud/issues/88))
+
+### Documentation
+
+- add postponed evaluation `README.md` disclaimer ([#92](https://github.com/eonu/feud/issues/92))
+- `click.Option` intersphinx reference ([#93](https://github.com/eonu/feud/issues/93))
+
+### Features
+
+- add `email` extra, issue/PR templates, `version` module ([#84](https://github.com/eonu/feud/issues/84))
+- add `typing.Pattern` to `feud.typing` ([#85](https://github.com/eonu/feud/issues/85))
+- add metavars for `typing.Union` and literal `|` union types ([#89](https://github.com/eonu/feud/issues/89))
+- add `Group.__main__()` support ([#90](https://github.com/eonu/feud/issues/90))
+- add `feud.env` decorator for env. variable options ([#91](https://github.com/eonu/feud/issues/91))
+- add `feud.rename` decorator ([#94](https://github.com/eonu/feud/issues/94))
+
+### Testing
+
+- add test for inheritance command override ([#87](https://github.com/eonu/feud/issues/87))
+
 ## [v0.1.0](https://github.com/eonu/feud/releases/tag/v0.1.0) - 2023-12-05
 
 ### Build System
