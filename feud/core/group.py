@@ -63,6 +63,9 @@ class Group(metaclass=_metaclass.GroupBase):
         - :py:func:`~descendants`
         - :py:func:`~register`
         - :py:func:`~subgroups`
+
+        See :py:func:`.rename` if you wish to define a command with one of the
+        above names.
     """
 
     __feud_config__: t.ClassVar[Config]
@@ -458,6 +461,9 @@ def get_group(__cls: type[Group], /) -> click.Group:
         is_group=True,
         aliases=getattr(func, "__feud_aliases__", {}),
         envs=getattr(func, "__feud_envs__", {}),
+        names=getattr(
+            func, "__feud_names__", _command.NameDict(command=None, params={})
+        ),
         overrides={
             override.name: override
             for override in getattr(func, "__click_params__", [])

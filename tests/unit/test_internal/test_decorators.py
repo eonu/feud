@@ -19,6 +19,7 @@ def test_validate_call_single_invalid() -> None:
     value.
     """
     name = "func"
+    param_renames = {}
     meta_vars = {"arg2": "--arg2"}
     sensitive_vars = {"arg2": False}
     pydantic_kwargs = {}
@@ -30,6 +31,7 @@ def test_validate_call_single_invalid() -> None:
         _decorators.validate_call(
             f,
             name=name,
+            param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
             pydantic_kwargs=pydantic_kwargs,
@@ -50,6 +52,7 @@ def test_validate_call_multiple_invalid() -> None:
     input values.
     """
     name = "func"
+    param_renames = {}
     meta_vars = {"0": "ARG1", "arg2": "--arg2"}
     sensitive_vars = {"0": False, "arg2": False}
     pydantic_kwargs = {}
@@ -61,6 +64,7 @@ def test_validate_call_multiple_invalid() -> None:
         _decorators.validate_call(
             f,
             name=name,
+            param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
             pydantic_kwargs=pydantic_kwargs,
@@ -83,6 +87,7 @@ def test_validate_call_list() -> None:
     a list argument.
     """
     name = "func"
+    param_renames = {}
     meta_vars = {"0": "[ARG1]..."}
     sensitive_vars = {"0": False}
     pydantic_kwargs = {}
@@ -94,6 +99,7 @@ def test_validate_call_list() -> None:
         _decorators.validate_call(
             f,
             name=name,
+            param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
             pydantic_kwargs=pydantic_kwargs,
@@ -116,6 +122,7 @@ def test_validate_call_enum() -> None:
     for an enum parameter.
     """
     name = "func"
+    param_renames = {}
     meta_vars = {"arg2": "--arg2"}
     sensitive_vars = {"arg2": False}
     pydantic_kwargs = {}
@@ -132,6 +139,7 @@ def test_validate_call_enum() -> None:
         _decorators.validate_call(
             f,
             name=name,
+            param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
             pydantic_kwargs=pydantic_kwargs,
@@ -152,6 +160,7 @@ def test_validate_call_datetime() -> None:
     for a datetime parameter.
     """
     name = "func"
+    param_renames = {}
     meta_vars = {"time": "--time"}
     sensitive_vars = {"time": False}
     pydantic_kwargs = {}
@@ -163,6 +172,7 @@ def test_validate_call_datetime() -> None:
         _decorators.validate_call(
             f,
             name=name,
+            param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
             pydantic_kwargs=pydantic_kwargs,

@@ -1,6 +1,12 @@
 Pydantic extra types
 ====================
 
+.. contents:: Table of Contents
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :local:
+    :backlinks: none
+    :depth: 3
+
 `Pydantic Extra Types <https://github.com/pydantic/pydantic-extra-types>`__ 
 is a package that extends `Pydantic <https://docs.pydantic.dev/latest/>`__
 with support for additional types.
@@ -28,12 +34,6 @@ The following types can be used as type hints for Feud commands.
         t.PaymentCardNumber  # pydantic_extra_types.payment.PaymentCardNumber
         t.Latitude  # pydantic_extra_types.coordinate.Latitude
         t.Color  # pydantic_extra_types.color.Color
-
-.. contents:: Table of Contents
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :local:
-    :backlinks: none
-    :depth: 3
 
 ----
 

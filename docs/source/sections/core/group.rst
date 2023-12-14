@@ -1,6 +1,12 @@
 Groups
 ======
 
+.. contents:: Table of Contents
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :local:
+    :backlinks: none
+    :depth: 3
+
 Groups are a component of CLIs that allow you to group together related :doc:`command`.
 
 In addition to commands, groups may also contain further nested groups by :py:obj:`.register`\ ing subgroups, 
@@ -17,12 +23,6 @@ Groups and their subgroups or commands can be executed using :py:func:`.run`.
   
       - `Arguments <https://click.palletsprojects.com/en/8.1.x/arguments/>`__
       - `Options <https://click.palletsprojects.com/en/8.1.x/options/>`__
-
-.. contents:: Table of Contents
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :local:
-    :backlinks: none
-    :depth: 3
 
 ----
 

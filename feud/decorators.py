@@ -10,13 +10,13 @@ from __future__ import annotations
 import inspect
 import re
 import typing as t
-from functools import partial
 
 import pydantic as pyd
 
+from feud._internal import _command
 from feud.exceptions import CompilationError
 
-__all__ = ["alias", "env"]
+__all__ = ["alias", "env", "rename"]
 
 
 @pyd.validate_call
@@ -33,9 +33,7 @@ def alias(**aliases: str | list[str]) -> t.Callable:
     Parameters
     ----------
     **aliases:
-
         Mapping of option names to aliases.
-
         Option names must be keyword-only parameters in the decorated
         function signature.
 
@@ -90,9 +88,7 @@ def alias(**aliases: str | list[str]) -> t.Callable:
     3
     """
 
-    def decorator(
-        f: t.Callable, *, aliases: dict[str, str | list[str]]
-    ) -> t.Callable:
+    def decorator(f: t.Callable) -> t.Callable:
         # check provided aliases and parameters match
         sig = inspect.signature(f)
         specified = set(aliases.keys())
@@ -134,7 +130,7 @@ def alias(**aliases: str | list[str]) -> t.Callable:
         }
         return f
 
-    return partial(decorator, aliases=aliases)
+    return decorator
 
 
 def env(**envs: str) -> t.Callable:
@@ -150,9 +146,7 @@ def env(**envs: str) -> t.Callable:
     Parameters
     ----------
     **envs:
-
         Mapping of option names to environment variables.
-
         Option names must be keyword-only parameters in the decorated
         function signature.
 
@@ -186,7 +180,7 @@ def env(**envs: str) -> t.Callable:
     ("Hello world!", "This is a secret key.")
     """
 
-    def decorator(f: t.Callable, *, envs: dict[str, str]) -> t.Callable:
+    def decorator(f: t.Callable) -> t.Callable:
         # check provided envs and parameters match
         sig = inspect.signature(f)
         specified = set(envs.keys())
@@ -204,8 +198,66 @@ def env(**envs: str) -> t.Callable:
         f.__feud_envs__ = envs
         return f
 
-    return partial(decorator, envs=envs)
+    return decorator
 
 
-# def rename(command: str | None = None, /, **params: str) -> t.Callable:
-# rename("cmd") renames the command without requiring @feud.command(name="cmd")
+def rename(command: str | None = None, /, **params: str) -> t.Callable:
+    """Rename a command and/or its parameters.
+
+    Useful for command/parameter names that use hyphens, reserved Python
+    keywords or in-built function names.
+
+    Parameters
+    ----------
+    command:
+        New command name. If ``None``, the command is not renamed.
+
+    **params:
+        Mapping of parameter names to new names.
+        Parameter names must be defined in the decorated function signature.
+
+    Returns
+    -------
+    Function decorated with command/parameter renaming metadata.
+
+    Examples
+    --------
+    Renaming a command.
+
+    >>> import feud
+    >>> @feud.rename("my-func")
+    ... def my_func(arg_1: int, *, opt_1: str, opt_2: bool):
+    ...     pass
+
+    Renaming parameters.
+
+    >>> import feud
+    >>> @feud.rename(arg_1="arg-1", opt_2="opt-2")
+    ... def my_func(arg_1: int, *, opt_1: str, opt_2: bool):
+    ...     pass
+
+    Renaming a command and parameters.
+
+    >>> import feud
+    >>> @feud.rename("my-func", arg_1="arg-1", opt_2="opt-2")
+    ... def my_func(arg_1: int, *, opt_1: str, opt_2: bool):
+    ...     pass
+    """
+
+    def decorator(f: t.Callable) -> t.Callable:
+        # check provided names and parameters match
+        sig = inspect.signature(f)
+        specified = set(params.keys())
+        received = {p.name for p in sig.parameters.values()}
+        if len(specified - received) > 0:
+            msg = (
+                f"Arguments provided to 'env' decorator must "
+                f"also be parameters for function {f.__name__!r}. "
+                f"Received extra arguments: {specified - received!r}."
+            )
+            raise CompilationError(msg)
+
+        f.__feud_names__ = _command.NameDict(command=command, params=params)
+        return f
+
+    return decorator

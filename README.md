@@ -472,8 +472,8 @@ $ python blog.py post list --help
 
 ### Powerful typing
 
-Feud is powered by Pydantic – a validation library with extensive support for
-many data types, including:
+Feud is powered by [Pydantic](https://docs.pydantic.dev/latest/) – a
+validation library with extensive support for many data types, including:
 
 - simple types such as integers and dates,
 - complex types such as emails, IP addresses, file/directory paths, database
@@ -742,22 +742,26 @@ You can install Feud using `pip`.
 The latest stable version of Feud can be installed with the following command.
 
 ```console
-pip install feud[all]
+pip install "feud[all]"
 ```
 
 This installs Feud with the optional dependencies:
 
-- [`rich-click`](https://github.com/ewels/rich-click) (can install individually with `pip install feud[rich]`)<br/>
+- [`rich-click`](https://github.com/ewels/rich-click) (can install individually with `pip install "feud[rich]"`)<br/>
   _Provides improved formatting for CLIs produced by Feud._
-- [`pydantic-extra-types`](https://github.com/pydantic/pydantic-extra-types) (can install individually with `pip install feud[extra-types]`)<br/>
+- [`pydantic-extra-types`](https://github.com/pydantic/pydantic-extra-types) (can install individually with `pip install "feud[extra-types]"`)<br/>
   _Provides additional types that can be used as type hints for Feud commands._
-- [`email-validator`](https://github.com/JoshData/python-email-validator) (can install individually with `pip install feud[email]`)<br/>
+- [`email-validator`](https://github.com/JoshData/python-email-validator) (can install individually with `pip install "feud[email]"`)<br/>
   _Provides Pydantic support for email validation._
 
 To install Feud without any optional dependencies, simply run `pip install feud`.
 
 > [!CAUTION]
-> Feud **will break** if used with postponed type hint evaluation ([PEP563](https://peps.python.org/pep-0563/)), i.e. `from __future__ import annotations`.
+> Feud **will break** if used with postponed type hint evaluation ([PEP563](https://peps.python.org/pep-0563/)), i.e.:
+>
+> ```python
+> from __future__ import annotations
+> ```
 >
 > This is because Feud relies on type hint evaluation in order to determine the expected input type for command parameters.
 
@@ -890,7 +894,7 @@ All contributions to this repository are greatly appreciated. Contribution guide
 
 > <img src="https://i.postimg.cc/jq3MZSTD/avatar.png" align="left"/>
 > <b>We're living in an imperfect world!</b><br/>
-> <sup>Feud is in a public beta-test phase, likely with <em>lots</em> of bugs. Please leave feedback if you come across anything strange!</sup>
+> <sup>Feud is in a public beta-test phase, likely with <em>lots</em> of bugs. Please <a href="https://github.com/eonu/feud/issues/new">leave feedback</a> if you come across anything strange!</sup>
 
 ## Licensing
 

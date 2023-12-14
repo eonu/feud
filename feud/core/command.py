@@ -134,6 +134,9 @@ def build_command_state(
         meta = _command.ParameterSpec()
         meta.hint: type = spec.annotation
 
+        # get renamed parameter if @feud.rename used
+        name: str = state.names["params"].get(param, param)
+
         if _command.pass_context(sig) and param == _command.CONTEXT_PARAM:
             # skip handling for click.Context argument
             state.pass_context = True
@@ -143,7 +146,7 @@ def build_command_state(
             meta.type = _command.ParameterType.ARGUMENT
 
             # add the argument
-            meta.args = [param]
+            meta.args = [name]
 
             # special handling for variable-length collections
             is_collection, base_type = _types.click.is_collection_type(
@@ -182,7 +185,7 @@ def build_command_state(
             # add the option
             meta.args = [
                 _command.get_option(
-                    param, hint=meta.hint, negate_flags=config.negate_flags
+                    name, hint=meta.hint, negate_flags=config.negate_flags
                 )
             ]
 
@@ -243,6 +246,9 @@ def get_command(
         is_group=False,
         aliases=getattr(func, "__feud_aliases__", {}),
         envs=getattr(func, "__feud_envs__", {}),
+        names=getattr(
+            func, "__feud_names__", _command.NameDict(command=None, params={})
+        ),
         overrides={
             override.name: override
             for override in getattr(func, "__click_params__", [])
