@@ -9,9 +9,12 @@ import click
 import pytest
 
 from feud import typing as t
+from feud._internal._types.click import Union
 from feud.config import Config
 
-from ..utils import annotate  # noqa: TID252
+
+def annotate(hint: t.Any) -> t.Annotated[t.Any, "annotation"]:
+    return t.Annotated[hint, "annotation"]
 
 
 @pytest.mark.parametrize("annotated", [False, True])
@@ -20,6 +23,7 @@ from ..utils import annotate  # noqa: TID252
     [
         (t.Any, None),
         (t.Text, click.STRING),
+        (t.Pattern, None),
         (t.Optional[int], click.INT),
         (t.Optional[annotate(int)], click.INT),
         (
@@ -50,7 +54,11 @@ from ..utils import annotate  # noqa: TID252
             t.NamedTuple("Point", x=annotate(int), y=annotate(str)),
             (click.INT, click.STRING),
         ),
-        (t.Union[int, str], None),
+        (
+            t.Union[int, str],
+            lambda x: isinstance(x, Union)
+            and x.types == [click.INT, click.STRING],
+        ),
     ],
 )
 def test_typing(

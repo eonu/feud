@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feud"
-version = "0.1.0"
+version = "0.1.1"
 license = "MIT"
 authors = ["Edwin Onuonga <ed@eonu.net>"]
 maintainers = ["Edwin Onuonga <ed@eonu.net>"]
@@ -22,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Application Frameworks",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: User Interfaces",
@@ -63,13 +64,15 @@ python = "^3.11"
 pydantic = "^2.0.0"
 click = "^8.1.7"
 docstring-parser = "^0.15"
+Pydantic = { version = "^2.0.0", optional = true, extras = ["email"] }
 rich-click = { version = "^1.6.1", optional = true }
 pydantic-extra-types = { version = "^2.1.0", optional = true, extras = ["all"] }
 
 [tool.poetry.extras]
 rich = ["rich-click"]
+email = ["email"]
 extra-types = ["pydantic-extra-types"]
-all = ["rich-click", "pydantic-extra-types"]
+all = ["rich-click", "email", "pydantic-extra-types"]
 
 [tool.poetry.group.base.dependencies]
 invoke = "2.2.0"
@@ -166,14 +169,11 @@ allow-star-arg-any = true
 "__init__.py" = ["PLC0414", "F403", "F401", "F405"]
 "feud/typing/*.py" = ["PLC0414", "F403", "F401"]
 "tests/**/*.py" = ["D100", "D100", "D101", "D102", "D103", "D104"] # temporary
-"tests/**/test_*.py" = ["ARG001", "S101"]
-"tests/unit/test_internal/test_types/test_click/test_get_click_type/test_pydantic.py" = [
-    "ERA001",
-] # temporary
+"tests/**/test_*.py" = ["ARG001", "S101", "D", "FA100", "FA102"]
 
 [tool.pydoclint]
 style = "numpy"
-exclude = ".git|.tox|feud/_internal" # temporary
+exclude = ".git|.tox|feud/_internal|tests" # temporary
 check-return-types = false
 arg-type-hints-in-docstring = false
 quiet = true

@@ -1,6 +1,12 @@
 Commands
 ========
 
+.. contents:: Table of Contents
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :local:
+    :backlinks: none
+    :depth: 3
+
 Commands are the core component of a CLI, running a user-defined function that
 may be parameterized with arguments or options.
 
@@ -17,12 +23,6 @@ Commands may be executed using :py:func:`.run`.
   
       - `Arguments <https://click.palletsprojects.com/en/8.1.x/arguments/>`__
       - `Options <https://click.palletsprojects.com/en/8.1.x/options/>`__
-
-.. contents:: Table of Contents
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :local:
-    :backlinks: none
-    :depth: 3
 
 ----
 

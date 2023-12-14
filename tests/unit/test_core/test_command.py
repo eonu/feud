@@ -72,7 +72,7 @@ def test_param_help_docstring(capsys: pytest.CaptureFixture) -> None:
 
         arg2:
             Changes something.
-        """  # noqa: D301, D400
+        """
 
     with pytest.raises(SystemExit):
         f(["--help"])
@@ -196,7 +196,7 @@ def test_invoke() -> None:
 
 
 def test_run_undecorated() -> None:
-    def f(arg1: int, *, arg2: bool) -> tuple[int, bool]:  # noqa: FA102
+    def f(arg1: int, *, arg2: bool) -> tuple[int, bool]:
         return arg1, arg2
 
     assert feud.run(f, ["1", "--no-arg2"], standalone_mode=False) == (1, False)
@@ -204,7 +204,7 @@ def test_run_undecorated() -> None:
 
 def test_run_decorated() -> None:
     @feud.command
-    def f(arg1: int, *, arg2: bool) -> tuple[int, bool]:  # noqa: FA102
+    def f(arg1: int, *, arg2: bool) -> tuple[int, bool]:
         return arg1, arg2
 
     assert feud.run(f, ["1", "--no-arg2"], standalone_mode=False) == (1, False)

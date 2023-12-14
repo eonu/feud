@@ -3,11 +3,10 @@
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
 
-from __future__ import annotations
-
 import typing as t
 from collections import OrderedDict
 from operator import itemgetter
+from pathlib import Path
 
 import pytest
 
@@ -16,7 +15,12 @@ from feud import click
 
 
 def assert_help(
-    __obj: feud.Group | click.Group | click.Command | t.Callable,
+    __obj: t.Union[
+        feud.Group,
+        click.Group,
+        click.Command,
+        t.Callable,
+    ],
     /,
     *,
     capsys: pytest.CaptureFixture,
@@ -157,18 +161,6 @@ Commands:
     )
 
 
-def test_click_version(capsys: pytest.CaptureFixture) -> None:
-    @click.version_option(version="0.1.0")
-    class Test(feud.Group):
-        pass
-
-    with pytest.raises(SystemExit):
-        Test(["--version"])
-
-    out, _ = capsys.readouterr()
-    assert out.strip() == "pytest, version 0.1.0"
-
-
 def test_config_kwarg_propagation() -> None:
     class Test(feud.Group, show_help_defaults=False):
         def f(*, arg1: int = 1) -> None:
@@ -235,17 +227,17 @@ def test_config_kwarg_override() -> None:
 
 def test_subgroups_parent_single_child() -> None:
     class Parent(feud.Group):
-        """This is the parent group."""  # noqa: D404
+        """This is the parent group."""
 
         def f(*, arg: int) -> None:
-            """This is a command in the parent group."""  # noqa: D401, D404
+            """This is a command in the parent group."""
             return arg
 
     class Child(feud.Group):
-        """This is a subgroup."""  # noqa: D404
+        """This is a subgroup."""
 
         def g(*, arg: int) -> None:
-            """This is a command in the subgroup."""  # noqa: D401, D404
+            """This is a command in the subgroup."""
             return arg
 
     Parent.register(Child)
@@ -276,24 +268,24 @@ def test_subgroups_parent_multi_children() -> None:
     """
 
     class Parent(feud.Group):
-        """This is the parent group."""  # noqa: D404
+        """This is the parent group."""
 
         def f(*, arg: int) -> int:
-            """This is a command in the parent group."""  # noqa: D401, D404
+            """This is a command in the parent group."""
             return arg
 
     class Child1(feud.Group):
-        """This is the first subgroup."""  # noqa: D404
+        """This is the first subgroup."""
 
         def g(*, arg: int) -> int:
-            """This is a command in the first subgroup."""  # noqa: D401, D404
+            """This is a command in the first subgroup."""
             return arg
 
     class Child2(feud.Group):
-        """This is the second subgroup."""  # noqa: D404
+        """This is the second subgroup."""
 
         def h(*, arg: int) -> int:
-            """This is a command in the second subgroup."""  # noqa: D401, D404
+            """This is a command in the second subgroup."""
             return arg
 
     Parent.register([Child1, Child2])
@@ -339,38 +331,38 @@ def test_subgroups_nested() -> None:  # noqa: PLR0915
     """
 
     class Parent(feud.Group):
-        """This is the parent group."""  # noqa: D404
+        """This is the parent group."""
 
         def f(*, arg: int) -> int:
-            """This is a command in the parent group."""  # noqa: D401, D404
+            """This is a command in the parent group."""
             return arg
 
     class Child1(feud.Group):
-        """This is the first subgroup."""  # noqa: D404
+        """This is the first subgroup."""
 
         def g(*, arg: int) -> int:
-            """This is a command in the first subgroup."""  # noqa: D401, D404
+            """This is a command in the first subgroup."""
             return arg
 
     class Child2(feud.Group):
-        """This is the second subgroup."""  # noqa: D404
+        """This is the second subgroup."""
 
         def h(*, arg: int) -> int:
-            """This is a command in the second subgroup."""  # noqa: D401, D404
+            """This is a command in the second subgroup."""
             return arg
 
     class Child3(feud.Group):
-        """This is the third subgroup."""  # noqa: D404
+        """This is the third subgroup."""
 
         def i(*, arg: int) -> int:
-            """This is a command in the third subgroup."""  # noqa: D401, D404
+            """This is a command in the third subgroup."""
             return arg
 
     class Child4(feud.Group):
-        """This is the fourth subgroup."""  # noqa: D404
+        """This is the fourth subgroup."""
 
         def j(*, arg: int) -> int:
-            """This is a command in the fourth subgroup."""  # noqa: D401, D404
+            """This is a command in the fourth subgroup."""
             return arg
 
     Parent.register(Child1)
@@ -492,31 +484,31 @@ def test_subgroups_nested() -> None:  # noqa: PLR0915
 
 def test_deregister_nested() -> None:  # noqa: PLR0915
     class Parent(feud.Group):
-        """This is the parent group."""  # noqa: D404
+        """This is the parent group."""
 
         def f(*, arg: int) -> int:
-            """This is a command in the parent group."""  # noqa: D401, D404
+            """This is a command in the parent group."""
             return arg
 
     class Child1(feud.Group):
-        """This is the first subgroup."""  # noqa: D404
+        """This is the first subgroup."""
 
         def g(*, arg: int) -> int:
-            """This is a command in the first subgroup."""  # noqa: D401, D404
+            """This is a command in the first subgroup."""
             return arg
 
     class Child2(feud.Group):
-        """This is the second subgroup."""  # noqa: D404
+        """This is the second subgroup."""
 
         def h(*, arg: int) -> int:
-            """This is a command in the second subgroup."""  # noqa: D401, D404
+            """This is a command in the second subgroup."""
             return arg
 
     class Child3(feud.Group):
-        """This is the third subgroup."""  # noqa: D404
+        """This is the third subgroup."""
 
         def i(*, arg: int) -> int:
-            """This is a command in the third subgroup."""  # noqa: D401, D404
+            """This is a command in the third subgroup."""
             return arg
 
     Parent.register([Child1, Child2])
@@ -769,6 +761,18 @@ def test_inheritance_multiple() -> None:
     }
 
 
+def test_inheritance_overwrite_command() -> None:
+    class Parent(feud.Group):
+        def f(*, arg: str = "From the parent!") -> int:
+            return arg
+
+    class Child(Parent):
+        def f(*, arg: str = "From the child!") -> str:
+            return arg
+
+    assert Child.f([], standalone_mode=False) == "From the child!"
+
+
 def test_register_deregister_compile() -> None:
     class Parent(
         feud.Group,
@@ -776,15 +780,15 @@ def test_register_deregister_compile() -> None:
         show_help_defaults=False,
         epilog="Visit https://www.com for more information.",
     ):
-        """This is the parent group."""  # noqa: D404
+        """This is the parent group."""
 
         def f(*, arg: int) -> int:
-            """This is a command in the parent group."""  # noqa: D401, D404
+            """This is a command in the parent group."""
             return arg
 
     class Subgroup(feud.Group):
         def g(*, arg: int) -> int:
-            """This is a command in a subgroup."""  # noqa: D401, D404
+            """This is a command in a subgroup."""
             return arg
 
     Parent.register(Subgroup)
@@ -990,3 +994,384 @@ def test_descendants() -> None:
             (D, D.descendants()),
         ]
     )
+
+
+def test_help_no_docstring(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group):
+        pass
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_help_simple_docstring(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group):
+        """This is a group."""
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  This is a group.
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_help_param_docstring(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group):
+        """This is a group.\f
+
+        Parameters
+        ----------
+        param:
+            Help for a parameter.
+        """
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  This is a group.
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_help_override(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group, help="Overridden."):
+        """This is a group."""
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  Overridden.
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_main_help_no_docstrings(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group):
+        def __main__() -> None:
+            pass
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_main_help_class_docstring(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group):
+        """This is a class-level docstring."""
+
+        def __main__() -> None:
+            pass
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  This is a class-level docstring.
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_main_help_function_docstring(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group):
+        def __main__() -> None:
+            """This is a function-level docstring."""
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  This is a function-level docstring.
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_main_help_both_docstrings(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group):
+        """This is a class-level docstring."""
+
+        def __main__() -> None:
+            """This is a function-level docstring."""
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  This is a function-level docstring.
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_main_help_both_docstrings_with_override(
+    capsys: pytest.CaptureFixture
+) -> None:
+    class Test(feud.Group, help="Overridden."):
+        """This is a class-level docstring."""
+
+        def __main__() -> None:
+            """This is a function-level docstring."""
+
+    assert_help(
+        Test,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  Overridden.
+
+Options:
+  --help  Show this message and exit.
+        """,
+    )
+
+
+def test_main(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group, invoke_without_command=True):
+        """This group does something relative to a root directory.\f
+
+        Parameters
+        ----------
+        root:
+            Root directory
+        """
+
+        @staticmethod
+        @click.version_option("0.1.0")
+        @feud.alias(root="-r")
+        def __main__(ctx: click.Context, *, root: Path = Path(".")) -> None:
+            ctx.obj = {"root": root}
+            return root
+
+        @staticmethod
+        def command(ctx: click.Context, path: Path) -> Path:
+            """Returns a full path.\f
+
+            Parameters
+            ----------
+            path:
+                Relative path.
+            """
+            return ctx.obj["root"] / path
+
+    group = feud.compile(Test)
+
+    assert_help(
+        group,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  This group does something relative to a root directory.
+
+Options:
+  -r, --root PATH  Root directory  [default: .]
+  --version        Show the version and exit.
+  --help           Show this message and exit.
+
+Commands:
+  command  Returns a full path.
+        """,
+    )
+
+    # check version
+    with pytest.raises(SystemExit):
+        group(["--version"])
+    out, _ = capsys.readouterr()
+    assert out.strip() == "pytest, version 0.1.0"
+
+    # test invoke without command
+    assert group(["-r", "/usr"], standalone_mode=False) == Path("/usr")
+
+    # test command context
+    assert group(
+        ["-r", "/usr", "command", "bin/sh"],
+        standalone_mode=False,
+    ) == Path("/usr/bin/sh")
+
+
+def test_main_inheritance_no_docstring(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group, invoke_without_command=True):
+        """This group does something relative to a root directory.\f
+
+        Parameters
+        ----------
+        root:
+            Root directory
+        """
+
+        @staticmethod
+        @click.version_option("0.1.0")
+        @feud.alias(root="-r")
+        def __main__(ctx: click.Context, *, root: Path = Path(".")) -> None:
+            ctx.obj = {"root": root}
+            return root
+
+        @staticmethod
+        def command(ctx: click.Context, path: Path) -> Path:
+            """Returns a full path.\f
+
+            Parameters
+            ----------
+            path:
+                Relative path.
+            """
+            return ctx.obj["root"] / path
+
+    class Child(Test):
+        pass
+
+    group = feud.compile(Child)
+
+    assert_help(
+        group,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  This group does something relative to a root directory.
+
+Options:
+  -r, --root PATH  Root directory  [default: .]
+  --version        Show the version and exit.
+  --help           Show this message and exit.
+
+Commands:
+  command  Returns a full path.
+        """,
+    )
+
+    # check version
+    with pytest.raises(SystemExit):
+        group(["--version"])
+    out, _ = capsys.readouterr()
+    assert out.strip() == "pytest, version 0.1.0"
+
+    # test invoke without command
+    assert group(["-r", "/usr"], standalone_mode=False) == Path("/usr")
+
+    # test command context
+    assert group(
+        ["-r", "/usr", "command", "bin/sh"],
+        standalone_mode=False,
+    ) == Path("/usr/bin/sh")
+
+
+def test_main_inheritance_docstring(capsys: pytest.CaptureFixture) -> None:
+    class Test(feud.Group, invoke_without_command=True):
+        """This group does something relative to a root directory.\f
+
+        Parameters
+        ----------
+        root:
+            Root directory
+        """
+
+        @staticmethod
+        @click.version_option("0.1.0")
+        @feud.alias(root="-r")
+        def __main__(ctx: click.Context, *, root: Path = Path(".")) -> None:
+            ctx.obj = {"root": root}
+            return root
+
+        @staticmethod
+        def command(ctx: click.Context, path: Path) -> Path:
+            """Returns a full path.\f
+
+            Parameters
+            ----------
+            path:
+                Relative path.
+            """
+            return ctx.obj["root"] / path
+
+    class Child(Test):
+        """This is a new docstring.\f
+
+        Parameters
+        ----------
+        root:
+            Root directory
+        """
+
+    group = feud.compile(Child)
+
+    assert_help(
+        group,
+        capsys=capsys,
+        expected="""
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+  This is a new docstring.
+
+Options:
+  -r, --root PATH  Root directory  [default: .]
+  --version        Show the version and exit.
+  --help           Show this message and exit.
+
+Commands:
+  command  Returns a full path.
+        """,
+    )
+
+    # check version
+    with pytest.raises(SystemExit):
+        group(["--version"])
+    out, _ = capsys.readouterr()
+    assert out.strip() == "pytest, version 0.1.0"
+
+    # test invoke without command
+    assert group(["-r", "/usr"], standalone_mode=False) == Path("/usr")
+
+    # test command context
+    assert group(
+        ["-r", "/usr", "command", "bin/sh"],
+        standalone_mode=False,
+    ) == Path("/usr/bin/sh")

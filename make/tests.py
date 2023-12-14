@@ -14,7 +14,9 @@ from invoke.tasks import task
 @task
 def install(c: Config) -> None:
     """Install package with core and test dependencies."""
-    c.run("poetry install --sync --only base,main,tests -E extra-types")
+    c.run(
+        "poetry install --sync --only base,main,tests -E extra-types -E email"
+    )
 
 
 @task
@@ -24,7 +26,7 @@ def doctest(c: Config) -> None:
     # - feud/click/context.py
     # - feud/decorators.py
     files: list[str] = [
-        "feud/config/__init__.py",
+        "feud/config.py",
         "feud/core/__init__.py",
         "feud/core/command.py",
         "feud/core/group.py",
@@ -35,11 +37,7 @@ def doctest(c: Config) -> None:
 @task
 def unit(c: Config, *, cov: bool = False) -> None:
     """Run unit tests."""
-    command: str = (
-        "poetry run pytest tests/ "
-        "--ignore tests/unit/test_internal/test_types/test_click/"
-        "test_get_click_type/test_pydantic.py"
-    )
+    command: str = "poetry run pytest tests/"
 
     if cov:
         command = f"{command} --cov feud --cov-report xml"

@@ -37,6 +37,9 @@ class Config(pyd.BaseModel):
     #: Whether to display datetime parameter formats in command help.
     show_help_datetime_formats: bool = False
 
+    #: Whether to display environment variable names in command help.
+    show_help_envvars: bool = True
+
     #: Validation settings for
     #: :py:func:`pydantic.validate_call_decorator.validate_call`.
     pydantic_kwargs: dict[str, Any] = {}
@@ -68,6 +71,7 @@ def config(
     negate_flags: bool | None = None,
     show_help_defaults: bool | None = None,
     show_help_datetime_formats: bool | None = None,
+    show_help_envvars: bool | None = None,
     pydantic_kwargs: dict[str, Any] | None = None,
 ) -> Config:
     """Create a reusable configuration for :py:func:`.command` or
@@ -85,6 +89,9 @@ def config(
 
     show_help_datetime_formats:
         Whether to display datetime parameter formats in command help.
+
+    show_help_envvars:
+        Whether to display environment variable names in command help.
 
     pydantic_kwargs:
         Validation settings for
@@ -123,5 +130,6 @@ def config(
         negate_flags=negate_flags,
         show_help_defaults=show_help_defaults,
         show_help_datetime_formats=show_help_datetime_formats,
+        show_help_envvars=show_help_envvars,
         pydantic_kwargs=pydantic_kwargs,
     )

@@ -148,6 +148,35 @@ class DateTime(click.DateTime):
             return None
 
 
+class Union(click.ParamType):
+    def __init__(
+        self: DateTime,
+        *args: t.Any,
+        types: list[click.ParamType],
+        **kwargs: t.Any,
+    ) -> DateTime:
+        self.types = types
+        super().__init__(*args, **kwargs)
+
+    @staticmethod
+    def _get_metavar(
+        click_type: click.ParamType | None,
+        param: click.Parameter,
+    ) -> str:
+        if click_type:
+            return click_type.get_metavar(param) or click_type.name.upper()
+        return None
+
+    def get_metavar(self: DateTime, param: click.Parameter) -> str:
+        metavars = [
+            metavar
+            for click_type in self.types
+            if (metavar := self._get_metavar(click_type, param))
+        ]
+        unique_metavars = list(dict.fromkeys(metavars))
+        return " | ".join(unique_metavars)
+
+
 def get_click_type(hint: t.Any, *, config: Config) -> ClickType | None:
     base_type, base_args, _, _ = get_base_type(hint)
     origin_type = t.get_origin(base_type)
@@ -178,6 +207,14 @@ def resolve_type(hint: t.Any, *, config: Config) -> ClickType:
         if len(base_args) == 2 and type(None) in arg_values:
             non_none = next(arg for arg in arg_values if arg is not type(None))
             return get_click_type(non_none, config=config)
+        # t.Union with more than one non-None argument
+        base_types = list(
+            map(
+                ft.partial(get_click_type, config=config),
+                base_args.values(),
+            )
+        )
+        return Union(types=base_types)
     if inspect.isclass(base_type):
         if issubclass(base_type, enum.Enum):
             return click.Choice([str(e.value) for e in base_type])
@@ -355,22 +392,22 @@ def resolve_annotated(
     arg_list = list(parent_args.values())  # noqa: F841
     two_field_subtype = t.Annotated[*arg_list[:2]]
     # integer types
-    if two_field_subtype is pyd.PositiveInt:
+    if two_field_subtype == pyd.PositiveInt:
         return click.IntRange(min=0, min_open=True)
-    if two_field_subtype is pyd.NonNegativeInt:
+    if two_field_subtype == pyd.NonNegativeInt:
         return click.IntRange(min=0, min_open=False)
-    if two_field_subtype is pyd.NegativeInt:
+    if two_field_subtype == pyd.NegativeInt:
         return click.IntRange(max=0, max_open=True)
-    if two_field_subtype is pyd.NonPositiveInt:
+    if two_field_subtype == pyd.NonPositiveInt:
         return click.IntRange(max=0, max_open=False)
     # float types
-    if two_field_subtype is pyd.PositiveFloat:
+    if two_field_subtype == pyd.PositiveFloat:
         return click.FloatRange(min=0, min_open=True)
-    if two_field_subtype is pyd.NonNegativeFloat:
+    if two_field_subtype == pyd.NonNegativeFloat:
         return click.FloatRange(min=0, min_open=False)
-    if two_field_subtype is pyd.NegativeFloat:
+    if two_field_subtype == pyd.NegativeFloat:
         return click.FloatRange(max=0, max_open=True)
-    if two_field_subtype is pyd.NonPositiveFloat:
+    if two_field_subtype == pyd.NonPositiveFloat:
         return click.FloatRange(max=0, max_open=False)
     # int / float range types
     if is_pyd_conint(base_type, parent_args):
@@ -380,9 +417,9 @@ def resolve_annotated(
     if is_pyd_condecimal(base_type, parent_args):
         return get_click_range_type(parent_args, range_type=click.FloatRange)
     # file / directory types
-    if two_field_subtype is pyd.FilePath:
+    if two_field_subtype == pyd.FilePath:
         return click.Path(exists=True, dir_okay=False)
-    if two_field_subtype is pyd.DirectoryPath:
+    if two_field_subtype == pyd.DirectoryPath:
         return click.Path(exists=True, file_okay=False)
     if base_type in PATH_TYPES:
         return click.Path()

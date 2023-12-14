@@ -38,6 +38,7 @@ def command(
     negate_flags: bool | None = None,
     show_help_defaults: bool | None = None,
     show_help_datetime_formats: bool | None = None,
+    show_help_envvars: bool | None = None,
     pydantic_kwargs: dict[str, typing.Any] | None = None,
     config: Config | None = None,
     **click_kwargs: typing.Any,
@@ -59,6 +60,9 @@ def command(
 
     show_help_datetime_formats:
         Whether to display datetime parameter formats in command help.
+
+    show_help_envvars:
+        Whether to display environment variable names in command help.
 
     pydantic_kwargs:
         Validation settings for
@@ -106,6 +110,7 @@ def command(
             negate_flags=negate_flags,
             show_help_defaults=show_help_defaults,
             show_help_datetime_formats=show_help_datetime_formats,
+            show_help_envvars=show_help_envvars,
             pydantic_kwargs=pydantic_kwargs,
         )
         # decorate function
@@ -114,46 +119,34 @@ def command(
     return decorate(func) if func else decorate
 
 
-def get_command(
-    func: typing.Callable,
-    /,
-    *,
-    config: Config,
-    click_kwargs: dict[str, typing.Any],
-) -> click.Command:
-    if isinstance(func, staticmethod):
-        func = func.__func__
+def build_command_state(
+    state: _command.CommandState, *, func: callable, config: Config
+) -> None:
+    doc: docstring_parser.Docstring
+    if state.is_group:
+        doc = docstring_parser.parse(state.click_kwargs.get("help", ""))
+    else:
+        doc = docstring_parser.parse_from_object(func)
 
-    doc: docstring_parser.Docstring = docstring_parser.parse_from_object(func)
     sig: inspect.Signature = inspect.signature(func)
-    pass_context: bool = _command.pass_context(sig)
-
-    state = _command.CommandState(
-        config=config,
-        click_kwargs=click_kwargs,
-        context=pass_context,
-        is_group=False,
-        aliases=getattr(func, "__feud_aliases__", {}),
-        overrides={
-            override.name: override
-            for override in getattr(func, "__click_params__", [])
-        },
-    )
 
     for param, spec in sig.parameters.items():
         meta = _command.ParameterSpec()
         meta.hint: type = spec.annotation
 
-        if pass_context and param == _command.CONTEXT_PARAM:
+        # get renamed parameter if @feud.rename used
+        name: str = state.names["params"].get(param, param)
+
+        if _command.pass_context(sig) and param == _command.CONTEXT_PARAM:
             # skip handling for click.Context argument
-            continue
+            state.pass_context = True
 
         if spec.kind in (spec.POSITIONAL_ONLY, spec.POSITIONAL_OR_KEYWORD):
             # function positional arguments correspond to CLI arguments
             meta.type = _command.ParameterType.ARGUMENT
 
             # add the argument
-            meta.args = [param]
+            meta.args = [name]
 
             # special handling for variable-length collections
             is_collection, base_type = _types.click.is_collection_type(
@@ -192,7 +185,7 @@ def get_command(
             # add the option
             meta.args = [
                 _command.get_option(
-                    param, hint=meta.hint, negate_flags=config.negate_flags
+                    name, hint=meta.hint, negate_flags=config.negate_flags
                 )
             ]
 
@@ -205,6 +198,11 @@ def get_command(
                         negate_flags=config.negate_flags,
                     )
                 )
+
+            # add env var - if specified by feud.env decorator
+            if env := state.envs.get(param):
+                meta.kwargs["envvar"] = env
+                meta.kwargs["show_envvar"] = config.show_help_envvars
 
             # add help - fetch parameter description from docstring
             if doc_param := next(
@@ -230,6 +228,35 @@ def get_command(
             state.arguments[param] = meta
         elif meta.type == _command.ParameterType.OPTION:
             state.options[param] = meta
+
+
+def get_command(
+    func: typing.Callable,
+    /,
+    *,
+    config: Config,
+    click_kwargs: dict[str, typing.Any],
+) -> click.Command:
+    if isinstance(func, staticmethod):
+        func = func.__func__
+
+    state = _command.CommandState(
+        config=config,
+        click_kwargs=click_kwargs,
+        is_group=False,
+        aliases=getattr(func, "__feud_aliases__", {}),
+        envs=getattr(func, "__feud_envs__", {}),
+        names=getattr(
+            func, "__feud_names__", _command.NameDict(command=None, params={})
+        ),
+        overrides={
+            override.name: override
+            for override in getattr(func, "__click_params__", [])
+        },
+    )
+
+    # construct command state from signature
+    build_command_state(state, func=func, config=config)
 
     # generate click.Command and attach original function reference
     command = state.decorate(func)

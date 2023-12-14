@@ -9,4 +9,5 @@ This module consists of decorators that modify :doc:`../core/command` and their 
    :titlesonly:
 
    alias.rst
-   .. rename.rst
+   env.rst
+   rename.rst

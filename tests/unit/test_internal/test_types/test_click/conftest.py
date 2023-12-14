@@ -5,13 +5,15 @@
 
 from __future__ import annotations
 
-import pytest
+import typing as t
 
-from .utils import annotate
+import pytest
 
 
 class Helpers:
-    annotate = annotate
+    @staticmethod
+    def annotate(hint: t.Any) -> t.Annotated[t.Any, "annotation"]:
+        return t.Annotated[hint, "annotation"]
 
 
 @pytest.fixture(scope="module")

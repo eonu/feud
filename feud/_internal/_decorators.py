@@ -23,6 +23,7 @@ def validate_call(
     /,
     *,
     name: str,
+    param_renames: dict[str, str],
     meta_vars: dict[str, str],
     sensitive_vars: dict[str, bool],
     pydantic_kwargs: dict[str, t.Any],
@@ -30,8 +31,10 @@ def validate_call(
     @ft.wraps(func)
     def wrapper(*args: t.Any, **kwargs: t.Any) -> t.Callable:
         try:
+            inv_mapping = {v: k for k, v in param_renames.items()}
             config = pyd.ConfigDict(**pydantic_kwargs)
-            return pyd.validate_call(func, config=config)(*args, **kwargs)
+            true_kwargs = {inv_mapping.get(k, k): v for k, v in kwargs.items()}
+            return pyd.validate_call(func, config=config)(*args, **true_kwargs)
         except pyd.ValidationError as e:
             msg = re.sub(
                 r"validation error(s?) for (.*)\n",

@@ -13,7 +13,9 @@ import pytest
 from feud import typing as t
 from feud.config import Config
 
-from ..utils import annotate  # noqa: TID252
+
+def annotate(hint: t.Any) -> t.Annotated[t.Any, "annotation"]:
+    return t.Annotated[hint, "annotation"]
 
 
 @pytest.mark.parametrize("annotated", [False, True])

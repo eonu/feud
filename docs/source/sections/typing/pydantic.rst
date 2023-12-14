@@ -1,6 +1,12 @@
 Pydantic types
 ==============
 
+.. contents:: Table of Contents
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :local:
+    :backlinks: none
+    :depth: 3
+
 `Pydantic <https://docs.pydantic.dev/latest/>`__ is a validation library that provides 
 a rich selection of useful types for command-line inputs.
 
@@ -28,12 +34,6 @@ The following commonly used Pydantic types can be used as type hints for Feud co
         t.FutureDatetime  # pydantic.types.FutureDatetime
         t.conint  # pydantic.types.conint
         t.IPvAnyAddress  # pydantic.networks.IPvAnyAddress
-
-.. contents:: Table of Contents
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :local:
-    :backlinks: none
-    :depth: 3
 
 ----
 
@@ -106,6 +106,15 @@ URL types
 
 Email types
 -----------
+
+.. important::
+
+    In order to use email types, you must install Feud with the optional 
+    ``email-validator`` dependency (see `here <https://github.com/JoshData/python-email-validator>`__).
+
+    .. code:: console
+
+        $ pip install feud[email]
 
 - :py:obj:`pydantic.networks.EmailStr`
 - :py:obj:`pydantic.networks.NameEmail`

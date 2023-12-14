@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Got a question?
+    url: "https://github.com/eonu/feud/discussions/new?category=question"
+    about: Start a discussion on GitHub discussions where Feud developers and users can respond.

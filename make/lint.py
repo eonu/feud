@@ -14,7 +14,7 @@ from invoke.tasks import task
 @task
 def install(c: Config) -> None:
     """Install package with core and dev dependencies."""
-    c.run("poetry install --sync --only base,main,lint -E extra-types")
+    c.run("poetry install --sync --only base,main,lint")
 
 
 @task

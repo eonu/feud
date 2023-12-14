@@ -20,7 +20,7 @@ except ImportError:
 
 class GroupBase(abc.ABCMeta):
     def __new__(
-        cls: type[GroupBase],
+        __cls: type[GroupBase],  # noqa: N804
         cls_name: str,
         bases: tuple[type, ...],
         namespace: dict[str, t.Any],
@@ -57,7 +57,8 @@ class GroupBase(abc.ABCMeta):
             subgroups: list[type] = []  # type[Group], but circular import
             commands: list[str] = []
 
-            # extend/inherit from parent group if subclassed
+            # extend/inherit information from parent group if subclassed
+            help_: str | None = None
             for base in bases:
                 if config := getattr(base, "__feud_config__", None):
                     # NOTE: may want **dict(config) depending on behaviour
@@ -79,6 +80,7 @@ class GroupBase(abc.ABCMeta):
                         for cmd in base.__feud_commands__
                         if cmd not in commands
                     ]
+                    help_ = base.__feud_click_kwargs__.get("help")
 
             # deconstruct base config, override config kwargs and click kwargs
             config_kwargs: dict[str, t.Any] = {}
@@ -97,7 +99,9 @@ class GroupBase(abc.ABCMeta):
                     d[k] = v
 
             # sanitize click kwargs
-            _command.sanitize_click_kwargs(click_kwargs, name=cls_name)
+            _command.sanitize_click_kwargs(
+                click_kwargs, name=cls_name, help_=help_
+            )
 
             # members to consider as commands
             funcs = {
@@ -124,4 +128,17 @@ class GroupBase(abc.ABCMeta):
                         func, config=namespace["__feud_config__"]
                     )
 
-        return super().__new__(cls, cls_name, bases, namespace)
+        group = super().__new__(__cls, cls_name, bases, namespace)
+
+        if bases:
+            # use class-level docstring as help if provided
+            if doc := group.__doc__:
+                click_kwargs["help"] = doc
+            # use __main__ function-level docstring as help if provided
+            if doc := group.__main__.__doc__:
+                click_kwargs["help"] = doc
+            # use class-level click kwargs help if provided
+            if doc := kwargs.get("help"):
+                click_kwargs["help"] = doc
+
+        return group
