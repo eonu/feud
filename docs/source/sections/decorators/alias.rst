@@ -1,6 +1,12 @@
 Aliasing parameters
 ===================
 
+.. contents:: Table of Contents
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :local:
+    :backlinks: none
+    :depth: 3
+
 In CLIs, it is common for options to have an alias allowing
 for quicker short-hand usage. 
 
@@ -43,12 +49,6 @@ and can instead rely on type hints and docstrings.
 
     In the case of boolean flags such as ``--verbose`` in this case, the ``--no-verbose``
     option will also have a corresponding ``--no-v`` alias automatically defined.
-
-.. contents:: Table of Contents
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :local:
-    :backlinks: none
-    :depth: 3
    
 ----
 

@@ -1,6 +1,12 @@
 Standard library types
 ======================
 
+.. contents:: Table of Contents
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :local:
+    :backlinks: none
+    :depth: 3
+
 The following Python standard library types can be used as type hints for Feud commands.
 
 .. tip::
@@ -20,12 +26,6 @@ The following Python standard library types can be used as type hints for Feud c
         t.IntEnum  # enum.IntEnum
         t.NamedTuple  # typing.NamedTuple
         t.Union  # typing.Union
-
-.. contents:: Table of Contents
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :local:
-    :backlinks: none
-    :depth: 3
 
 ----
 

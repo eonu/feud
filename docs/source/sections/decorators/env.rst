@@ -1,6 +1,12 @@
 Using environment variables
 ===========================
 
+.. contents:: Table of Contents
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :local:
+    :backlinks: none
+    :depth: 3
+
 In CLIs, environment variables are often used as an alternative method of 
 providing input for options. This is particularly useful for sensitive 
 information such as API keys, tokens and passwords.
@@ -52,12 +58,6 @@ and can instead rely on type hints and docstrings.
         feud.run(my_command)
 
 This can be called with ``SECRET_TOKEN=hello-world python command.py``, for example.
-
-.. contents:: Table of Contents
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :local:
-    :backlinks: none
-    :depth: 3
    
 ----
 

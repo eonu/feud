@@ -10,4 +10,4 @@ This module consists of decorators that modify :doc:`../core/command` and their 
 
    alias.rst
    env.rst
-   .. rename.rst
+   rename.rst

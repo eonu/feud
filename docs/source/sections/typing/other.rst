@@ -1,6 +1,12 @@
 Other types
 ===========
 
+.. contents:: Table of Contents
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :local:
+    :backlinks: none
+    :depth: 3
+
 Feud provides the following additional types for common CLI needs.
 
 .. tip::
@@ -15,12 +21,6 @@ Feud provides the following additional types for common CLI needs.
 
         t.Counter  # feud.typing.custom.Counter
         t.concounter  # feud.typing.custom.concounter
-
-.. contents:: Table of Contents
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :local:
-    :backlinks: none
-    :depth: 3
 
 ----
 

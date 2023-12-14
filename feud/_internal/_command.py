@@ -34,24 +34,26 @@ class ParameterSpec:
     kwargs: dict[str, t.Any] = dataclasses.field(default_factory=dict)
 
 
+class NameDict(t.TypedDict):
+    command: str | None
+    params: dict[str, str]
+
+
 @dataclasses.dataclass
 class CommandState:
     config: Config
     click_kwargs: dict[str, t.Any]
     is_group: bool
+    names: dict[str, NameDict]  # key: parameter name
+    aliases: dict[str, str | list[str]]  # key: parameter name
+    envs: dict[str, str]  # key: parameter name
+    overrides: dict[str, click.Parameter]  # key: parameter name
     pass_context: bool = False
     # below keys are parameter name
     arguments: dict[str, ParameterSpec] = dataclasses.field(
         default_factory=dict
     )
     options: dict[str, ParameterSpec] = dataclasses.field(default_factory=dict)
-    aliases: dict[str, str | list[str]] = dataclasses.field(
-        default_factory=dict
-    )
-    envs: dict[str, str] = dataclasses.field(default_factory=dict)
-    overrides: dict[str, click.Parameter] = dataclasses.field(
-        default_factory=dict
-    )
 
     def decorate(self: CommandState, func: t.Callable) -> click.Command:
         meta_vars: dict[str, str] = {}
@@ -82,8 +84,18 @@ class CommandState:
                 hide_input = spec.kwargs.get("hide_input")
                 envvar = spec.kwargs.get("envvar")
                 sensitive = hide_input or envvar
-            meta_vars[param_name] = self.get_meta_var(param)
-            sensitive_vars[param_name] = sensitive
+
+            # get renamed parameter if @feud.rename used
+            name: str = self.names["params"].get(param_name, param_name)
+
+            # set parameter name
+            param.name = name
+
+            # get meta vars and identify sensitive parameters for validate_call
+            meta_vars[name] = self.get_meta_var(param)
+            sensitive_vars[name] = sensitive
+
+            # add the parameter
             params.append(param)
 
         # add any overrides that don't appear in function signature
@@ -92,9 +104,14 @@ class CommandState:
             if param_name not in sig.parameters:
                 params.append(param)
 
+        # rename command if @feud.rename used
+        if command_rename := self.names["command"]:
+            self.click_kwargs = {**self.click_kwargs, "name": command_rename}
+
         command = _decorators.validate_call(
             func,
             name=self.click_kwargs["name"],
+            param_renames=self.names["params"],
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
             pydantic_kwargs=self.config.pydantic_kwargs,
