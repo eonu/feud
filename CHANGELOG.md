@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.2rc1](https://github.com/eonu/feud/releases/tag/v0.1.2rc1) - 2023-12-15
+
+### Bug Fixes
+
+- fix repository issue/PR templates ([#97](https://github.com/eonu/feud/issues/97))
+
 ## [v0.1.1](https://github.com/eonu/feud/releases/tag/v0.1.1) - 2023-12-14
 
 ### Bug Fixes
