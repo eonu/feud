@@ -893,7 +893,7 @@ All contributions to this repository are greatly appreciated. Contribution guide
 
 > <img src="https://i.postimg.cc/jq3MZSTD/avatar.png" align="left"/>
 > <b>We're living in an imperfect world!</b><br/>
-> <sup>Feud is in a public beta-test phase, likely with <em>lots</em> of bugs. Please <a href="https://github.com/eonu/feud/issues/new">leave feedback</a> if you come across anything strange!</sup>
+> <sup>Feud is in a public beta-test phase, likely with <em>lots</em> of bugs. Please <a href="https://github.com/eonu/feud/issues/new/choose">leave feedback</a> if you come across anything strange!</sup>
 
 ## Licensing
 
