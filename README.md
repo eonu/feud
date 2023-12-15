@@ -882,8 +882,7 @@ library documentation. Typer is also based on Click.
 One source of motivation for creating Feud is that at the time of creation,
 Pydantic was not yet supported as a type system for Typer. It is worth
 noting that Pydantic as an optional dependency is on Typer's [tentative roadmap](https://github.com/tiangolo/typer/issues/678),
-so it will with no doubt be interesting to see how the implementation compares
-to Feud!
+so it will be interesting to see how the implementation compares to Feud!
 
 Typer is a more complete library for building CLIs overall, but currently
 lacks support for more complex types such as those offered by Pydantic.
