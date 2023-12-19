@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.3](https://github.com/eonu/feud/releases/tag/v0.1.3) - 2023-12-19
+
+### Bug Fixes
+
+- update issues and discussions URLs ([#104](https://github.com/eonu/feud/issues/104))
+
+### Features
+
+- support iterables and `dict` in `feud.run` ([#105](https://github.com/eonu/feud/issues/105))
+
 ## [v0.1.2](https://github.com/eonu/feud/releases/tag/v0.1.2) - 2023-12-15
 
 ### Bug Fixes
