@@ -110,7 +110,7 @@ def run(
     ...     return opt
     >>> feud.run(
     ...     {"func1": func1, "func2": func2},
-    ...     ["func2", "0.12"],
+    ...     ["func2", "--opt", "0.12"],
     ...     standalone_mode=False,
     ... )
     0.12
@@ -122,7 +122,11 @@ def run(
     ...     return opt
     >>> def func2(*, opt: float) -> float:
     ...     return opt
-    >>> feud.run((func1, func2), ["func2", "0.12"], standalone_mode=False)
+    >>> feud.run(
+    ...     (func1, func2),
+    ...     ["func2", "--opt", "0.12"],
+    ...     standalone_mode=False,
+    ... )
     0.12
     """
     runner: t.Callable | None = None
