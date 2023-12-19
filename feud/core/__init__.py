@@ -8,7 +8,7 @@
 from __future__ import annotations
 
 import inspect
-import typing
+import typing as t
 
 import pydantic as pyd
 
@@ -23,15 +23,23 @@ from feud.core.group import *
 __all__ = ["Group", "compile", "command", "run"]
 
 
-@pyd.validate_call(config=pyd.ConfigDict(arbitrary_types_allowed=True))
 def run(
-    obj: type[Group] | click.Command | typing.Callable,
+    obj: t.Union[  # noqa: UP007
+        type[Group],
+        click.Command,
+        t.Callable,
+        dict[str, click.Command | t.Callable],
+        t.Iterable[click.Command | t.Callable],
+    ],
     args: list[str] | None = None,
     /,
-    **kwargs: typing.Any,
-) -> typing.Any:
+    **kwargs: t.Any,
+) -> t.Any:
     """Run a :py:class:`.Group`, :py:class:`click.Command`,
     or :py:class:`click.Group`.
+
+    Multiple functions/commands can also be provided as a :py:obj:`dict`
+    or iterable object.
 
     If called on a function, it will be decorated with :py:func:`.command`
     using the default configuration to convert it into a
@@ -92,7 +100,47 @@ def run(
     >>> group: click.Group = feud.compile(CLI)
     >>> feud.run(group, ["func", "--opt", "3"], standalone_mode=False)
     3
+
+    Running a :py:obj:`dict` of functions/commands.
+
+    >>> import feud
+    >>> def func1(*, opt: int) -> int:
+    ...     return opt
+    >>> def func2(*, opt: float) -> float:
+    ...     return opt
+    >>> feud.run(
+    ...     {"func1": func1, "func2": func2},
+    ...     ["func2", "0.12"],
+    ...     standalone_mode=False,
+    ... )
+    0.12
+
+    Running a collection of functions/commands.
+
+    >>> import feud
+    >>> def func1(*, opt: int) -> int:
+    ...     return opt
+    >>> def func2(*, opt: float) -> float:
+    ...     return opt
+    >>> feud.run((func1, func2), ["func2", "0.12"], standalone_mode=False)
+    0.12
     """
+    runner: t.Callable | None = None
+
     if inspect.isclass(obj) or isinstance(obj, click.Command):
-        return obj(args, **kwargs)
-    return command(obj)(args, **kwargs)
+        runner = obj
+    elif isinstance(obj, dict):
+        runner = type("group", (Group,), obj)
+    elif isinstance(obj, t.Iterable):
+        runner = type(
+            "group",
+            (Group,),
+            {
+                o.name if isinstance(o, click.Command) else o.__name__: o
+                for o in obj
+            },
+        )
+    else:
+        runner = command(obj)
+
+    return runner(args, **kwargs)

@@ -222,3 +222,137 @@ def test_sensitive_input() -> None:
     """.strip()
     with pytest.raises(click.UsageError, match=re.escape(msg)):
         feud.run(f, ["--password", "abc"], standalone_mode=False)
+
+
+@pytest.mark.parametrize("command", [True, False])
+def test_run_dict(capsys: pytest.CaptureFixture, *, command: bool) -> None:
+    def first(arg1: int, *, opt1: float, opt2: bool = False) -> None:
+        """The first command.\f
+
+        Parameters
+        ----------
+        arg1:
+            An argument.
+        opt1:
+            The first option.
+        opt2:
+            The second option.
+        """
+
+    def second(*, opt: int) -> None:
+        """The second command.\f
+
+        Parameters
+        ----------
+        opt:
+            An option.
+        """
+
+    if command:
+        first = feud.command()(first)
+        second = feud.command()(second)
+
+    with pytest.raises(SystemExit):
+        feud.run({"1st": first, "2nd": second}, ["--help"])
+
+    out, _ = capsys.readouterr()
+
+    assert (
+        out.strip()
+        == """
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  first   The first command.
+  second  The second command.
+        """.strip()
+    )
+
+    with pytest.raises(SystemExit):
+        feud.run({"1st": first, "2nd": second}, ["first", "--help"])
+
+    out, _ = capsys.readouterr()
+
+    assert (
+        out.strip()
+        == """
+Usage: pytest first [OPTIONS] ARG1
+
+  The first command.
+
+Options:
+  --opt1 FLOAT        The first option.  [required]
+  --opt2 / --no-opt2  The second option.  [default: no-opt2]
+  --help              Show this message and exit.
+        """.strip()
+    )
+
+
+@pytest.mark.parametrize("command", [True, False])
+def test_run_iterable(capsys: pytest.CaptureFixture, *, command: bool) -> None:
+    def first(arg1: int, *, opt1: float, opt2: bool = False) -> None:
+        """The first command.\f
+
+        Parameters
+        ----------
+        arg1:
+            An argument.
+        opt1:
+            The first option.
+        opt2:
+            The second option.
+        """
+
+    def second(*, opt: int) -> None:
+        """The second command.\f
+
+        Parameters
+        ----------
+        opt:
+            An option.
+        """
+
+    if command:
+        first = feud.command()(first)
+        second = feud.command()(second)
+
+    with pytest.raises(SystemExit):
+        feud.run((first, second), ["--help"])
+
+    out, _ = capsys.readouterr()
+
+    assert (
+        out.strip()
+        == """
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  first   The first command.
+  second  The second command.
+        """.strip()
+    )
+
+    with pytest.raises(SystemExit):
+        feud.run((first, second), ["first", "--help"])
+
+    out, _ = capsys.readouterr()
+
+    assert (
+        out.strip()
+        == """
+Usage: pytest first [OPTIONS] ARG1
+
+  The first command.
+
+Options:
+  --opt1 FLOAT        The first option.  [required]
+  --opt2 / --no-opt2  The second option.  [default: no-opt2]
+  --help              Show this message and exit.
+        """.strip()
+    )
