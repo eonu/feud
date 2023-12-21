@@ -356,3 +356,36 @@ Options:
   --help              Show this message and exit.
         """.strip()
     )
+
+
+def test_full_signature(capsys: pytest.CaptureFixture) -> None:
+    @feud.command
+    def f(
+        a: float,
+        /,
+        b: str,
+        *ints: t.PositiveInt,
+        c: int,
+        d: bool = True,
+        **floats: float,
+    ) -> None:
+        """Does something.\f
+
+        Parameters
+        ----------
+        a:
+            Test 1.
+        b:
+            Test 2.
+        *ints:
+            Test 3.
+        c:
+            Test 4.
+        d:
+            Test 5.
+        **floats:
+            Test 6.
+        """
+        return a, b, ints, c, d, floats
+
+    breakpoint()  # noqa: T100

@@ -318,7 +318,7 @@ from datetime import date
 def create_post(id: int, *, title: str, desc: str | None = None):
     """Create a blog post."""
 
-def delete_post(ids: list[int]):
+def delete_post(*ids: int):
     """Delete blog posts."""
 
 def list_posts(*, between: tuple[date, date] | None = None):
@@ -380,7 +380,7 @@ class Post(feud.Group):
     def create(id: int, *, title: str, desc: str | None = None):
         """Create a blog post."""
 
-    def delete(ids: list[int]):
+    def delete(*ids: int):
         """Delete blog posts."""
 
     def list(*, between: tuple[date, date] | None = None):

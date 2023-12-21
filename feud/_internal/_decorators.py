@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import functools as ft
+import inspect
 import re
 import typing as t
 
@@ -26,14 +27,35 @@ def validate_call(
     param_renames: dict[str, str],
     meta_vars: dict[str, str],
     sensitive_vars: dict[str, bool],
+    positional: list[str],
+    var_positional: str | None,
     pydantic_kwargs: dict[str, t.Any],
 ) -> t.Callable:
     @ft.wraps(func)
     def wrapper(*args: t.Any, **kwargs: t.Any) -> t.Callable:
         try:
+            # move positional arguments
+            for arg in positional:
+                pos_arg = kwargs.pop(arg, inspect._empty)  # noqa: SLF001
+                if pos_arg is not inspect._empty:  # noqa: SLF001
+                    args += (pos_arg,)
+
+            # move *args to positional arguments
+            var_pos_args = kwargs.pop(
+                var_positional,
+                inspect._empty,  # noqa: SLF001
+            )
+            if var_pos_args is not inspect._empty:  # noqa: SLF001
+                args += var_pos_args
+
+            # apply renaming for any options
             inv_mapping = {v: k for k, v in param_renames.items()}
-            config = pyd.ConfigDict(**pydantic_kwargs)
             true_kwargs = {inv_mapping.get(k, k): v for k, v in kwargs.items()}
+
+            # create Pydantic configuration
+            config = pyd.ConfigDict(**pydantic_kwargs)
+
+            # validate the function call
             return pyd.validate_call(func, config=config)(*args, **true_kwargs)
         except pyd.ValidationError as e:
             msg = re.sub(
