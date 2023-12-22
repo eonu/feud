@@ -165,6 +165,18 @@ def build_command_state(
                     "(command-line arguments)."
                 )
                 raise feud.exceptions.CompilationError(msg)
+
+            # handle option default
+            if spec.default is inspect._empty:  # noqa: SLF001
+                # specify as required option
+                # (if no default provided in function signature)
+                meta.kwargs["required"] = True
+            else:
+                # convert and show default
+                # (if default provided in function signature)
+                meta.kwargs["default"] = _types.defaults.convert_default(
+                    spec.default
+                )
         elif spec.kind == spec.KEYWORD_ONLY:
             # function keyword-only arguments correspond to CLI options
             meta.type = _command.ParameterType.OPTION

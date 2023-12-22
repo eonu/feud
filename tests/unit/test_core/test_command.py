@@ -222,3 +222,20 @@ def test_sensitive_input() -> None:
     """.strip()
     with pytest.raises(click.UsageError, match=re.escape(msg)):
         feud.run(f, ["--password", "abc"], standalone_mode=False)
+
+
+def test_argument_default() -> None:
+    @feud.command
+    def f(
+        a: int,
+        /,
+        b: float,
+        c: bool = True,  # noqa: FBT001, FBT002
+    ) -> None:
+        pass
+
+    assert len(f.params) == 3
+
+    # a = f.params[0]  # noqa: ERA001
+    # b = f.params[1]  # noqa: ERA001
+    # c = f.params[2]  # noqa: ERA001
