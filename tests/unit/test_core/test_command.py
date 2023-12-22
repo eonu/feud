@@ -447,3 +447,46 @@ def test_full_signature(  # noqa: PLR0915
     assert e.nargs == 1
     assert not e.required
     assert e.default is True
+
+
+def test_argument_default() -> None:
+    @feud.command
+    def f(
+        a: int,
+        /,
+        b: float,
+        c: bool = True,  # noqa: FBT001, FBT002
+    ) -> None:
+        pass
+
+    assert len(f.params) == 3
+
+    a = f.params[0]
+    assert isinstance(a, click.Argument)
+    assert a.name == "a"
+    assert a.type == click.INT
+    assert a.opts == ["a"]
+    assert a.secondary_opts == []
+    assert a.nargs == 1
+    assert a.required
+    assert a.default is None
+
+    b = f.params[1]
+    assert isinstance(b, click.Argument)
+    assert b.name == "b"
+    assert b.type == click.FLOAT
+    assert b.opts == ["b"]
+    assert b.secondary_opts == []
+    assert b.nargs == 1
+    assert b.required
+    assert b.default is None
+
+    c = f.params[2]
+    assert isinstance(c, click.Argument)
+    assert c.name == "c"
+    assert c.type == click.BOOL
+    assert c.opts == ["c"]
+    assert c.secondary_opts == []
+    assert c.nargs == 1
+    assert not c.required
+    assert c.default is True
