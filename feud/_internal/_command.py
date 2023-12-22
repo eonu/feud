@@ -58,11 +58,27 @@ class CommandState:
     def decorate(self: CommandState, func: t.Callable) -> click.Command:
         meta_vars: dict[str, str] = {}
         sensitive_vars: dict[str, bool] = {}
+        positional: list[str] = []
+        var_positional: str | None = None
         params: list[click.Parameter] = []
 
         sig: inspect.signature = inspect.signature(func)
 
-        for i, param_name in enumerate(sig.parameters):
+        for i, (param_name, param_spec) in enumerate(sig.parameters.items()):
+            # store names of positional arguments
+            if param_spec.kind in (
+                param_spec.POSITIONAL_ONLY,
+                param_spec.POSITIONAL_OR_KEYWORD,
+            ):
+                positional.append(param_name)
+            # store name of variable positional arguments (i.e. *args)
+            if param_spec.kind == param_spec.VAR_POSITIONAL:
+                var_positional = param_name
+            # ignore variable keyword arguments (i.e. **kwargs)
+            if param_spec.kind == param_spec.VAR_KEYWORD:
+                continue
+
+            # create Click parameters
             sensitive: bool = False
             if self.pass_context and i == 0:
                 continue
@@ -114,6 +130,8 @@ class CommandState:
             param_renames=self.names["params"],
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
+            positional=positional,
+            var_positional=var_positional,
             pydantic_kwargs=self.config.pydantic_kwargs,
         )
 

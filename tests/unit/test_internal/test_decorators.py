@@ -22,6 +22,8 @@ def test_validate_call_single_invalid() -> None:
     param_renames = {}
     meta_vars = {"arg2": "--arg2"}
     sensitive_vars = {"arg2": False}
+    positional = []
+    var_positional = None
     pydantic_kwargs = {}
 
     def f(*, arg2: t.Literal["a", "b", "c"]) -> None:
@@ -34,6 +36,8 @@ def test_validate_call_single_invalid() -> None:
             param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
+            positional=positional,
+            var_positional=var_positional,
             pydantic_kwargs=pydantic_kwargs,
         )(arg2="invalid")
 
@@ -55,6 +59,8 @@ def test_validate_call_multiple_invalid() -> None:
     param_renames = {}
     meta_vars = {"0": "ARG1", "arg2": "--arg2"}
     sensitive_vars = {"0": False, "arg2": False}
+    positional = []
+    var_positional = None
     pydantic_kwargs = {}
 
     def f(arg1: int, *, arg2: t.Literal["a", "b", "c"]) -> None:
@@ -67,6 +73,8 @@ def test_validate_call_multiple_invalid() -> None:
             param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
+            positional=positional,
+            var_positional=var_positional,
             pydantic_kwargs=pydantic_kwargs,
         )("invalid", arg2="invalid")
 
@@ -90,6 +98,8 @@ def test_validate_call_list() -> None:
     param_renames = {}
     meta_vars = {"0": "[ARG1]..."}
     sensitive_vars = {"0": False}
+    positional = []
+    var_positional = None
     pydantic_kwargs = {}
 
     def f(arg1: list[t.conint(multiple_of=2)]) -> None:
@@ -102,6 +112,8 @@ def test_validate_call_list() -> None:
             param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
+            positional=positional,
+            var_positional=var_positional,
             pydantic_kwargs=pydantic_kwargs,
         )([1, 2, 3])
 
@@ -125,6 +137,8 @@ def test_validate_call_enum() -> None:
     param_renames = {}
     meta_vars = {"arg2": "--arg2"}
     sensitive_vars = {"arg2": False}
+    positional = []
+    var_positional = None
     pydantic_kwargs = {}
 
     class Choice(enum.Enum):
@@ -142,6 +156,8 @@ def test_validate_call_enum() -> None:
             param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
+            positional=positional,
+            var_positional=var_positional,
             pydantic_kwargs=pydantic_kwargs,
         )(arg2="invalid")
 
@@ -163,6 +179,8 @@ def test_validate_call_datetime() -> None:
     param_renames = {}
     meta_vars = {"time": "--time"}
     sensitive_vars = {"time": False}
+    positional = []
+    var_positional = None
     pydantic_kwargs = {}
 
     def f(*, time: t.FutureDatetime) -> None:
@@ -175,6 +193,8 @@ def test_validate_call_datetime() -> None:
             param_renames=param_renames,
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
+            positional=positional,
+            var_positional=var_positional,
             pydantic_kwargs=pydantic_kwargs,
         )(time=t.datetime.now())
 
