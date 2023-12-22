@@ -119,7 +119,7 @@ def command(
     return decorate(func) if func else decorate
 
 
-def build_command_state(
+def build_command_state(  # noqa: PLR0915
     state: _command.CommandState, *, func: callable, config: Config
 ) -> None:
     doc: docstring_parser.Docstring
@@ -234,6 +234,25 @@ def build_command_state(
                 meta.kwargs["default"] = _types.defaults.convert_default(
                     spec.default
                 )
+        elif spec.kind == spec.VAR_POSITIONAL:
+            # function positional arguments correspond to CLI arguments
+            meta.type = _command.ParameterType.ARGUMENT
+
+            # add the argument
+            meta.args = [name]
+
+            # special handling for variable-length collections
+            meta.kwargs["nargs"] = -1
+
+            # special handling for feud.typing.custom counting types
+            if custom.is_counter(meta.hint):
+                msg = (
+                    "Counting may only be used in conjunction with "
+                    "keyword-only function parameters (command-line "
+                    "options), not positional function parameters "
+                    "(command-line arguments)."
+                )
+                raise feud.exceptions.CompilationError(msg)
 
         # add the parameter
         if meta.type == _command.ParameterType.ARGUMENT:

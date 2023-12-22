@@ -229,7 +229,7 @@ class Post(feud.Group):
     def create(id: int, *, title: str, desc: str | None = None):
         """Create a blog post."""
 
-    def delete(ids: list[int]):
+    def delete(*ids: int):
         """Delete blog posts."""
 
     def list(*, between: tuple[date, date] | None = None):
@@ -307,6 +307,33 @@ $ python post.py list --help
 </tr>
 </table>
 
+Alternatively, if you already have some functions defined that you would like
+to run as commands, you can simply provide them to `feud.run` and it will
+automatically generate and run a group with those commands.
+
+```python
+import feud
+from datetime import date
+
+def create_post(id: int, *, title: str, desc: str | None = None):
+    """Create a blog post."""
+
+def delete_post(*ids: int):
+    """Delete blog posts."""
+
+def list_posts(*, between: tuple[date, date] | None = None):
+    """View all blog posts, optionally filtering by date range."""
+
+if __name__ == "__main__":
+    feud.run([create_post, delete_post, list_posts])
+```
+
+You can also use a `dict` to rename the generated commands:
+
+```python
+feud.run({"create": create_post, "delete": delete_post, "list": list_posts})
+```
+
 As you can see, building a CLI using Feud does not require learning many new
 magic methods or a domain-specific language – you can just use the simple
 Python you know and ❤️!
@@ -353,7 +380,7 @@ class Post(feud.Group):
     def create(id: int, *, title: str, desc: str | None = None):
         """Create a blog post."""
 
-    def delete(ids: list[int]):
+    def delete(*ids: int):
         """Delete blog posts."""
 
     def list(*, between: tuple[date, date] | None = None):

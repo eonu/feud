@@ -224,6 +224,231 @@ def test_sensitive_input() -> None:
         feud.run(f, ["--password", "abc"], standalone_mode=False)
 
 
+@pytest.mark.parametrize("command", [True, False])
+def test_run_dict(capsys: pytest.CaptureFixture, *, command: bool) -> None:
+    def first(arg1: int, *, opt1: float, opt2: bool = False) -> None:
+        """The first command.\f
+
+        Parameters
+        ----------
+        arg1:
+            An argument.
+        opt1:
+            The first option.
+        opt2:
+            The second option.
+        """
+
+    def second(*, opt: int) -> None:
+        """The second command.\f
+
+        Parameters
+        ----------
+        opt:
+            An option.
+        """
+
+    if command:
+        first = feud.command()(first)
+        second = feud.command()(second)
+
+    with pytest.raises(SystemExit):
+        feud.run({"1st": first, "2nd": second}, ["--help"])
+
+    out, _ = capsys.readouterr()
+
+    assert (
+        out.strip()
+        == """
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  first   The first command.
+  second  The second command.
+        """.strip()
+    )
+
+    with pytest.raises(SystemExit):
+        feud.run({"1st": first, "2nd": second}, ["first", "--help"])
+
+    out, _ = capsys.readouterr()
+
+    assert (
+        out.strip()
+        == """
+Usage: pytest first [OPTIONS] ARG1
+
+  The first command.
+
+Options:
+  --opt1 FLOAT        The first option.  [required]
+  --opt2 / --no-opt2  The second option.  [default: no-opt2]
+  --help              Show this message and exit.
+        """.strip()
+    )
+
+
+@pytest.mark.parametrize("command", [True, False])
+def test_run_iterable(capsys: pytest.CaptureFixture, *, command: bool) -> None:
+    def first(arg1: int, *, opt1: float, opt2: bool = False) -> None:
+        """The first command.\f
+
+        Parameters
+        ----------
+        arg1:
+            An argument.
+        opt1:
+            The first option.
+        opt2:
+            The second option.
+        """
+
+    def second(*, opt: int) -> None:
+        """The second command.\f
+
+        Parameters
+        ----------
+        opt:
+            An option.
+        """
+
+    if command:
+        first = feud.command()(first)
+        second = feud.command()(second)
+
+    with pytest.raises(SystemExit):
+        feud.run((first, second), ["--help"])
+
+    out, _ = capsys.readouterr()
+
+    assert (
+        out.strip()
+        == """
+Usage: pytest [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  first   The first command.
+  second  The second command.
+        """.strip()
+    )
+
+    with pytest.raises(SystemExit):
+        feud.run((first, second), ["first", "--help"])
+
+    out, _ = capsys.readouterr()
+
+    assert (
+        out.strip()
+        == """
+Usage: pytest first [OPTIONS] ARG1
+
+  The first command.
+
+Options:
+  --opt1 FLOAT        The first option.  [required]
+  --opt2 / --no-opt2  The second option.  [default: no-opt2]
+  --help              Show this message and exit.
+        """.strip()
+    )
+
+
+def test_full_signature(  # noqa: PLR0915
+    capsys: pytest.CaptureFixture,
+) -> None:
+    @feud.command
+    def command(
+        a: float,
+        /,
+        b: str,
+        *c: t.PositiveInt,
+        d: int,
+        e: bool = True,
+        **f: float,
+    ) -> None:
+        """Does something.\f
+
+        Parameters
+        ----------
+        a:
+            Test 1.
+        b:
+            Test 2.
+        *c:
+            Test 3.
+        d:
+            Test 4.
+        e:
+            Test 5.
+        **f:
+            Test 6.
+        """
+        return a, b, c, d, e, f
+
+    # check params (**f should be ignored)
+    params = command.params
+    assert len(params) == 5
+
+    a = command.params[0]
+    assert isinstance(a, click.Argument)
+    assert a.name == "a"
+    assert a.type == click.FLOAT
+    assert a.opts == ["a"]
+    assert a.secondary_opts == []
+    assert a.nargs == 1
+    assert a.required
+    assert a.default is None
+
+    b = command.params[1]
+    assert isinstance(b, click.Argument)
+    assert b.name == "b"
+    assert b.type == click.STRING
+    assert b.opts == ["b"]
+    assert b.secondary_opts == []
+    assert b.nargs == 1
+    assert b.required
+    assert b.default is None
+
+    c = command.params[2]
+    assert isinstance(c, click.Argument)
+    assert c.name == "c"
+    assert isinstance(c.type, click.IntRange)
+    assert c.type.min == 0
+    assert c.type.min_open
+    assert c.opts == ["c"]
+    assert c.secondary_opts == []
+    assert c.nargs == -1
+    assert not c.required
+    assert c.default is None
+
+    d = command.params[3]
+    assert isinstance(d, click.Option)
+    assert d.name == "d"
+    assert d.help == "Test 4."
+    assert d.type == click.INT
+    assert d.opts == ["--d"]
+    assert d.secondary_opts == []
+    assert d.nargs == 1
+    assert d.required
+    assert d.default is None
+
+    e = command.params[4]
+    assert isinstance(e, click.Option)
+    assert e.name == "e"
+    assert e.help == "Test 5."
+    assert e.type == click.BOOL
+    assert e.opts == ["--e"]
+    assert e.secondary_opts == ["--no-e"]
+    assert e.nargs == 1
+    assert not e.required
+    assert e.default is True
+
+
 def test_argument_default() -> None:
     @feud.command
     def f(
@@ -236,6 +461,32 @@ def test_argument_default() -> None:
 
     assert len(f.params) == 3
 
-    # a = f.params[0]  # noqa: ERA001
-    # b = f.params[1]  # noqa: ERA001
-    # c = f.params[2]  # noqa: ERA001
+    a = f.params[0]
+    assert isinstance(a, click.Argument)
+    assert a.name == "a"
+    assert a.type == click.INT
+    assert a.opts == ["a"]
+    assert a.secondary_opts == []
+    assert a.nargs == 1
+    assert a.required
+    assert a.default is None
+
+    b = f.params[1]
+    assert isinstance(b, click.Argument)
+    assert b.name == "b"
+    assert b.type == click.FLOAT
+    assert b.opts == ["b"]
+    assert b.secondary_opts == []
+    assert b.nargs == 1
+    assert b.required
+    assert b.default is None
+
+    c = f.params[2]
+    assert isinstance(c, click.Argument)
+    assert c.name == "c"
+    assert c.type == click.BOOL
+    assert c.opts == ["c"]
+    assert c.secondary_opts == []
+    assert c.nargs == 1
+    assert not c.required
+    assert c.default is True

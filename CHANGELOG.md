@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.4](https://github.com/eonu/feud/releases/tag/v0.1.4) - 2023-12-22
+
+### Bug Fixes
+
+- update `release` task to use `version.py` ([#111](https://github.com/eonu/feud/issues/111))
+
+### Documentation
+
+- add `feud.run` dict/iterable examples to `README.md` ([#107](https://github.com/eonu/feud/issues/107))
+- add footer to `.md` files ([#109](https://github.com/eonu/feud/issues/109))
+
+### Features
+
+- support `*args` and `**kwargs` ([#108](https://github.com/eonu/feud/issues/108))
+
+## [v0.1.3](https://github.com/eonu/feud/releases/tag/v0.1.3) - 2023-12-19
+
+### Bug Fixes
+
+- update issues and discussions URLs ([#104](https://github.com/eonu/feud/issues/104))
+
+### Features
+
+- support iterables and `dict` in `feud.run` ([#105](https://github.com/eonu/feud/issues/105))
+
 ## [v0.1.2](https://github.com/eonu/feud/releases/tag/v0.1.2) - 2023-12-15
 
 ### Bug Fixes

@@ -25,12 +25,12 @@ def build(c: Config, *, v: str) -> None:
     with open(conf_path, "w") as f:
         f.write(re.sub(r'release = ".*"', f'release = "{v}"', conf))
 
-    # bump package version - feud/__init__.py)
-    init_path: Path = root / "feud" / "__init__.py"
+    # bump package version - feud/version.py)
+    init_path: Path = root / "feud" / "version.py"
     with open(init_path) as f:
         init: str = f.read()
     with open(init_path, "w") as f:
-        f.write(re.sub(r'__version__ = ".*"', f'__version__ = "{v}"', init))
+        f.write(re.sub(r'VERSION = ".*"', f'VERSION = "{v}"', init))
 
     # bump project version - pyproject.toml
     c.run(f"poetry version -q {v}")

@@ -112,3 +112,10 @@ poetry run tox -e docs -- --no-watch
 ## License
 
 By contributing, you agree that your contributions will be licensed under the repository's [MIT License](/LICENSE).
+
+---
+
+<p align="center">
+  <b>Feud</b> &copy; 2023-2025, Edwin Onuonga - Released under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.<br/>
+  <em>Authored and maintained by Edwin Onuonga.</em>
+</p>
