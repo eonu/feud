@@ -27,7 +27,7 @@ from feud.core.group import *
 
 __all__ = ["Group", "compile", "command", "run"]
 
-RICH_SETTINGS_REGEX = r"^[A-Z]+(_[A-Z]+)*$"
+RICH_SETTINGS_REGEX = r"^[A-Z]+(_[A-Z]+)*$"  # screaming snake case
 RICH_DEFAULTS = {"SHOW_ARGUMENTS": True}
 
 
@@ -181,6 +181,21 @@ def rich_styler(
         if RICH:
             # alias click.rich_click
             rich = click.rich_click
+
+            # check for screaming snake case kwargs that are invalid
+            invalid_kwargs: dict[str, t.Any] = {
+                k: rich_kwargs.pop(k)
+                for k in rich_kwargs.copy()
+                if not hasattr(rich, k)
+            }
+
+            # warn if any invalid kwargs
+            if invalid_kwargs:
+                warnings.warn(
+                    "The following invalid rich-click settings will be "
+                    f"ignored: {invalid_kwargs}.",
+                    stacklevel=1,
+                )
 
             # override: true defaults -> feud defaults -> specified settings
             true_defaults = {k: getattr(rich, k) for k in rich_kwargs}
