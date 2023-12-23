@@ -796,6 +796,13 @@ To install Feud without any optional dependencies, simply run `pip install feud`
 
 Below is a comparison of Feud with and without `rich-click`.
 
+> [!TIP]
+> [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
+>
+> ```python
+> feud.run(command, SHOW_ARGUMENTS=False)
+> ```
+
 <table>
 <tr>
 <th>
