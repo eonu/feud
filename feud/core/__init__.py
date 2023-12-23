@@ -7,20 +7,28 @@
 
 from __future__ import annotations
 
+import contextlib
 import inspect
+import re
 import typing as t
-
-import pydantic as pyd
+import warnings
 
 try:
     import rich_click as click
+
+    RICH = True
 except ImportError:
     import click
+
+    RICH = False
 
 from feud.core.command import *
 from feud.core.group import *
 
 __all__ = ["Group", "compile", "command", "run"]
+
+RICH_SETTINGS_REGEX = r"^[A-Z]+(_[A-Z]+)*$"  # screaming snake case
+RICH_DEFAULTS = {"SHOW_ARGUMENTS": True}
 
 
 def run(
@@ -147,4 +155,71 @@ def run(
     else:
         runner = command(obj)
 
-    return runner(args, **kwargs)
+    # set (and unset) feud/user-specified rich-click settings
+    with rich_styler(kwargs) as runner_kwargs:
+        return runner(args, **runner_kwargs)
+
+
+@contextlib.contextmanager
+def rich_styler(
+    original_kwargs: dict[str, t.Any],
+    /,
+) -> t.Generator[dict[str, t.Any]]:
+    """Temporarily applies Feud and user-specified rich-click settings if
+    rich-click is installed and rich-click keywords were provided to feud.run.
+    """
+    kwargs: dict[str, t.Any] = original_kwargs.copy()
+
+    # get rich_click settings
+    rich_kwargs: dict[str, t.Any] = {
+        k: kwargs.pop(k)
+        for k in original_kwargs
+        if re.match(RICH_SETTINGS_REGEX, k)
+    }
+
+    try:
+        if RICH:
+            # alias click.rich_click
+            rich = click.rich_click
+
+            # check for screaming snake case kwargs that are invalid
+            invalid_kwargs: dict[str, t.Any] = {
+                k: rich_kwargs.pop(k)
+                for k in rich_kwargs.copy()
+                if not hasattr(rich, k)
+            }
+
+            # warn if any invalid kwargs
+            if invalid_kwargs:
+                warnings.warn(
+                    "The following invalid rich-click settings will be "
+                    f"ignored: {invalid_kwargs}.",
+                    stacklevel=1,
+                )
+
+            # override: true defaults -> feud defaults -> specified settings
+            true_defaults = {k: getattr(rich, k) for k in rich_kwargs}
+            rich_kwargs = {**true_defaults, **RICH_DEFAULTS, **rich_kwargs}
+
+            # set rich_click settings
+            for k, v in rich_kwargs.items():
+                setattr(rich, k, v)
+
+            # yield kwargs for the runner
+            yield kwargs
+        else:
+            if rich_kwargs:
+                warnings.warn(
+                    "rich-click settings were provided to feud.run, "
+                    "but rich-click is not installed - these settings "
+                    "will be ignored.",
+                    stacklevel=1,
+                )
+
+            # yield kwargs for the runner
+            yield kwargs
+    finally:
+        # restore rich_click defaults
+        if RICH:
+            for k, v in true_defaults.items():
+                setattr(rich, k, v)
