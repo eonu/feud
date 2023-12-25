@@ -12,8 +12,7 @@ import feud
 import feud.core
 from feud import click
 from feud import typing as t
-
-from .fixtures import module
+from tests.unit.test_core.fixtures import module
 
 overrides: dict[str, t.Any] = {
     "name": "overridden",
