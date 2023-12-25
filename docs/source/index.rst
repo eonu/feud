@@ -61,6 +61,7 @@ Contents
    sections/typing/index
    sections/decorators/index
    sections/config/index
+   sections/exceptions
 
 Indices and tables
 ==================

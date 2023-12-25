@@ -10,7 +10,7 @@ __all__ = ["CompilationError", "RegistrationError"]
 
 class CompilationError(Exception):
     """An exception indicating an issue that would prevent a
-    :py:func:`click.Command`` command from being generated as expected.
+    :py:class:`click.Command` command from being generated as expected.
     """
 
 

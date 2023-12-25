@@ -129,8 +129,8 @@ def run(
 
     Raises
     ------
-    Compilation error if no runnable object or current module can be
-    determined.
+    feud.exceptions.CompilationError
+        If no runnable object or current module can be determined.
 
     Examples
     --------
