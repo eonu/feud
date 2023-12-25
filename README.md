@@ -354,11 +354,9 @@ feud.run(post)
 You can even call `feud.run()` without providing any object, and it will
 automatically discover all runnable objects in the current module.
 
----
-
-As you can see, building a CLI using Feud does not require learning many new
+_As you can see, building a CLI using Feud does not require learning many new
 magic methods or a domain-specific language – you can just use the simple
-Python you know and ❤️!
+Python you know and ❤️!_
 
 #### Registering command sub-groups
 
