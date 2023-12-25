@@ -4,7 +4,9 @@
 # This source code is part of the Feud project (https://feud.wiki).
 
 import inspect
+import os
 import re
+import sys
 
 import pytest
 
@@ -12,7 +14,9 @@ import feud
 import feud.core
 from feud import click
 from feud import typing as t
-from tests.unit.test_core.fixtures import module
+
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+from fixtures import module  # noqa: E402
 
 overrides: dict[str, t.Any] = {
     "name": "overridden",
