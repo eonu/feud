@@ -31,6 +31,7 @@ API reference
 
 .. autoclass:: feud.core.group.Group
     :members:
+    :exclude-members: from_dict, from_iter, from_module
 
 .. autofunction:: feud.core.group.compile
     

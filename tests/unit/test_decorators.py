@@ -363,7 +363,7 @@ def test_rename_group(capsys: pytest.CaptureFixture) -> None:
         def f(ctx: click.Context, *, opt2: int) -> int:
             return ctx.obj["opt1"], opt2
 
-    return Test(
+    assert Test(
         ["--opt-1", "1", "func", "--opt_2", "2"],
         standalone_mode=False,
     ) == (1, 2)

@@ -312,6 +312,8 @@ to run as commands, you can simply provide them to `feud.run` and it will
 automatically generate and run a group with those commands.
 
 ```python
+# post.py
+
 import feud
 from datetime import date
 
@@ -334,9 +336,27 @@ You can also use a `dict` to rename the generated commands:
 feud.run({"create": create_post, "delete": delete_post, "list": list_posts})
 ```
 
-As you can see, building a CLI using Feud does not require learning many new
+For more complex applications, you can also nest commands in sub-groups:
+
+```python
+feud.run({"list": list_posts, "modify": [create_post, delete_post]})
+```
+
+If commands are defined in another module, you can also
+run the module directly and Feud will pick up all runnable objects:
+
+```python
+from . import post
+
+feud.run(post)
+```
+
+You can even call `feud.run()` without providing any object, and it will
+automatically discover all runnable objects in the current module.
+
+**As you can see, building a CLI using Feud does not require learning many new
 magic methods or a domain-specific language – you can just use the simple
-Python you know and ❤️!
+Python you know and ❤️!**
 
 #### Registering command sub-groups
 
@@ -796,8 +816,7 @@ To install Feud without any optional dependencies, simply run `pip install feud`
 
 Below is a comparison of Feud with and without `rich-click`.
 
-> [!TIP]
-> [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
+> [!TIP] > [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
 >
 > ```python
 > feud.run(command, SHOW_ARGUMENTS=False)
