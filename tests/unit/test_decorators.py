@@ -39,7 +39,7 @@ def env_command() -> Callable:
     def f(
         *, opt1: t.PositiveInt, opt2: bool, opt3: t.NegativeFloat
     ) -> tuple[t.PositiveInt, bool, t.NegativeFloat]:
-        """Returns a full path.\f
+        """Returns a full path.
 
         Parameters
         ----------
@@ -295,7 +295,7 @@ def test_all_decorators(capsys: pytest.CaptureFixture) -> None:
     def command(
         *, opt1: t.PositiveInt, opt2: bool, opt3: t.NegativeFloat
     ) -> t.Path:
-        """Returns a full path.\f
+        """Returns a full path.
 
         Parameters
         ----------

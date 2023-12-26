@@ -23,7 +23,7 @@ except ImportError:
     import click
 
 import feud.exceptions
-from feud._internal import _command, _types
+from feud._internal import _command, _docstring, _types
 from feud.config import Config
 from feud.typing import custom
 
@@ -127,6 +127,8 @@ def build_command_state(  # noqa: PLR0915
         doc = docstring_parser.parse(state.click_kwargs.get("help", ""))
     else:
         doc = docstring_parser.parse_from_object(func)
+
+    state.description: str | None = _docstring.get_description(doc)
 
     sig: inspect.Signature = inspect.signature(func)
 

@@ -12,7 +12,7 @@ from feud import click
 
 
 def func1(*, opt: bool) -> bool:
-    """This is the first function.\f
+    """This is the first function.
 
     Parameters
     ----------
@@ -24,7 +24,7 @@ def func1(*, opt: bool) -> bool:
 
 @feud.command
 def command(*, opt: bool) -> bool:
-    """This is a command.\f
+    """This is a command.
 
     Parameters
     ----------
@@ -38,7 +38,7 @@ class Group(feud.Group, name="feud-group"):
     """This is a Feud group."""
 
     def func(*, opt: bool) -> bool:
-        """This is a function in the group.\f
+        """This is a function in the group.
 
         Parameters
         ----------
@@ -52,7 +52,7 @@ class Subgroup(feud.Group, name="feud-subgroup"):
     """This is a subgroup."""
 
     def func(*, opt: bool) -> bool:
-        """This is a function in the subgroup.\f
+        """This is a function in the subgroup.
 
         Parameters
         ----------

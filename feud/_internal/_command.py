@@ -54,6 +54,7 @@ class CommandState:
         default_factory=dict
     )
     options: dict[str, ParameterSpec] = dataclasses.field(default_factory=dict)
+    description: str | None = None
 
     def decorate(self: CommandState, func: t.Callable) -> click.Command:
         meta_vars: dict[str, str] = {}
@@ -123,6 +124,13 @@ class CommandState:
         # rename command if @feud.rename used
         if command_rename := self.names["command"]:
             self.click_kwargs = {**self.click_kwargs, "name": command_rename}
+
+        # set help to docstring description if not provided
+        if self.is_group:
+            if "help" in self.click_kwargs:
+                self.click_kwargs["help"] = self.description
+        elif help_ := self.click_kwargs.get("help", self.description):
+            self.click_kwargs["help"] = help_
 
         command = _decorators.validate_call(
             func,

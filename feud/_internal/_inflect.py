@@ -21,7 +21,8 @@ def transliterate(string: str) -> str:
     >>> transliterate("Ærøskøbing")
     "rskbing"
 
-    Source code from inflection package (https://github.com/jpvanhal/inflection).
+    Source code from inflection package
+    (https://github.com/jpvanhal/inflection).
 
         Copyright (C) 2012-2020 Janne Vanhala
 
@@ -58,7 +59,8 @@ def parameterize(string: str, separator: str = "-") -> str:
     >>> parameterize(u"Donald E. Knuth")
     "donald-e-knuth"
 
-    Source code from inflection package (https://github.com/jpvanhal/inflection).
+    Source code from inflection package
+    (https://github.com/jpvanhal/inflection).
 
         Copyright (C) 2012-2020 Janne Vanhala
 

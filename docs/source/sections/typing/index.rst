@@ -55,7 +55,7 @@ Feud relies on type hints to determine the type for command-line argument/option
                 from feud import typing as t
 
                 def serve(port: t.PositiveInt, *, watch: bool = True, env: t.Literal["dev", "prod"] = "dev"):
-                    """Start a local HTTP server.\f
+                    """Start a local HTTP server.
 
                     Parameters
                     ----------
