@@ -857,6 +857,41 @@ Feud either relies heavily on, or was inspired by the following
 packages. It would be greatly appreciated if you also supported the below
 maintainers and the work they have done that Feud has built upon.
 
+<table>
+
+<tr>
+  <th>Project</th>
+  <th>Description</th>
+</tr>
+<tr>
+<td>
+
+### [Click](https://github.com/pallets/click)
+
+<sup>
+
+by [@pallets](https://github.com/pallets)
+
+</sup>
+  
+</td>
+<td>
+
+> _Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary._
+
+Feud is essentially a wrapper around Click that takes classes and functions
+with type hints and intelligently 'compiles' them into a ready-to-use Click
+generated CLI.
+
+</td>
+</tr>
+<tr>
+<td>TODO</td>
+<td>TODO</td>
+</tr>
+
+</table>
+
 ### [Click](https://github.com/pallets/click)
 
 <sup>
