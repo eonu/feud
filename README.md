@@ -870,7 +870,7 @@ maintainers and the work they have done that Feud has built upon.
 
 <sup>
 
-by [@pallets](https://github.com/pallets)
+by&nbsp;[@pallets](https://github.com/pallets)
 
 </sup>
   
@@ -892,7 +892,7 @@ generated CLI.
 
 <sup>
 
-by [@ewels](https://github.com/ewels)
+by&nbsp;[@ewels](https://github.com/ewels)
 
 </sup>
 
