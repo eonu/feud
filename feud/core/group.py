@@ -441,6 +441,7 @@ class Group(metaclass=_metaclass.GroupBase):
         ----------
         obj:
             :py:obj:`dict` of runnable function, command or group objects.
+
         **kwargs:
             Click keywords or Feud configuration to apply:
 
@@ -524,6 +525,7 @@ class Group(metaclass=_metaclass.GroupBase):
         ----------
         obj:
             :py:obj:`dict` of runnable function, command or group objects.
+
         **kwargs:
             Click keywords or Feud configuration to apply:
 
@@ -584,6 +586,7 @@ class Group(metaclass=_metaclass.GroupBase):
         ----------
         obj:
             Module of runnable function, command or group objects.
+
         **kwargs:
             Click keywords or Feud configuration to apply:
 
@@ -602,10 +605,9 @@ class Group(metaclass=_metaclass.GroupBase):
                 return inspect.getmodule(item) == obj
             return isinstance(item, click.Command)
 
-        def get_descendants(group: type[Group]) -> t.Generator[type[Group]]:
-            for name, child in group.descendants().items():
-                yield name
-                yield from map(get_descendants, child.keys())
+        # function to get the name of a command or function
+        def get_name(o: click.Command | t.Callable) -> str:
+            return o.name if isinstance(o, click.Command) else o.__name__
 
         # split function/click.Command/click.Group from feud.Group
         commands: list[t.Callable | click.Command] = []
@@ -615,10 +617,6 @@ class Group(metaclass=_metaclass.GroupBase):
                 commands.append(item)
             elif inspect.isclass(item) and issubclass(item, Group):
                 groups.append(item)
-
-        # function to get the name of a command or function
-        def get_name(o: click.Command | t.Callable) -> str:
-            return o.name if isinstance(o, click.Command) else o.__name__
 
         # group members
         members: dict[str, click.Command | t.Callable] = {
@@ -633,7 +631,10 @@ class Group(metaclass=_metaclass.GroupBase):
 
         # discard non-root groups
         non_root: set[type[Group]] = set(
-            chain.from_iterable(map(get_descendants, groups))
+            chain.from_iterable(
+                group._descendants()  # noqa: SLF001
+                for group in groups
+            )
         )
         subgroups = [group for group in groups if group not in non_root]
 
