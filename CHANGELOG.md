@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.5](https://github.com/eonu/feud/releases/tag/v0.1.5) - 2023-12-26
+
+### Documentation
+
+- restyle `README.md` and related projects ([#117](https://github.com/eonu/feud/issues/117))
+
+### Features
+
+- support argument defaults ([#114](https://github.com/eonu/feud/issues/114))
+- show argument help by default + support `rich-click` overrides ([#115](https://github.com/eonu/feud/issues/115))
+- expand `feud.run` object support/discovery ([#116](https://github.com/eonu/feud/issues/116))
+
 ## [v0.1.4](https://github.com/eonu/feud/releases/tag/v0.1.4) - 2023-12-22
 
 ### Bug Fixes
