@@ -44,8 +44,6 @@
   </sup>
 </p>
 
----
-
 ## About
 
 > [!WARNING]  
