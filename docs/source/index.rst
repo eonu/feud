@@ -40,11 +40,7 @@ Feud
 
 ----
 
-It is not uncommon for CLIs to consist of many commands, subcommands, 
-arguments, options and aliases, on top of dealing with other aspects such as 
-documentation and input types when it comes to argument parsing.
-
-Designing such interfaces can spiral into chaos without the help of
+Designing a *good* CLI can spiral into chaos without the help of
 an intuitive CLI builder.
 
 **Feud builds on** `Click <https://click.palletsprojects.com/en/8.1.x/>`__ **for
@@ -61,6 +57,7 @@ Contents
    sections/typing/index
    sections/decorators/index
    sections/config/index
+   sections/exceptions
 
 Indices and tables
 ==================

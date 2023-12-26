@@ -44,19 +44,12 @@
   </sup>
 </p>
 
----
-
 ## About
 
 > [!WARNING]  
 > _Writing command-line interfaces can get messy!_
 
-It is not uncommon for CLIs to consist of many commands,
-subcommands, arguments, options and aliases, on
-top of dealing with other aspects such as documentation and input types when
-it comes to argument parsing.
-
-Designing such an interface can quickly spiral into chaos without the help of
+Designing a _good_ CLI can quickly spiral into chaos without the help of
 an intuitive CLI builder.
 
 **Feud builds on [Click](https://click.palletsprojects.com/en/8.1.x/) for
@@ -77,13 +70,25 @@ Consider the following example command for serving local files on a HTTP server.
 
 **In red is a typical Click implementation, and in green is the Feud equivalent.**
 
+<table>
+<tr>
+<td>
+
+**Example**: Command for running a HTTP web server.
+
+</td>
+</tr>
+<tr>
+<td>
+
 ```diff
+# serve.py
+
 - import click
 + import feud
 + from typing import Literal
 
 - @click.command
-+ @feud.command
 - @click.argument("port", type=int, help="Server port.")
 - @click.option("--watch/--no-watch", type=bool, default=True, help="Watch source code for changes.")
 - @click.option("--env", type=click.Choice(["dev", "prod"]), default="dev", help="Environment mode.")
@@ -101,42 +106,10 @@ Consider the following example command for serving local files on a HTTP server.
 +     env:
 +         Environment mode.
 +     """
-```
-
-Let's take a closer look at the Feud implementation.
-
-<table>
-<tr>
-<td>
-
-**Example**: Command for running a HTTP web server.
-
-</td>
-</tr>
-<tr>
-<td>
-
-```python
-# serve.py
-
-import feud
-from typing import Literal
-
-def serve(port: int, *, watch: bool = True, env: Literal["dev", "prod"] = "dev"):
-    """Start a local HTTP server.\f
-
-    Parameters
-    ----------
-    port:
-        Server port.
-    watch:
-        Watch source code for changes.
-    env:
-        Environment mode.
-    """
 
 if __name__ == "__main__":
-    feud.run(serve)
+-     serve()
++     feud.run(serve)
 ```
 
 </td>
@@ -312,6 +285,8 @@ to run as commands, you can simply provide them to `feud.run` and it will
 automatically generate and run a group with those commands.
 
 ```python
+# post.py
+
 import feud
 from datetime import date
 
@@ -334,9 +309,27 @@ You can also use a `dict` to rename the generated commands:
 feud.run({"create": create_post, "delete": delete_post, "list": list_posts})
 ```
 
-As you can see, building a CLI using Feud does not require learning many new
+For more complex applications, you can also nest commands in sub-groups:
+
+```python
+feud.run({"list": list_posts, "modify": [create_post, delete_post]})
+```
+
+If commands are defined in another module, you can also
+run the module directly and Feud will pick up all runnable objects:
+
+```python
+import post
+
+feud.run(post)
+```
+
+You can even call `feud.run()` without providing any object, and it will
+automatically discover all runnable objects in the current module.
+
+_As you can see, building a CLI using Feud does not require learning many new
 magic methods or a domain-specific language – you can just use the simple
-Python you know and ❤️!
+Python you know and ❤️!_
 
 #### Registering command sub-groups
 
@@ -508,13 +501,8 @@ validation library with extensive support for many data types, including:
 - constrained types (e.g. positive/negative integers or past/future dates).
 
 [`pydantic-extra-types`](https://github.com/pydantic/pydantic-extra-types) is
-an optional dependency offering additional types such as:
-
-- country names,
-- payment card numbers,
-- phone numbers,
-- colours,
-- latitude/longitude.
+an optional dependency offering additional types such as country names,
+payment card numbers, phone numbers, colours, latitude/longitude and more.
 
 Custom annotated types with user-defined validation functions can also be
 defined with Pydantic.
@@ -526,6 +514,12 @@ defined with Pydantic.
 **Example**: Command for generating audio samples from text prompts using
 a machine learning model, and storing produced audio files in an output
 directory.
+
+- **At least one** text prompt must be provided.
+- **No more than five** text prompts can be provided.
+- Each text prompt can have a **maximum of 12 characters**.
+- The model is specified by a path to a **file that must exist**.
+- The output directory is a path to a **folder that must exist**.
 
 </td>
 </tr>
@@ -655,6 +649,10 @@ $ python generate.py "dog barking" "cat meowing" --output audio.txt
 </td>
 </tr>
 </table>
+
+_By relying on Pydantic to handle the hard work of validation, we can contain all
+of the required CLI constraints in a simple function signature, leaving you to focus
+on the important part – implementing your commands._
 
 ### Highly configurable and extensible
 
@@ -823,6 +821,14 @@ Without Rich-formatted output
 </tr>
 </table>
 
+> [!TIP]
+>
+> [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
+>
+> ```python
+> feud.run(command, rich_settings={"SHOW_ARGUMENTS": False})
+> ```
+
 ## Build status
 
 | `master`                                                                                                                                                                                       | `dev`                                                                                                                                                                                            |
@@ -848,71 +854,118 @@ Feud either relies heavily on, or was inspired by the following
 packages. It would be greatly appreciated if you also supported the below
 maintainers and the work they have done that Feud has built upon.
 
-### [Click](https://github.com/pallets/click)
+<table>
+
+<tr>
+  <th>Project</th>
+  <th>Description</th>
+</tr>
+<tr>
+<td>
+
+##### [Click](https://github.com/pallets/click)
 
 <sup>
 
-by [@pallets](https://github.com/pallets)
+by&nbsp;[@pallets](https://github.com/pallets)
 
 </sup>
-
-> _Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary._
+  
+</td>
+<td>
 
 Feud is essentially a wrapper around Click that takes classes and functions
 with type hints and intelligently 'compiles' them into a ready-to-use Click
 generated CLI.
 
-### [Rich Click](https://github.com/ewels/rich-click)
+</td>
+</tr>
+<tr>
+<td>
+
+##### [Rich Click](https://github.com/ewels/rich-click)
 
 <sup>
 
-by [@ewels](https://github.com/ewels)
+by&nbsp;[@ewels](https://github.com/ewels)
 
 </sup>
 
-> _Richly rendered command line interfaces in click._
+</td>
+<td>
 
 A shim around Click that renders help output nicely using
 [Rich](https://github.com/Textualize/rich).
 
-### [Pydantic](https://github.com/pydantic/pydantic)
+</td>
+</tr>
+<tr>
+<td>
+
+##### [Pydantic](https://github.com/pydantic/pydantic)
 
 <sup>
 
-by [@samuelcolvin](https://github.com/samuelcolvin)
+by&nbsp;[@samuelcolvin](https://github.com/samuelcolvin)
 
 </sup>
 
-> _Data validation using Python type hints._
+</td>
+<td>
 
 Pydantic is a validation package that makes it easy to declaratively validate
 input data based on type hints.
 
-The package offers support for common standard library types (e.g. `int`,
-`float`, `str`, `date`/`datetime`), plus more complex types which can also be
-used as type hints in Feud commands for input validation.
+The package offers support for common standard library types, plus more complex
+types which can also be used as type hints in Feud commands for input validation.
 
-### [Typer](https://github.com/tiangolo/typer)
+</td>
+</tr>
+<tr>
+<td>
+
+##### [Typer](https://github.com/tiangolo/typer)
 
 <sup>
 
-by [@tiangolo](https://github.com/tiangolo)
+by&nbsp;[@tiangolo](https://github.com/tiangolo)
 
 </sup>
 
-> _Typer is a library for building CLI applications that users will love using and developers will love creating._
+</td>
+<td>
 
 Typer shares a similar ideology to Feud, in that building CLIs should be
 simple and not require learning new functions or constantly referring to
 library documentation. Typer is also based on Click.
 
-One source of motivation for creating Feud is that at the time of creation,
-Pydantic was not yet supported as a type system for Typer. It is worth
-noting that Pydantic as an optional dependency is on Typer's [tentative roadmap](https://github.com/tiangolo/typer/issues/678),
-so it will be interesting to see how the implementation compares to Feud!
-
 Typer is a more complete library for building CLIs overall, but currently
 lacks support for more complex types such as those offered by Pydantic.
+
+</td>
+</tr>
+<tr>
+<td>
+
+##### [Thor](https://github.com/rails/thor)
+
+<sup>
+
+by&nbsp;[@rails](https://github.com/rails)
+
+</sup>
+
+</td>
+<td>
+
+Though not a Python package, the highly object-oriented design of Thor (a CLI
+building package in Ruby) – in particular the use of classes to define command
+groups – greatly influenced the implementation of the `feud.Group` class.
+
+</td>
+</tr>
+
+</table>
 
 ## Contributing
 

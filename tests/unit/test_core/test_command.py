@@ -266,20 +266,20 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  first   The first command.
-  second  The second command.
+  1st  The first command.
+  2nd  The second command.
         """.strip()
     )
 
     with pytest.raises(SystemExit):
-        feud.run({"1st": first, "2nd": second}, ["first", "--help"])
+        feud.run({"1st": first, "2nd": second}, ["1st", "--help"])
 
     out, _ = capsys.readouterr()
 
     assert (
         out.strip()
         == """
-Usage: pytest first [OPTIONS] ARG1
+Usage: pytest 1st [OPTIONS] ARG1
 
   The first command.
 
@@ -358,7 +358,7 @@ Options:
     )
 
 
-def test_full_signature(  # noqa: PLR0915
+def test_full_signature(
     capsys: pytest.CaptureFixture,
 ) -> None:
     @feud.command
@@ -447,3 +447,46 @@ def test_full_signature(  # noqa: PLR0915
     assert e.nargs == 1
     assert not e.required
     assert e.default is True
+
+
+def test_argument_default() -> None:
+    @feud.command
+    def f(
+        a: int,
+        /,
+        b: float,
+        c: bool = True,  # noqa: FBT001, FBT002
+    ) -> None:
+        pass
+
+    assert len(f.params) == 3
+
+    a = f.params[0]
+    assert isinstance(a, click.Argument)
+    assert a.name == "a"
+    assert a.type == click.INT
+    assert a.opts == ["a"]
+    assert a.secondary_opts == []
+    assert a.nargs == 1
+    assert a.required
+    assert a.default is None
+
+    b = f.params[1]
+    assert isinstance(b, click.Argument)
+    assert b.name == "b"
+    assert b.type == click.FLOAT
+    assert b.opts == ["b"]
+    assert b.secondary_opts == []
+    assert b.nargs == 1
+    assert b.required
+    assert b.default is None
+
+    c = f.params[2]
+    assert isinstance(c, click.Argument)
+    assert c.name == "c"
+    assert c.type == click.BOOL
+    assert c.opts == ["c"]
+    assert c.secondary_opts == []
+    assert c.nargs == 1
+    assert not c.required
+    assert c.default is True

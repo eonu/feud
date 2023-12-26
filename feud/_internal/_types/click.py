@@ -202,7 +202,7 @@ def resolve_type(hint: t.Any, *, config: Config) -> ClickType:
         return click.Choice(list(map(str, base_args.values())))
     if t.get_origin(base_type) in (t.Union, types.UnionType):
         # only try to determine type for
-        # t.Optional[t.Any] / t.Union[t.Any, None]  # noqa: ERA001
+        # t.Optional[t.Any] / t.Union[t.Any, None]
         arg_values = base_args.values()
         if len(base_args) == 2 and type(None) in arg_values:
             non_none = next(arg for arg in arg_values if arg is not type(None))
@@ -338,7 +338,7 @@ def is_collection_type(hint: t.Any) -> tuple[bool, t.Any | None]:
                 # typing.Tuple
                 return True, None
             if len(base_args) == 2 and base_args.get(1) is Ellipsis:
-                # typing.Tuple[typing.Any, ...]  # noqa: ERA001
+                # typing.Tuple[typing.Any, ...]
                 return True, base_args.get(0)
             return False, None
         return True, base_args.get(0)
@@ -381,7 +381,7 @@ def resolve_collection(
             )
         )
     if hint in (list, set, frozenset, collections.deque):
-        # Type[t.Any]  # noqa: ERA001
+        # Type[t.Any]
         return resolve_type(args.get(0), config=config)
     return None
 

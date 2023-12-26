@@ -318,7 +318,7 @@ def test_subgroups_parent_multi_children() -> None:
     assert parent(["child2", "h", "--arg", "1"], standalone_mode=False) == 1
 
 
-def test_subgroups_nested() -> None:  # noqa: PLR0915
+def test_subgroups_nested() -> None:
     r"""Parent subgroup with multiple children.
 
     Parent
@@ -482,7 +482,7 @@ def test_subgroups_nested() -> None:  # noqa: PLR0915
     )
 
 
-def test_deregister_nested() -> None:  # noqa: PLR0915
+def test_deregister_nested() -> None:
     class Parent(feud.Group):
         """This is the parent group."""
 

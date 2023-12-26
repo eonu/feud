@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feud"
-version = "0.1.4"
+version = "0.1.5"
 license = "MIT"
 authors = ["Edwin Onuonga <ed@eonu.net>"]
 maintainers = ["Edwin Onuonga <ed@eonu.net>"]
@@ -154,6 +154,7 @@ ignore = [
     "PLR2004", # Magic value used in comparison, consider replacing * with a constant variable"
     "COM812",  # ruff format conflict
     "ISC001",  # ruff format conflict
+    "ERA001",  # Found commented-out code
 ]
 ignore-init-module-imports = true # allow unused imports in __init__.py
 line-length = 79
@@ -168,8 +169,8 @@ allow-star-arg-any = true
 [tool.ruff.extend-per-file-ignores]
 "__init__.py" = ["PLC0414", "F403", "F401", "F405"]
 "feud/typing/*.py" = ["PLC0414", "F403", "F401"]
-"tests/**/*.py" = ["D100", "D100", "D101", "D102", "D103", "D104"] # temporary
-"tests/**/test_*.py" = ["ARG001", "S101", "D", "FA100", "FA102"]
+"tests/**/*.py" = ["D100", "D100", "D101", "D102", "D103", "D104"]          # temporary
+"tests/**/test_*.py" = ["ARG001", "S101", "D", "FA100", "FA102", "PLR0915"]
 
 [tool.pydoclint]
 style = "numpy"
