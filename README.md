@@ -293,26 +293,26 @@ from datetime import date
 def create_post(id: int, *, title: str, desc: str | None = None):
     """Create a blog post."""
 
-def delete_post(*ids: int):
+def delete_posts(*ids: int):
     """Delete blog posts."""
 
 def list_posts(*, between: tuple[date, date] | None = None):
     """View all blog posts, optionally filtering by date range."""
 
 if __name__ == "__main__":
-    feud.run([create_post, delete_post, list_posts])
+    feud.run([create_post, delete_posts, list_posts])
 ```
 
 You can also use a `dict` to rename the generated commands:
 
 ```python
-feud.run({"create": create_post, "delete": delete_post, "list": list_posts})
+feud.run({"create": create_post, "delete": delete_posts, "list": list_posts})
 ```
 
 For more complex applications, you can also nest commands in sub-groups:
 
 ```python
-feud.run({"list": list_posts, "modify": [create_post, delete_post]})
+feud.run({"list": list_posts, "modify": [create_post, delete_posts]})
 ```
 
 If commands are defined in another module, you can also
