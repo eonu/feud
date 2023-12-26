@@ -508,13 +508,8 @@ validation library with extensive support for many data types, including:
 - constrained types (e.g. positive/negative integers or past/future dates).
 
 [`pydantic-extra-types`](https://github.com/pydantic/pydantic-extra-types) is
-an optional dependency offering additional types such as:
-
-- country names,
-- payment card numbers,
-- phone numbers,
-- colours,
-- latitude/longitude.
+an optional dependency offering additional types such as country names,
+payment card numbers, phone numbers, colours, latitude/longitude and more.
 
 Custom annotated types with user-defined validation functions can also be
 defined with Pydantic.
@@ -525,11 +520,11 @@ defined with Pydantic.
 
 **Example**: Command for generating audio samples from text prompts using
 a machine learning model, and storing produced audio files in an output
-directory, with the constraints:
+directory.
 
-- **At least one** prompt must be provided.
-- **No more than five prompts** can be provided.
-- Each prompt can have a **maximum of 12 characters**.
+- **At least one** text prompt must be provided.
+- **No more than five** text prompts can be provided.
+- Each text prompt can have a **maximum of 12 characters**.
 - The model is specified by a file path that **must exist**.
 - The output directory is a path that **must exist**.
 
@@ -829,8 +824,7 @@ Without Rich-formatted output
 </tr>
 </table>
 
-> [!TIP]
-> [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
+> [!TIP] > [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
 >
 > ```python
 > feud.run(command, rich_settings={"SHOW_ARGUMENTS": False})
