@@ -266,20 +266,20 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  first   The first command.
-  second  The second command.
+  1st  The first command.
+  2nd  The second command.
         """.strip()
     )
 
     with pytest.raises(SystemExit):
-        feud.run({"1st": first, "2nd": second}, ["first", "--help"])
+        feud.run({"1st": first, "2nd": second}, ["1st", "--help"])
 
     out, _ = capsys.readouterr()
 
     assert (
         out.strip()
         == """
-Usage: pytest first [OPTIONS] ARG1
+Usage: pytest 1st [OPTIONS] ARG1
 
   The first command.
 
@@ -358,7 +358,7 @@ Options:
     )
 
 
-def test_full_signature(  # noqa: PLR0915
+def test_full_signature(
     capsys: pytest.CaptureFixture,
 ) -> None:
     @feud.command

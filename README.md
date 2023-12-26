@@ -77,13 +77,25 @@ Consider the following example command for serving local files on a HTTP server.
 
 **In red is a typical Click implementation, and in green is the Feud equivalent.**
 
+<table>
+<tr>
+<td>
+
+**Example**: Command for running a HTTP web server.
+
+</td>
+</tr>
+<tr>
+<td>
+
 ```diff
+# serve.py
+
 - import click
 + import feud
 + from typing import Literal
 
 - @click.command
-+ @feud.command
 - @click.argument("port", type=int, help="Server port.")
 - @click.option("--watch/--no-watch", type=bool, default=True, help="Watch source code for changes.")
 - @click.option("--env", type=click.Choice(["dev", "prod"]), default="dev", help="Environment mode.")
@@ -101,42 +113,10 @@ Consider the following example command for serving local files on a HTTP server.
 +     env:
 +         Environment mode.
 +     """
-```
-
-Let's take a closer look at the Feud implementation.
-
-<table>
-<tr>
-<td>
-
-**Example**: Command for running a HTTP web server.
-
-</td>
-</tr>
-<tr>
-<td>
-
-```python
-# serve.py
-
-import feud
-from typing import Literal
-
-def serve(port: int, *, watch: bool = True, env: Literal["dev", "prod"] = "dev"):
-    """Start a local HTTP server.\f
-
-    Parameters
-    ----------
-    port:
-        Server port.
-    watch:
-        Watch source code for changes.
-    env:
-        Environment mode.
-    """
 
 if __name__ == "__main__":
-    feud.run(serve)
+-     serve()
++     feud.run(serve)
 ```
 
 </td>
@@ -312,6 +292,8 @@ to run as commands, you can simply provide them to `feud.run` and it will
 automatically generate and run a group with those commands.
 
 ```python
+# post.py
+
 import feud
 from datetime import date
 
@@ -334,9 +316,27 @@ You can also use a `dict` to rename the generated commands:
 feud.run({"create": create_post, "delete": delete_post, "list": list_posts})
 ```
 
-As you can see, building a CLI using Feud does not require learning many new
+For more complex applications, you can also nest commands in sub-groups:
+
+```python
+feud.run({"list": list_posts, "modify": [create_post, delete_post]})
+```
+
+If commands are defined in another module, you can also
+run the module directly and Feud will pick up all runnable objects:
+
+```python
+import post
+
+feud.run(post)
+```
+
+You can even call `feud.run()` without providing any object, and it will
+automatically discover all runnable objects in the current module.
+
+_As you can see, building a CLI using Feud does not require learning many new
 magic methods or a domain-specific language – you can just use the simple
-Python you know and ❤️!
+Python you know and ❤️!_
 
 #### Registering command sub-groups
 
@@ -508,13 +508,8 @@ validation library with extensive support for many data types, including:
 - constrained types (e.g. positive/negative integers or past/future dates).
 
 [`pydantic-extra-types`](https://github.com/pydantic/pydantic-extra-types) is
-an optional dependency offering additional types such as:
-
-- country names,
-- payment card numbers,
-- phone numbers,
-- colours,
-- latitude/longitude.
+an optional dependency offering additional types such as country names,
+payment card numbers, phone numbers, colours, latitude/longitude and more.
 
 Custom annotated types with user-defined validation functions can also be
 defined with Pydantic.
@@ -526,6 +521,12 @@ defined with Pydantic.
 **Example**: Command for generating audio samples from text prompts using
 a machine learning model, and storing produced audio files in an output
 directory.
+
+- **At least one** text prompt must be provided.
+- **No more than five** text prompts can be provided.
+- Each text prompt can have a **maximum of 12 characters**.
+- The model is specified by a path to a **file that must exist**.
+- The output directory is a path to a **folder that must exist**.
 
 </td>
 </tr>
@@ -796,13 +797,6 @@ To install Feud without any optional dependencies, simply run `pip install feud`
 
 Below is a comparison of Feud with and without `rich-click`.
 
-> [!TIP]
-> [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
->
-> ```python
-> feud.run(command, SHOW_ARGUMENTS=False)
-> ```
-
 <table>
 <tr>
 <th>
@@ -829,6 +823,14 @@ Without Rich-formatted output
 </td>
 </tr>
 </table>
+
+> [!TIP]
+>
+> [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
+>
+> ```python
+> feud.run(command, rich_settings={"SHOW_ARGUMENTS": False})
+> ```
 
 ## Build status
 
