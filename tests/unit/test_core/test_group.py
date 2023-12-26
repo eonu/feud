@@ -1032,7 +1032,7 @@ Options:
 
 def test_help_param_docstring(capsys: pytest.CaptureFixture) -> None:
     class Test(feud.Group):
-        """This is a group.\f
+        """This is a group.
 
         Parameters
         ----------
@@ -1175,7 +1175,7 @@ Options:
 
 def test_main(capsys: pytest.CaptureFixture) -> None:
     class Test(feud.Group, invoke_without_command=True):
-        """This group does something relative to a root directory.\f
+        """This group does something relative to a root directory.
 
         Parameters
         ----------
@@ -1192,7 +1192,7 @@ def test_main(capsys: pytest.CaptureFixture) -> None:
 
         @staticmethod
         def command(ctx: click.Context, path: Path) -> Path:
-            """Returns a full path.\f
+            """Returns a full path.
 
             Parameters
             ----------
@@ -1239,7 +1239,7 @@ Commands:
 
 def test_main_inheritance_no_docstring(capsys: pytest.CaptureFixture) -> None:
     class Test(feud.Group, invoke_without_command=True):
-        """This group does something relative to a root directory.\f
+        """This group does something relative to a root directory.
 
         Parameters
         ----------
@@ -1256,7 +1256,7 @@ def test_main_inheritance_no_docstring(capsys: pytest.CaptureFixture) -> None:
 
         @staticmethod
         def command(ctx: click.Context, path: Path) -> Path:
-            """Returns a full path.\f
+            """Returns a full path.
 
             Parameters
             ----------
@@ -1306,7 +1306,7 @@ Commands:
 
 def test_main_inheritance_docstring(capsys: pytest.CaptureFixture) -> None:
     class Test(feud.Group, invoke_without_command=True):
-        """This group does something relative to a root directory.\f
+        """This group does something relative to a root directory.
 
         Parameters
         ----------
@@ -1323,7 +1323,7 @@ def test_main_inheritance_docstring(capsys: pytest.CaptureFixture) -> None:
 
         @staticmethod
         def command(ctx: click.Context, path: Path) -> Path:
-            """Returns a full path.\f
+            """Returns a full path.
 
             Parameters
             ----------
@@ -1333,7 +1333,7 @@ def test_main_inheritance_docstring(capsys: pytest.CaptureFixture) -> None:
             return ctx.obj["root"] / path
 
     class Child(Test):
-        """This is a new docstring.\f
+        """This is a new docstring.
 
         Parameters
         ----------

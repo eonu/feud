@@ -95,7 +95,7 @@ Consider the following example command for serving local files on a HTTP server.
 - def serve(port, watch, env):
 + def serve(port: int, *, watch: bool = True, env: Literal["dev", "prod"] = "dev"):
 -     """Start a local HTTP server."""
-+     """Start a local HTTP server.\f
++     """Start a local HTTP server.
 +
 +     Parameters
 +     ----------
@@ -688,7 +688,7 @@ from pydantic import constr
 
 @click.password_option("--password", help="The user's password (≥ 10 characters).")
 def login(*, username: str, password: constr(min_length=10)):
-    """Log in as a user.\f
+    """Log in as a user.
 
     Parameters
     ----------
