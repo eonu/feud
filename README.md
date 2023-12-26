@@ -525,7 +525,13 @@ defined with Pydantic.
 
 **Example**: Command for generating audio samples from text prompts using
 a machine learning model, and storing produced audio files in an output
-directory.
+directory, with the constraints:
+
+- **At least one** prompt must be provided.
+- **No more than five prompts** can be provided.
+- Each prompt can have a **maximum of 12 characters**.
+- The model is specified by a file path that **must exist**.
+- The output directory is a path that **must exist**.
 
 </td>
 </tr>
