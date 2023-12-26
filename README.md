@@ -866,7 +866,7 @@ maintainers and the work they have done that Feud has built upon.
 <tr>
 <td>
 
-##### [Click](https://github.com/pallets/click)
+[**Click**](https://github.com/pallets/click)
 
 <sup>
 
@@ -886,7 +886,7 @@ generated CLI.
 <tr>
 <td>
 
-##### [Rich Click](https://github.com/ewels/rich-click)
+[**Rich Click**](https://github.com/ewels/rich-click)
 
 <sup>
 
@@ -905,7 +905,7 @@ A shim around Click that renders help output nicely using
 <tr>
 <td>
 
-##### [Pydantic](https://github.com/pydantic/pydantic)
+[**Pydantic**](https://github.com/pydantic/pydantic)
 
 <sup>
 
