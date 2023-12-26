@@ -525,8 +525,8 @@ directory.
 - **At least one** text prompt must be provided.
 - **No more than five** text prompts can be provided.
 - Each text prompt can have a **maximum of 12 characters**.
-- The model is specified by a path to a file that **must exist**.
-- The output directory is a path to a folder that **must exist**.
+- The model is specified by a path to a **file that must exist**.
+- The output directory is a path to a **folder that **must exist\*\*.
 
 </td>
 </tr>
@@ -825,6 +825,7 @@ Without Rich-formatted output
 </table>
 
 > [!TIP]
+>
 > [Settings for `rich-click`](https://github.com/ewels/rich-click/blob/main/src/rich_click/rich_click.py) can be provided to `feud.run`, e.g.:
 >
 > ```python
