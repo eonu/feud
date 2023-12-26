@@ -866,7 +866,7 @@ maintainers and the work they have done that Feud has built upon.
 <tr>
 <td>
 
-### [Click](https://github.com/pallets/click)
+##### [Click](https://github.com/pallets/click)
 
 <sup>
 
@@ -879,24 +879,20 @@ by [@pallets](https://github.com/pallets)
 
 > _Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary._
 
-<sup>
-
 Feud is essentially a wrapper around Click that takes classes and functions
 with type hints and intelligently 'compiles' them into a ready-to-use Click
 generated CLI.
-
-</sup>
 
 </td>
 </tr>
 <tr>
 <td>
 
-### [Rich Click](https://github.com/ewels/rich-click)
+##### [Rich Click](https://github.com/ewels/rich-click)
 
 <sup>
 
-[@ewels](https://github.com/ewels)
+by [@ewels](https://github.com/ewels)
 
 </sup>
 
@@ -905,12 +901,8 @@ generated CLI.
 
 > _Richly rendered command line interfaces in click._
 
-<sup>
-
 A shim around Click that renders help output nicely using
 [Rich](https://github.com/Textualize/rich).
-
-</sup>
 
 </td>
 </tr>
