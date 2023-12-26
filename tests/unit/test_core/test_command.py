@@ -63,7 +63,7 @@ Options:
 def test_param_help_docstring(capsys: pytest.CaptureFixture) -> None:
     @feud.command
     def f(arg1: int, *, arg2: bool) -> None:
-        """Do something.\f
+        """Do something.
 
         Parameters
         ----------
@@ -227,7 +227,7 @@ def test_sensitive_input() -> None:
 @pytest.mark.parametrize("command", [True, False])
 def test_run_dict(capsys: pytest.CaptureFixture, *, command: bool) -> None:
     def first(arg1: int, *, opt1: float, opt2: bool = False) -> None:
-        """The first command.\f
+        """The first command.
 
         Parameters
         ----------
@@ -240,7 +240,7 @@ def test_run_dict(capsys: pytest.CaptureFixture, *, command: bool) -> None:
         """
 
     def second(*, opt: int) -> None:
-        """The second command.\f
+        """The second command.
 
         Parameters
         ----------
@@ -294,7 +294,7 @@ Options:
 @pytest.mark.parametrize("command", [True, False])
 def test_run_iterable(capsys: pytest.CaptureFixture, *, command: bool) -> None:
     def first(arg1: int, *, opt1: float, opt2: bool = False) -> None:
-        """The first command.\f
+        """The first command.
 
         Parameters
         ----------
@@ -307,7 +307,7 @@ def test_run_iterable(capsys: pytest.CaptureFixture, *, command: bool) -> None:
         """
 
     def second(*, opt: int) -> None:
-        """The second command.\f
+        """The second command.
 
         Parameters
         ----------
@@ -371,7 +371,7 @@ def test_full_signature(
         e: bool = True,
         **f: float,
     ) -> None:
-        """Does something.\f
+        """Does something.
 
         Parameters
         ----------
