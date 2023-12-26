@@ -77,13 +77,25 @@ Consider the following example command for serving local files on a HTTP server.
 
 **In red is a typical Click implementation, and in green is the Feud equivalent.**
 
+<table>
+<tr>
+<td>
+
+**Example**: Command for running a HTTP web server.
+
+</td>
+</tr>
+<tr>
+<td>
+
 ```diff
+# serve.py
+
 - import click
 + import feud
 + from typing import Literal
 
 - @click.command
-+ @feud.command
 - @click.argument("port", type=int, help="Server port.")
 - @click.option("--watch/--no-watch", type=bool, default=True, help="Watch source code for changes.")
 - @click.option("--env", type=click.Choice(["dev", "prod"]), default="dev", help="Environment mode.")
@@ -101,42 +113,10 @@ Consider the following example command for serving local files on a HTTP server.
 +     env:
 +         Environment mode.
 +     """
-```
-
-Let's take a closer look at the Feud implementation.
-
-<table>
-<tr>
-<td>
-
-**Example**: Command for running a HTTP web server.
-
-</td>
-</tr>
-<tr>
-<td>
-
-```python
-# serve.py
-
-import feud
-from typing import Literal
-
-def serve(port: int, *, watch: bool = True, env: Literal["dev", "prod"] = "dev"):
-    """Start a local HTTP server.\f
-
-    Parameters
-    ----------
-    port:
-        Server port.
-    watch:
-        Watch source code for changes.
-    env:
-        Environment mode.
-    """
 
 if __name__ == "__main__":
-    feud.run(serve)
+-     serve()
++     feud.run(serve)
 ```
 
 </td>
@@ -346,7 +326,7 @@ If commands are defined in another module, you can also
 run the module directly and Feud will pick up all runnable objects:
 
 ```python
-from . import post
+import post
 
 feud.run(post)
 ```
