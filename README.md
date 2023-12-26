@@ -866,7 +866,7 @@ maintainers and the work they have done that Feud has built upon.
 <tr>
 <td>
 
-[**Click**](https://github.com/pallets/click)
+##### [Click](https://github.com/pallets/click)
 
 <sup>
 
@@ -886,7 +886,7 @@ generated CLI.
 <tr>
 <td>
 
-[**Rich Click**](https://github.com/ewels/rich-click)
+##### [Rich Click](https://github.com/ewels/rich-click)
 
 <sup>
 
@@ -905,7 +905,7 @@ A shim around Click that renders help output nicely using
 <tr>
 <td>
 
-[**Pydantic**](https://github.com/pydantic/pydantic)
+##### [Pydantic](https://github.com/pydantic/pydantic)
 
 <sup>
 
@@ -924,30 +924,51 @@ types which can also be used as type hints in Feud commands for input validation
 
 </td>
 </tr>
+<tr>
+<td>
 
-</table>
-
-### [Typer](https://github.com/tiangolo/typer)
+##### [Typer](https://github.com/tiangolo/typer)
 
 <sup>
 
-by [@tiangolo](https://github.com/tiangolo)
+by&nbsp;[@tiangolo](https://github.com/tiangolo)
 
 </sup>
 
-> _Typer is a library for building CLI applications that users will love using and developers will love creating._
+</td>
+<td>
 
 Typer shares a similar ideology to Feud, in that building CLIs should be
 simple and not require learning new functions or constantly referring to
 library documentation. Typer is also based on Click.
 
-One source of motivation for creating Feud is that at the time of creation,
-Pydantic was not yet supported as a type system for Typer. It is worth
-noting that Pydantic as an optional dependency is on Typer's [tentative roadmap](https://github.com/tiangolo/typer/issues/678),
-so it will be interesting to see how the implementation compares to Feud!
-
 Typer is a more complete library for building CLIs overall, but currently
 lacks support for more complex types such as those offered by Pydantic.
+
+</td>
+</tr>
+<tr>
+<td>
+
+##### [Thor](https://github.com/rails/thor)
+
+<sup>
+
+by&nbsp;[@rails](https://github.com/rails)
+
+</sup>
+
+</td>
+<td>
+
+Though not a Python package, the highly object-oriented design of Thor (a CLI
+building package in Ruby) – in particular the use of classes to define command
+groups – greatly influenced the implementation of the `feud.Group` class.
+
+</td>
+</tr>
+
+</table>
 
 ## Contributing
 
