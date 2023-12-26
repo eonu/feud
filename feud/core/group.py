@@ -482,10 +482,7 @@ class Group(metaclass=_metaclass.GroupBase):
                 subgroups[name] = types.new_class(
                     "__feud_group__",
                     bases=(subgroup,),
-                    kwds={
-                        **subgroup.__feud_click_kwargs__,
-                        "name": name,
-                    },
+                    kwds={"name": name},
                     exec_body=(
                         lambda body: body.update(
                             {"__doc__": subgroup.__doc__},  # noqa: B023
