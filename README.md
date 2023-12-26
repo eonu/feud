@@ -650,6 +650,10 @@ $ python generate.py "dog barking" "cat meowing" --output audio.txt
 </tr>
 </table>
 
+_By relying on Pydantic to handle the hard work of validation, we can contain all
+of the required CLI constraints in a simple function signature, leaving you to focus
+on the important part – implementing your commands._
+
 ### Highly configurable and extensible
 
 > [!IMPORTANT]  
