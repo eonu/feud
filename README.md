@@ -877,8 +877,6 @@ by&nbsp;[@pallets](https://github.com/pallets)
 </td>
 <td>
 
-> _Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary._
-
 Feud is essentially a wrapper around Click that takes classes and functions
 with type hints and intelligently 'compiles' them into a ready-to-use Click
 generated CLI.
@@ -899,32 +897,35 @@ by&nbsp;[@ewels](https://github.com/ewels)
 </td>
 <td>
 
-> _Richly rendered command line interfaces in click._
-
 A shim around Click that renders help output nicely using
 [Rich](https://github.com/Textualize/rich).
 
 </td>
 </tr>
+<tr>
+<td>
 
-</table>
-
-### [Pydantic](https://github.com/pydantic/pydantic)
+##### [Pydantic](https://github.com/pydantic/pydantic)
 
 <sup>
 
-by [@samuelcolvin](https://github.com/samuelcolvin)
+by&nbsp;[@samuelcolvin](https://github.com/samuelcolvin)
 
 </sup>
 
-> _Data validation using Python type hints._
+</td>
+<td>
 
 Pydantic is a validation package that makes it easy to declaratively validate
 input data based on type hints.
 
-The package offers support for common standard library types (e.g. `int`,
-`float`, `str`, `date`/`datetime`), plus more complex types which can also be
-used as type hints in Feud commands for input validation.
+The package offers support for common standard library types, plus more complex
+types which can also be used as type hints in Feud commands for input validation.
+
+</td>
+</tr>
+
+</table>
 
 ### [Typer](https://github.com/tiangolo/typer)
 
