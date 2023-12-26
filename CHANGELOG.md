@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.6](https://github.com/eonu/feud/releases/tag/v0.1.6) - 2023-12-26
+
+### Bug Fixes
+
+- improve docstring parsing ([#121](https://github.com/eonu/feud/issues/121))
+
 ## [v0.1.5](https://github.com/eonu/feud/releases/tag/v0.1.5) - 2023-12-26
 
 ### Documentation
