@@ -5,18 +5,26 @@
 
 """Officially supported types from the ``typing`` package."""
 
-from typing import (
-    Annotated,
-    Any,
-    Deque,
-    FrozenSet,
-    List,
-    Literal,
-    NamedTuple,
-    Optional,
-    Pattern,
-    Set,
-    Text,
-    Tuple,
-    Union,
-)
+from __future__ import annotations
+
+import typing
+
+types: list[str] = [
+    "Annotated",
+    "Any",
+    "Deque",
+    "FrozenSet",
+    "List",
+    "Literal",
+    "NamedTuple",
+    "Optional",
+    "Pattern",
+    "Set",
+    "Text",
+    "Tuple",
+    "Union",
+]
+
+globals().update({attr: getattr(typing, attr) for attr in types})
+
+__all__ = list(types)
