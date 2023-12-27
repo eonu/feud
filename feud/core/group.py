@@ -18,15 +18,13 @@ import warnings
 from collections import OrderedDict
 from itertools import chain
 
-import pydantic as pyd
-
 import feud.exceptions
 from feud import click
 from feud._internal import _command, _metaclass
 from feud.config import Config
 from feud.core.command import build_command_state
 
-__all__ = ["Group", "compile"]
+__all__ = ["Group"]
 
 
 class Group(metaclass=_metaclass.GroupBase):
@@ -63,6 +61,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
         The following function names should **NOT** be used in a group:
 
+        - :py:func:`~compile`
         - :py:func:`~deregister`
         - :py:func:`~descendants`
         - :py:func:`~register`
@@ -165,6 +164,25 @@ class Group(metaclass=_metaclass.GroupBase):
             parent.add_command(click_group)
 
         return click_group
+
+    @classmethod
+    def compile(cls: type[Group]) -> click.Group:  # noqa: A003
+        """Compile the group into a :py:class:`click.Group`.
+
+        Returns
+        -------
+        The generated :py:class:`click.Group`.
+
+        Examples
+        --------
+        >>> import feud, click
+        >>> class CLI(feud.Group):
+        ...     def func(*, opt: int) -> int:
+        ...         return opt
+        >>> isinstance(CLI.compile(), click.Group)
+        True
+        """
+        return cls.__compile__()
 
     @classmethod
     def subgroups(cls: type[Group]) -> list[type[Group]]:
@@ -648,31 +666,6 @@ class Group(metaclass=_metaclass.GroupBase):
             group.register(subgroups)
 
         return group
-
-
-@pyd.validate_call(config=pyd.ConfigDict(arbitrary_types_allowed=True))
-def compile(group: type[Group], /) -> click.Group:  # noqa: A001
-    """Compile a :py:class:`.Group` into a :py:class:`click.Group`.
-
-    Parameters
-    ----------
-    group:
-        Group to compile into a :py:class:`click.Group`.
-
-    Returns
-    -------
-    The generated :py:class:`click.Group`.
-
-    Examples
-    --------
-    >>> import feud
-    >>> class CLI(feud.Group):
-    ...     def func(*, opt: int) -> int:
-    ...         return opt
-    >>> isinstance(feud.compile(CLI), click.Group)
-    True
-    """
-    return group.__compile__()
 
 
 def get_group(__cls: type[Group], /) -> click.Group:
