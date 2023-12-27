@@ -656,9 +656,6 @@ on the important part – implementing your commands._
 
 ### Highly configurable and extensible
 
-> [!IMPORTANT]  
-> _Feud is **not** the new Click_ - it is an extension of Click and directly depends it.
-
 While designed to be simpler than Click, this comes with the trade-off that
 Feud is also more opinionated than Click and only directly implements a subset
 of its functionality.
