@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.0](https://github.com/eonu/feud/releases/tag/v0.2.0) - 2023-12-27
+
+### Features
+
+- add `feud.build` + move `rich_click` styling to `feud.Config` ([#123](https://github.com/eonu/feud/issues/123))
+
 ## [v0.1.6](https://github.com/eonu/feud/releases/tag/v0.1.6) - 2023-12-26
 
 ### Bug Fixes
