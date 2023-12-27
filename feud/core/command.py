@@ -17,12 +17,8 @@ import typing
 import docstring_parser
 import pydantic as pyd
 
-try:
-    import rich_click as click
-except ImportError:
-    import click
-
 import feud.exceptions
+from feud import click
 from feud._internal import _command, _docstring, _types
 from feud.config import Config
 from feud.typing import custom

@@ -10,15 +10,7 @@ import enum
 import inspect
 import typing as t
 
-try:
-    import rich_click as click
-
-    RICH = True
-except ImportError:
-    import click
-
-    RICH = False
-
+from feud import click
 from feud._internal import _decorators, _inflect, _types
 from feud.config import Config
 
@@ -153,7 +145,7 @@ class CommandState:
         if self.pass_context:
             command = click.pass_context(command)
 
-        if RICH:
+        if click.is_rich:
             # apply rich-click styling
             command = click.rich_config(
                 help_config=click.RichHelpConfiguration(
