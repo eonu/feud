@@ -393,7 +393,7 @@ def build(
     # use current module if no runner provided
     if obj is None:
         frame = inspect.stack()[1]
-        obj = inspect.getmodule(frame[0]) or sys.modules.get("__main__")
+        obj = sys.modules.get("__main__", inspect.getmodule(frame[0]))
 
     if obj is None:
         msg = (
