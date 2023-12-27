@@ -16,6 +16,7 @@ def test_create_no_base_no_kwargs() -> None:
     assert config.show_help_datetime_formats is False
     assert config.show_help_envvars is True
     assert config.pydantic_kwargs == {}
+    assert config.rich_click_kwargs == {"show_arguments": True}
 
 
 def test_create_no_base_none_kwargs() -> None:
@@ -32,6 +33,7 @@ def test_create_no_base_none_kwargs() -> None:
     assert config.show_help_datetime_formats is False
     assert config.show_help_envvars is True
     assert config.pydantic_kwargs == {}
+    assert config.rich_click_kwargs == {"show_arguments": True}
 
 
 def test_create_no_base_with_kwargs_default() -> None:

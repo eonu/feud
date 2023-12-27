@@ -72,7 +72,7 @@ def test_compile() -> None:
         def g(*, arg1: int, arg2: bool) -> None:
             pass
 
-    group = feud.compile(Test)
+    group = Test.compile()
     assert isinstance(group, click.Group)
 
     assert len(group.commands) == 2
@@ -169,7 +169,7 @@ def test_config_kwarg_propagation() -> None:
         def g(*, arg1: int = 2, arg2: bool = False) -> None:
             pass
 
-    group = feud.compile(Test)
+    group = Test.compile()
     for command in group.commands.values():
         for param in command.params:
             assert param.show_default is False
@@ -181,7 +181,7 @@ def test_config_kwarg_propagation() -> None:
         def g(*, arg1: int = 2, arg2: bool = False) -> None:
             pass
 
-    group = feud.compile(Test)
+    group = Test.compile()
     for command in group.commands.values():
         for param in command.params:
             assert param.show_default is True
@@ -195,7 +195,7 @@ def test_config_propagation() -> None:
         def g(*, arg1: int = 2, arg2: bool = False) -> None:
             pass
 
-    group = feud.compile(Test)
+    group = Test.compile()
     for command in group.commands.values():
         for param in command.params:
             assert param.show_default is False
@@ -207,7 +207,7 @@ def test_config_propagation() -> None:
         def g(*, arg1: int = 2, arg2: bool = False) -> None:
             pass
 
-    group = feud.compile(Test)
+    group = Test.compile()
     for command in group.commands.values():
         for param in command.params:
             assert param.show_default is True
@@ -219,7 +219,7 @@ def test_config_kwarg_override() -> None:
         def f(*, arg1: int = 1) -> None:
             pass
 
-    group = feud.compile(Test)
+    group = Test.compile()
     for command in group.commands.values():
         for param in command.params:
             assert param.show_default is True
@@ -244,7 +244,7 @@ def test_subgroups_parent_single_child() -> None:
     assert Parent.subgroups() == [Child]
     assert Child.subgroups() == []
 
-    parent = feud.compile(Parent)
+    parent = Parent.compile()
     f, child = itemgetter("f", "child")(parent.commands)
 
     assert isinstance(f, click.Command)
@@ -293,7 +293,7 @@ def test_subgroups_parent_multi_children() -> None:
     assert Child1.subgroups() == []
     assert Child2.subgroups() == []
 
-    parent = feud.compile(Parent)
+    parent = Parent.compile()
     f, child1, child2 = itemgetter("f", "child1", "child2")(parent.commands)
 
     assert isinstance(f, click.Command)
@@ -409,7 +409,7 @@ def test_subgroups_nested() -> None:
     assert Child3.subgroups() == []
     assert Child4.subgroups() == []
 
-    parent = feud.compile(Parent)
+    parent = Parent.compile()
 
     assert len(parent.commands) == 3
     f, child1, child2 = itemgetter("f", "child1", "child2")(parent.commands)
@@ -519,7 +519,7 @@ def test_deregister_nested() -> None:
     assert Child1.subgroups() == [Child2]
     assert Child2.subgroups() == [Child3]
 
-    parent = feud.compile(Parent)
+    parent = Parent.compile()
 
     assert len(parent.commands) == 3
     f, child1, child2 = itemgetter("f", "child1", "child2")(parent.commands)
@@ -573,7 +573,7 @@ def test_deregister_nested() -> None:
     assert Child1.subgroups() == [Child2]
     assert Child2.subgroups() == []
 
-    parent = feud.compile(Parent)
+    parent = Parent.compile()
 
     assert len(parent.commands) == 3
     f, child1, child2 = itemgetter("f", "child1", "child2")(parent.commands)
@@ -673,7 +673,7 @@ def test_inheritance_ancestor() -> None:
         def f(*, arg: int) -> int:
             return arg
 
-    grandparent = feud.compile(Grandparent)
+    grandparent = Grandparent.compile()
     assert grandparent.name == "older"
     assert list(grandparent.commands) == ["f"]
 
@@ -681,7 +681,7 @@ def test_inheritance_ancestor() -> None:
         def g(*, arg: int) -> int:
             return arg
 
-    parent = feud.compile(Parent)
+    parent = Parent.compile()
     assert parent.name == "old"
     assert list(parent.commands) == ["f", "g"]
     assert all(
@@ -693,7 +693,7 @@ def test_inheritance_ancestor() -> None:
         def h(*, arg: int) -> int:
             return arg
 
-    child = feud.compile(Child)
+    child = Child.compile()
     assert child.name == "young"
     assert list(child.commands) == ["f", "g", "h"]
     assert all(
@@ -714,7 +714,7 @@ def test_inheritance_multiple() -> None:
         def f(*, arg: int) -> int:
             return arg
 
-    mother = feud.compile(Mother)
+    mother = Mother.compile()
     assert mother.name == "mother"
     assert list(mother.commands) == ["f"]
 
@@ -724,7 +724,7 @@ def test_inheritance_multiple() -> None:
         def g(*, arg: int) -> int:
             return arg
 
-    father = feud.compile(Father)
+    father = Father.compile()
     assert father.name == "father"
     assert list(father.commands) == ["g"]
 
@@ -732,7 +732,7 @@ def test_inheritance_multiple() -> None:
         def h(*, arg: int) -> int:
             return arg
 
-    child = feud.compile(Child)
+    child = Child.compile()
     assert list(child.commands) == ["f", "g", "h"]
     assert Child.__feud_config__ == feud.config(
         negate_flags=False,
@@ -748,7 +748,7 @@ def test_inheritance_multiple() -> None:
         def h(*, arg: int) -> int:
             return arg
 
-    child = feud.compile(Child)
+    child = Child.compile()
     assert list(child.commands) == ["g", "f", "h"]
     assert Child.__feud_config__ == feud.config(
         negate_flags=False,
@@ -796,29 +796,29 @@ def test_register_deregister_compile() -> None:
     class Child(Parent):
         pass
 
-    child = feud.compile(Child)
+    child = Child.compile()
     assert list(child.commands) == ["f", "subgroup"]
 
     Child.deregister(Subgroup)
 
-    child = feud.compile(Child)
+    child = Child.compile()
     assert list(child.commands) == ["f"]
 
     class Child(Parent):
         pass
 
-    parent = feud.compile(Parent)
+    parent = Parent.compile()
     assert list(parent.commands) == ["f", "subgroup"]
 
-    child = feud.compile(Child)
+    child = Child.compile()
     assert list(child.commands) == ["f", "subgroup"]
 
     Parent.deregister(Subgroup)
 
-    parent = feud.compile(Parent)
+    parent = Parent.compile()
     assert list(parent.commands) == ["f"]
 
-    child = feud.compile(Child)
+    child = Child.compile()
     assert list(child.commands) == ["f", "subgroup"]
 
 
@@ -1201,7 +1201,7 @@ def test_main(capsys: pytest.CaptureFixture) -> None:
             """
             return ctx.obj["root"] / path
 
-    group = feud.compile(Test)
+    group = Test.compile()
 
     assert_help(
         group,
@@ -1268,7 +1268,7 @@ def test_main_inheritance_no_docstring(capsys: pytest.CaptureFixture) -> None:
     class Child(Test):
         pass
 
-    group = feud.compile(Child)
+    group = Child.compile()
 
     assert_help(
         group,
@@ -1341,7 +1341,7 @@ def test_main_inheritance_docstring(capsys: pytest.CaptureFixture) -> None:
             Root directory
         """
 
-    group = feud.compile(Child)
+    group = Child.compile()
 
     assert_help(
         group,

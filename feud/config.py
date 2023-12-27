@@ -44,6 +44,13 @@ class Config(pyd.BaseModel):
     #: :py:func:`pydantic.validate_call_decorator.validate_call`.
     pydantic_kwargs: dict[str, Any] = {}
 
+    #: Styling settings for ``rich-click``.
+    #:
+    #: See all available options
+    #: `here <https://github.com/ewels/rich-click/blob/e6a3add46c591d49079d440917700dfe28cf0cfe/src/rich_click/rich_help_configuration.py#L50>`__
+    #: (as of ``rich-click`` v1.7.2).
+    rich_click_kwargs: dict[str, Any] = {"show_arguments": True}
+
     def __init__(self: Config, **kwargs: Any) -> Config:
         caller: str = inspect.currentframe().f_back.f_code.co_name
         if caller != Config._create.__name__:
@@ -73,6 +80,7 @@ def config(
     show_help_datetime_formats: bool | None = None,
     show_help_envvars: bool | None = None,
     pydantic_kwargs: dict[str, Any] | None = None,
+    rich_click_kwargs: dict[str, Any] | None = None,
 ) -> Config:
     """Create a reusable configuration for :py:func:`.command` or
     :py:class:`.Group` objects.
@@ -96,6 +104,13 @@ def config(
     pydantic_kwargs:
         Validation settings for
         :py:func:`pydantic.validate_call_decorator.validate_call`.
+
+    rich_click_kwargs:
+        Styling settings for ``rich-click``.
+
+        See all available options
+        `here <https://github.com/ewels/rich-click/blob/e6a3add46c591d49079d440917700dfe28cf0cfe/src/rich_click/rich_help_configuration.py#L50>`__
+        (as of ``rich-click`` v1.7.2).
 
     Returns
     -------
@@ -132,4 +147,5 @@ def config(
         show_help_datetime_formats=show_help_datetime_formats,
         show_help_envvars=show_help_envvars,
         pydantic_kwargs=pydantic_kwargs,
+        rich_click_kwargs=rich_click_kwargs,
     )

@@ -86,7 +86,7 @@ def test_metaclass_click_kwargs() -> None:
     assert Test.__feud_config__ == feud.config()
     assert Test.__feud_click_kwargs__ == {"name": name, "epilog": epilog}
 
-    group = feud.compile(Test)
+    group = Test.compile()
     assert group.name == name
     assert group.epilog == epilog
 
@@ -115,7 +115,7 @@ def test_metaclass_config_with_feud_kwargs_and_click_kwargs() -> None:
     assert Test.__feud_config__ == feud.config(negate_flags=True)
     assert Test.__feud_click_kwargs__ == {"name": name, "epilog": epilog}
 
-    group = feud.compile(Test)
+    group = Test.compile()
     assert group.name == name
     assert group.epilog == epilog
 

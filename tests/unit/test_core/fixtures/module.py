@@ -64,13 +64,11 @@ class Subgroup(feud.Group, name="feud-subgroup"):
 
 Group.register(Subgroup)
 
-click_group: click.Group = feud.compile(
-    types.new_class(
-        "ClickGroup",
-        bases=(Group,),
-        kwds={
-            "name": "click-group",
-            "help": "This is a Click group.",
-        },
-    )
-)
+click_group: click.Group = types.new_class(
+    "ClickGroup",
+    bases=(Group,),
+    kwds={
+        "name": "click-group",
+        "help": "This is a Click group.",
+    },
+).compile()
