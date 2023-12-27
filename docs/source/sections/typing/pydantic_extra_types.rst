@@ -37,44 +37,53 @@ The following types can be used as type hints for Feud commands.
 
 ----
 
+The version number indicates the minimum ``pydantic-extra-types`` version required to use the type. 
+
+If this version requirement is not met, the type is not imported by Feud.
+
 Color type
 ----------
 
-- :py:obj:`pydantic_extra_types.color.Color`
+- :py:obj:`pydantic_extra_types.color.Color` (``>= 2.1.0``)
 
 Coordinate types
 ----------------
 
-- :py:obj:`pydantic_extra_types.coordinate.Coordinate`
-- :py:obj:`pydantic_extra_types.coordinate.Latitude`
-- :py:obj:`pydantic_extra_types.coordinate.Longitude`
+- :py:obj:`pydantic_extra_types.coordinate.Coordinate` (``>= 2.1.0``)
+- :py:obj:`pydantic_extra_types.coordinate.Latitude` (``>= 2.1.0``)
+- :py:obj:`pydantic_extra_types.coordinate.Longitude` (``>= 2.1.0``)
 
 Country types
 -------------
 
-- :py:obj:`pydantic_extra_types.country.CountryAlpha2`
-- :py:obj:`pydantic_extra_types.country.CountryAlpha3`
-- :py:obj:`pydantic_extra_types.country.CountryNumericCode`
-- :py:obj:`pydantic_extra_types.country.CountryOfficialName`
-- :py:obj:`pydantic_extra_types.country.CountryShortName`
+- :py:obj:`pydantic_extra_types.country.CountryAlpha2` (``>= 2.1.0``)
+- :py:obj:`pydantic_extra_types.country.CountryAlpha3` (``>= 2.1.0``)
+- :py:obj:`pydantic_extra_types.country.CountryNumericCode` (``>= 2.1.0``)
+- :py:obj:`pydantic_extra_types.country.CountryOfficialName` (``>= 2.1.0``)
+- :py:obj:`pydantic_extra_types.country.CountryShortName` (``>= 2.1.0``)
 
 Phone number type
 -----------------
 
-- :py:obj:`pydantic_extra_types.phone_numbers.PhoneNumber`
+- :py:obj:`pydantic_extra_types.phone_numbers.PhoneNumber` (``>= 2.1.0``)
 
 Payment types
 -------------
 
-- :py:obj:`pydantic_extra_types.payment.PaymentCardBrand`
-- :py:obj:`pydantic_extra_types.payment.PaymentCardNumber`
+- :py:obj:`pydantic_extra_types.payment.PaymentCardBrand` (``>= 2.1.0``)
+- :py:obj:`pydantic_extra_types.payment.PaymentCardNumber` (``>= 2.1.0``)
 
 MAC address type
 ----------------
 
-- :py:obj:`pydantic_extra_types.mac_address.MacAddress`
+- :py:obj:`pydantic_extra_types.mac_address.MacAddress` (``>= 2.1.0``)
 
 Routing number type
 -------------------
 
-- :py:obj:`pydantic_extra_types.routing_number.ABARoutingNumber`
+- :py:obj:`pydantic_extra_types.routing_number.ABARoutingNumber` (``>= 2.1.0``)
+
+ULID type
+---------
+
+- :py:obj:`pydantic_extra_types.ulid.ULID` (``>= 2.2.0``)
