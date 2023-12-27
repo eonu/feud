@@ -8,14 +8,10 @@ from __future__ import annotations
 import abc
 import typing as t
 
+from feud import click
 from feud._internal import _command
 from feud.config import Config
 from feud.core.command import command
-
-try:
-    import rich_click as click
-except ImportError:
-    import click
 
 
 class GroupBase(abc.ABCMeta):

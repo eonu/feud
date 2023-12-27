@@ -13,10 +13,7 @@ import typing as t
 import pydantic as pyd
 import pydantic_core as pydc
 
-try:
-    import rich_click as click
-except ImportError:
-    import click
+from feud import click
 
 
 def validate_call(

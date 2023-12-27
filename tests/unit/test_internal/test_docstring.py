@@ -178,14 +178,14 @@ def test_get_description_class_single_line_no_doc() -> None:
     class Group(feud.Group):
         pass
 
-    assert feud.compile(Group).help is None
+    assert Group.compile().help is None
 
 
 def test_get_description_class_single_line_doc() -> None:
     class Group(feud.Group):
         """Line 1."""
 
-    assert feud.compile(Group).help == "Line 1."
+    assert Group.compile().help == "Line 1."
 
 
 def test_get_description_class_single_line_doc_with_examples() -> None:
@@ -197,7 +197,7 @@ def test_get_description_class_single_line_doc_with_examples() -> None:
         >>> # Hello World!
         """
 
-    assert feud.compile(Group).help == "Line 1."
+    assert Group.compile().help == "Line 1."
 
 
 def test_get_description_class_multi_line_doc() -> None:
@@ -207,7 +207,7 @@ def test_get_description_class_multi_line_doc() -> None:
         Line 2.
         """
 
-    assert feud.compile(Group).help == "Line 1.\n\nLine 2."
+    assert Group.compile().help == "Line 1.\n\nLine 2."
 
 
 def test_get_description_class_multi_line_doc_with_examples() -> None:
@@ -221,7 +221,7 @@ def test_get_description_class_multi_line_doc_with_examples() -> None:
         >>> # Hello World!
         """
 
-    assert feud.compile(Group).help == "Line 1.\n\nLine 2."
+    assert Group.compile().help == "Line 1.\n\nLine 2."
 
 
 def test_get_description_class_multi_line_doc_with_f() -> None:
@@ -231,7 +231,7 @@ def test_get_description_class_multi_line_doc_with_f() -> None:
         Line 2.\f
         """
 
-    assert feud.compile(Group).help == "Line 1.\n\nLine 2."
+    assert Group.compile().help == "Line 1.\n\nLine 2."
 
 
 def test_get_description_class_multi_line_doc_with_examples_and_f() -> None:
@@ -245,7 +245,7 @@ def test_get_description_class_multi_line_doc_with_examples_and_f() -> None:
         >>> # Hello World!
         """
 
-    assert feud.compile(Group).help == "Line 1.\n\nLine 2."
+    assert Group.compile().help == "Line 1.\n\nLine 2."
 
 
 def test_get_description_class_main() -> None:
@@ -260,7 +260,7 @@ def test_get_description_class_main() -> None:
             >>> # Hello World!
             """
 
-    assert feud.compile(Group).help == "Line 1.\n\nLine 2."
+    assert Group.compile().help == "Line 1.\n\nLine 2."
 
 
 def test_get_description_class_override() -> None:
@@ -274,4 +274,4 @@ def test_get_description_class_override() -> None:
         >>> # Hello World!
         """
 
-    assert feud.compile(Group).help == "Override."
+    assert Group.compile().help == "Override."

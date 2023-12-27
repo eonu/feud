@@ -12,8 +12,12 @@ import typing as t
 
 try:
     import rich_click as click
+
+    RICH = True
 except ImportError:
     import click
+
+    RICH = False
 
 from feud._internal import _decorators, _inflect, _types
 from feud.config import Config
@@ -56,7 +60,10 @@ class CommandState:
     options: dict[str, ParameterSpec] = dataclasses.field(default_factory=dict)
     description: str | None = None
 
-    def decorate(self: CommandState, func: t.Callable) -> click.Command:
+    def decorate(  # noqa: PLR0915
+        self: CommandState,
+        func: t.Callable,
+    ) -> click.Command:
         meta_vars: dict[str, str] = {}
         sensitive_vars: dict[str, bool] = {}
         positional: list[str] = []
@@ -145,6 +152,14 @@ class CommandState:
 
         if self.pass_context:
             command = click.pass_context(command)
+
+        if RICH:
+            # apply rich-click styling
+            command = click.rich_config(
+                help_config=click.RichHelpConfiguration(
+                    **self.config.rich_click_kwargs
+                )
+            )(command)
 
         constructor = click.group if self.is_group else click.command
         command = constructor(**self.click_kwargs)(command)
