@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feud"
-version = "0.1.6"
+version = "0.2.0"
 license = "MIT"
 authors = ["Edwin Onuonga <ed@eonu.net>"]
 maintainers = ["Edwin Onuonga <ed@eonu.net>"]
