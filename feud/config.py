@@ -114,7 +114,8 @@ def config(
 
     Returns
     -------
-    The reusable :py:class:`.Config`.
+    Config
+        The reusable configuration.
 
     Examples
     --------

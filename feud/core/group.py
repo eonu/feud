@@ -18,13 +18,35 @@ import warnings
 from collections import OrderedDict
 from itertools import chain
 
+import pydantic as pyd
+
 import feud.exceptions
 from feud import click
-from feud._internal import _command, _metaclass
+from feud._internal import _group, _metaclass
 from feud.config import Config
-from feud.core.command import build_command_state
 
-__all__ = ["Group"]
+__all__ = ["Group", "Section"]
+
+
+class Section(pyd.BaseModel, extra="forbid"):
+    """Commands or subgroups to display in a separate section on the help page
+    of a :py:class:`.Group`.
+    """
+
+    #: Name of the command section.
+    name: str
+
+    #: Description of the command section.
+    #:
+    #: .. deprecated:: 0.3.0
+    #:   Not yet supported by ``rich-click``.
+    description: str | None = None
+
+    #: Names of commands or subgroups to include in the section.
+    #:
+    #: If :py:func:`.rename` was used to rename a command, the new command
+    #: name should be used.
+    items: list[str] = []
 
 
 class Group(metaclass=_metaclass.GroupBase):
@@ -57,13 +79,15 @@ class Group(metaclass=_metaclass.GroupBase):
     :py:func:`.command`. In the above example, ``func`` is automatically
     wrapped with ``@feud.command(show_help_defaults=False)``.
 
-    .. warning::
+    .. caution::
 
         The following function names should **NOT** be used in a group:
 
+        - :py:func:`~commands`
         - :py:func:`~compile`
         - :py:func:`~deregister`
         - :py:func:`~descendants`
+        - :py:func:`~name`
         - :py:func:`~register`
         - :py:func:`~subgroups`
 
@@ -82,6 +106,10 @@ class Group(metaclass=_metaclass.GroupBase):
     ) -> t.Any:
         """Compile and run the group.
 
+        .. warning::
+            This function should be considered internal. The preferred way to
+            run a group is to use the :py:func:`.run` function.
+
         Parameters
         ----------
         cls:
@@ -97,7 +125,8 @@ class Group(metaclass=_metaclass.GroupBase):
 
         Returns
         -------
-        Output of the called :py:class:`click.Command`.
+        typing.Any
+            Output of the called :py:class:`click.Command`.
 
         Examples
         --------
@@ -117,7 +146,9 @@ class Group(metaclass=_metaclass.GroupBase):
 
     @classmethod
     def __compile__(
-        cls: type[Group], *, parent: click.Group | None = None
+        cls: type[Group],
+        *,
+        parent: click.Group | None = None,
     ) -> click.Group:
         """Compile the group into a :py:class:`click.Group`.
 
@@ -134,7 +165,8 @@ class Group(metaclass=_metaclass.GroupBase):
 
         Returns
         -------
-        The generated :py:class:`click.Group`.
+        click.Group
+            The generated group.
 
         Examples
         --------
@@ -149,11 +181,12 @@ class Group(metaclass=_metaclass.GroupBase):
         cls._check_descendants()
 
         # create the group
-        click_group: click.Group = get_group(cls)
+        click_group: click.Group = _group.get_group(cls)
 
         # add commands to the group
         for name in cls.__feud_commands__:
-            click_group.add_command(getattr(cls, name))
+            command: click.Command = getattr(cls, name)
+            click_group.add_command(command)
 
         # compile all subgroups
         for subgroup in cls.__feud_subgroups__:
@@ -165,13 +198,79 @@ class Group(metaclass=_metaclass.GroupBase):
 
         return click_group
 
+    @staticmethod
+    def __main__() -> None:  # noqa: D105
+        pass
+
+    @classmethod
+    def __sections__(cls: type[Group]) -> list[feud.Section]:
+        """Sections to partition commands and subgroups into.
+
+        These sections are displayed on the group help page if ``rich-click``
+        is installed.
+
+        Returns
+        -------
+        list[Section]
+            Command sections.
+
+        Examples
+        --------
+        >>> import feud
+        >>> class Test(feud.Group):
+        ...     def one():
+        ...         pass
+        ...     def two():
+        ...         pass
+        ...     def three():
+        ...         pass
+        ...     def __sections__() -> list[feud.Section]:
+        ...         return [
+        ...             feud.Section(
+        ...                 name="Odd commands", items=["one", "three"]
+        ...             ),
+        ...             feud.Section(name="Even commands", items=["two"]),
+        ...             feud.Section(name="Groups", items=["subgroup"]),
+        ...         ]
+        >>> class Subgroup(feud.Group):
+        ...     pass
+        >>> Test.register(Subgroup)
+
+        """
+        return [
+            feud.Section(
+                name="Command groups",
+                items=cls.subgroups(name=True),
+            )
+        ]
+
+    @classmethod
+    def name(cls: type[Group]) -> str:
+        """Return the name of the group.
+
+        Returns
+        -------
+        str
+            The group name.
+
+        Examples
+        --------
+        >>> import feud
+        >>> class A(feud.Group):
+        ...     pass
+        >>> A.name()
+        'a'
+        """
+        return cls.__feud_click_kwargs__["name"]
+
     @classmethod
     def compile(cls: type[Group]) -> click.Group:  # noqa: A003
         """Compile the group into a :py:class:`click.Group`.
 
         Returns
         -------
-        The generated :py:class:`click.Group`.
+        click.Group
+            The generated group.
 
         Examples
         --------
@@ -185,12 +284,54 @@ class Group(metaclass=_metaclass.GroupBase):
         return cls.__compile__()
 
     @classmethod
-    def subgroups(cls: type[Group]) -> list[type[Group]]:
-        """Registered subgroups.
+    def commands(
+        cls: type[Group], *, name: bool = False
+    ) -> list[click.Command] | list[str]:
+        """Commands defined in the group.
+
+        Parameters
+        ----------
+        name:
+            Whether or not to return the command names.
 
         Returns
         -------
-        Registered subgroups.
+        list[click.Command] | list[str]
+            Group commands.
+
+        Examples
+        --------
+        >>> import feud
+        >>> class Test(feud.Group):
+        ...     def func_a():
+        ...         pass
+        ...     def func_b():
+        ...         pass
+        >>> Test.commands()
+        [<Command func_a>, <Command func_b>]
+        """
+        commands: list[click.Command] = [
+            getattr(cls, cmd) for cmd in cls.__feud_commands__
+        ]
+        if name:
+            return [command.name for command in commands]
+        return commands
+
+    @classmethod
+    def subgroups(
+        cls: type[Group], *, name: bool = False
+    ) -> list[type[Group]] | list[str]:
+        """Registered subgroups.
+
+        Parameters
+        ----------
+        name:
+            Whether or not to return the subgroup names.
+
+        Returns
+        -------
+        list[type[Group]] | list[str]
+            Registered subgroups.
 
         Examples
         --------
@@ -210,6 +351,8 @@ class Group(metaclass=_metaclass.GroupBase):
         descendants:
             Directed acyclic graph of subgroup descendants.
         """  # noqa: D401
+        if name:
+            return [sub.name() for sub in cls.__feud_subgroups__]
         return list(cls.__feud_subgroups__)
 
     @classmethod
@@ -218,7 +361,8 @@ class Group(metaclass=_metaclass.GroupBase):
 
         Returns
         -------
-        Subgroup descendants.
+        collections.OrderedDict[type[Group], collections.OrderedDict]
+            Subgroup descendants.
 
         Examples
         --------
@@ -443,9 +587,6 @@ class Group(metaclass=_metaclass.GroupBase):
             # deregister all subgroups
             cls.__feud_subgroups__ = []
 
-    def __main__() -> None:  # noqa: D105
-        pass
-
     @classmethod
     def from_dict(
         cls: type[Group],
@@ -470,7 +611,8 @@ class Group(metaclass=_metaclass.GroupBase):
 
         Returns
         -------
-        The generated :py:class:`.Group`.
+        Group
+            The generated group.
         """
         # split commands and subgroups
         commands: dict[str, click.Command | t.Callable] = obj.copy()
@@ -483,14 +625,14 @@ class Group(metaclass=_metaclass.GroupBase):
         # rename commands (if necessary)
         funcs: list[str] = []
         for name, command in commands.copy().items():
-            if isinstance(command, click.Command) and name != command.name:
-                # copy command
-                commands[name] = copy.copy(command)
-                commands[name].name = name
-            elif isinstance(command, t.Callable):
+            if isinstance(command, click.Command):
+                if name != command.name:
+                    # copy command
+                    commands[name] = copy.copy(command)
+                    commands[name].name = name
+            elif isinstance(command, t.Callable) and name != command.__name__:
                 # note commands generated by functions to be renamed later
-                if name != command.__name__:
-                    funcs.append(name)
+                funcs.append(name)
 
         # rename groups
         for name, subgroup in subgroups.copy().items():
@@ -551,7 +693,8 @@ class Group(metaclass=_metaclass.GroupBase):
 
         Returns
         -------
-        The generated :py:class:`.Group`.
+        Group
+            The generated group.
         """
         # convert to list
         obj: list[click.Command | type[Group] | t.Callable] = list(obj)
@@ -612,7 +755,8 @@ class Group(metaclass=_metaclass.GroupBase):
 
         Returns
         -------
-        The generated :py:class:`.Group`.
+        Group
+            The generated group.
         """
 
         def is_command(item: t.Any) -> bool:
@@ -666,32 +810,3 @@ class Group(metaclass=_metaclass.GroupBase):
             group.register(subgroups)
 
         return group
-
-
-def get_group(__cls: type[Group], /) -> click.Group:
-    func: callable = __cls.__main__
-    if isinstance(func, staticmethod):
-        func = func.__func__
-
-    state = _command.CommandState(
-        config=__cls.__feud_config__,
-        click_kwargs=__cls.__feud_click_kwargs__,
-        is_group=True,
-        aliases=getattr(func, "__feud_aliases__", {}),
-        envs=getattr(func, "__feud_envs__", {}),
-        names=getattr(
-            func, "__feud_names__", _command.NameDict(command=None, params={})
-        ),
-        overrides={
-            override.name: override
-            for override in getattr(func, "__click_params__", [])
-        },
-    )
-
-    # construct command state from signature
-    build_command_state(state, func=func, config=__cls.__feud_config__)
-
-    # generate click.Group and attach original function reference
-    command = state.decorate(func)
-    command.__func__ = func
-    return command

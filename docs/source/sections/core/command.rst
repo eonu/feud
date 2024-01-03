@@ -32,10 +32,6 @@ Understanding function signatures
 To understand how Feud converts a function into a :py:class:`click.Command`,
 consider the following function.
 
-.. tip::
-
-    When called with :py:func:`.run`, a function does not need to be manually decorated with :py:func:`.command`.
-
 .. code:: python
 
     # func.py
@@ -78,14 +74,6 @@ Similarly, when building a :py:class:`click.Command`, Feud treats:
     $ python func.py 1 hello --opt1 2.0 --opt2 3
 
 Note that ``--opt1`` is a required option as it has no default specified, whereas ``--opt2`` is not required.
-
-.. tip::
-
-    Feud does **not** support command-line *arguments* with default values. 
-    
-    In such a scenario, it is recommended to configure the parameter as a command-line *option* 
-    (by specifying it as a keyword-only parameter instead of a positional parameter),
-    since an argument with a default value is optional after all.
   
 API reference
 -------------

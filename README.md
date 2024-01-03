@@ -360,6 +360,7 @@ but still organized in a sensible way.
 
 import feud
 from datetime import date
+from typing import Literal
 
 class Blog(feud.Group):
     """Manage and serve a blog."""
@@ -408,8 +409,10 @@ $ python blog.py --help
 ╭─ Options ──────────────────────────────────────────────────────────╮
 │ --help      Show this message and exit.                            │
 ╰────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────╮
+╭─ Command groups ───────────────────────────────────────────────────╮
 │ post         Manage blog posts.                                    │
+╰────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────╮
 │ serve        Start a local HTTP server.                            │
 ╰────────────────────────────────────────────────────────────────────╯
 ```
@@ -656,9 +659,6 @@ on the important part – implementing your commands._
 
 ### Highly configurable and extensible
 
-> [!IMPORTANT]  
-> _Feud is **not** the new Click_ - it is an extension of Click and directly depends it.
-
 While designed to be simpler than Click, this comes with the trade-off that
 Feud is also more opinionated than Click and only directly implements a subset
 of its functionality.
@@ -855,7 +855,7 @@ maintainers and the work they have done that Feud has built upon.
 <tr>
 <td>
 
-##### [Click](https://github.com/pallets/click)
+[**Click**](https://github.com/pallets/click)
 
 <sup>
 
@@ -875,7 +875,7 @@ generated CLI.
 <tr>
 <td>
 
-##### [Rich Click](https://github.com/ewels/rich-click)
+[**Rich Click**](https://github.com/ewels/rich-click)
 
 <sup>
 
@@ -894,7 +894,7 @@ A shim around Click that renders help output nicely using
 <tr>
 <td>
 
-##### [Pydantic](https://github.com/pydantic/pydantic)
+[**Pydantic**](https://github.com/pydantic/pydantic)
 
 <sup>
 
@@ -916,7 +916,7 @@ types which can also be used as type hints in Feud commands for input validation
 <tr>
 <td>
 
-##### [Typer](https://github.com/tiangolo/typer)
+[**Typer**](https://github.com/tiangolo/typer)
 
 <sup>
 
@@ -939,7 +939,7 @@ lacks support for more complex types such as those offered by Pydantic.
 <tr>
 <td>
 
-##### [Thor](https://github.com/rails/thor)
+[**Thor**](https://github.com/rails/thor)
 
 <sup>
 

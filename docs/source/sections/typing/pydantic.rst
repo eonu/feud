@@ -37,72 +37,76 @@ The following commonly used Pydantic types can be used as type hints for Feud co
 
 ----
 
+The version number indicates the minimum ``pydantic`` version required to use the type. 
+
+If this version requirement is not met, the type is not imported by Feud.
+
 String types
 ------------
 
-- :py:obj:`pydantic.types.ImportString`
-- :py:obj:`pydantic.types.SecretStr`
-- :py:obj:`pydantic.types.StrictStr`
-- :py:obj:`pydantic.types.constr`
+- :py:obj:`pydantic.types.ImportString` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.SecretStr` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.StrictStr` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.constr` (``>= 2.0.3``)
 
 Integer types
 -------------
 
-- :py:obj:`pydantic.types.NegativeInt`
-- :py:obj:`pydantic.types.NonNegativeInt`
-- :py:obj:`pydantic.types.NonPositiveInt`
-- :py:obj:`pydantic.types.PositiveInt`
-- :py:obj:`pydantic.types.StrictInt`
-- :py:obj:`pydantic.types.conint`
+- :py:obj:`pydantic.types.NegativeInt` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.NonNegativeInt` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.NonPositiveInt` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.PositiveInt` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.StrictInt` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.conint` (``>= 2.0.3``)
 
 Float types
 -----------
 
-- :py:obj:`pydantic.types.FiniteFloat`
-- :py:obj:`pydantic.types.NegativeFloat`
-- :py:obj:`pydantic.types.NonNegativeFloat`
-- :py:obj:`pydantic.types.NonPositiveFloat`
-- :py:obj:`pydantic.types.PositiveFloat`
-- :py:obj:`pydantic.types.StrictFloat`
-- :py:obj:`pydantic.types.confloat`
+- :py:obj:`pydantic.types.FiniteFloat` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.NegativeFloat` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.NonNegativeFloat` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.NonPositiveFloat` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.PositiveFloat` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.StrictFloat` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.confloat` (``>= 2.0.3``)
 
 Sequence types
 --------------
 
-- :py:obj:`pydantic.types.confrozenset`
-- :py:obj:`pydantic.types.conlist`
-- :py:obj:`pydantic.types.conset`
+- :py:obj:`pydantic.types.confrozenset` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.conlist` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.conset` (``>= 2.0.3``)
 
 Datetime types
 --------------
 
-- :py:obj:`pydantic.types.AwareDatetime`
-- :py:obj:`pydantic.types.FutureDate`
-- :py:obj:`pydantic.types.FutureDatetime`
-- :py:obj:`pydantic.types.NaiveDatetime`
-- :py:obj:`pydantic.types.PastDate`
-- :py:obj:`pydantic.types.PastDatetime`
-- :py:obj:`pydantic.types.condate`
+- :py:obj:`pydantic.types.AwareDatetime` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.FutureDate` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.FutureDatetime` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.NaiveDatetime` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.PastDate` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.PastDatetime` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.condate` (``>= 2.0.3``)
 
 Path types
 ----------
 
-- :py:obj:`pydantic.types.DirectoryPath`
-- :py:obj:`pydantic.types.FilePath`
-- :py:obj:`pydantic.types.NewPath`
+- :py:obj:`pydantic.types.DirectoryPath` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.FilePath` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.NewPath` (``>= 2.0.3``)
 
 Decimal type
 ------------
 
-- :py:obj:`pydantic.types.condecimal`
+- :py:obj:`pydantic.types.condecimal` (``>= 2.0.3``)
 
 URL types
 ---------
 
-- :py:obj:`pydantic.networks.AnyHttpUrl`
-- :py:obj:`pydantic.networks.AnyUrl`
-- :py:obj:`pydantic.networks.FileUrl`
-- :py:obj:`pydantic.networks.HttpUrl`
+- :py:obj:`pydantic.networks.AnyHttpUrl` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.AnyUrl` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.FileUrl` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.HttpUrl` (``>= 2.0.3``)
 
 Email types
 -----------
@@ -116,61 +120,64 @@ Email types
 
         $ pip install feud[email]
 
-- :py:obj:`pydantic.networks.EmailStr`
-- :py:obj:`pydantic.networks.NameEmail`
+- :py:obj:`pydantic.networks.EmailStr` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.NameEmail` (``>= 2.0.3``)
 
 Base-64 types
 -------------
 
-- :py:obj:`pydantic.types.Base64Bytes`
-- :py:obj:`pydantic.types.Base64Str`
+- :py:obj:`pydantic.types.Base64Bytes` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.Base64Str` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.Base64UrlBytes` (``>= 2.4.0``)
+- :py:obj:`pydantic.types.Base64UrlStr` (``>= 2.4.0``)
 
 Byte types
 ----------
 
-- :py:obj:`pydantic.types.ByteSize`
-- :py:obj:`pydantic.types.SecretBytes`
-- :py:obj:`pydantic.types.StrictBytes`
-- :py:obj:`pydantic.types.conbytes`
+- :py:obj:`pydantic.types.ByteSize` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.SecretBytes` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.StrictBytes` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.conbytes` (``>= 2.0.3``)
 
 JSON type
 ---------
 
-- :py:obj:`pydantic.types.Json`
+- :py:obj:`pydantic.types.Json` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.JsonValue` (``>= 2.5.0``)
 
 IP address types
 ----------------
 
-- :py:obj:`pydantic.networks.IPvAnyAddress`
-- :py:obj:`pydantic.networks.IPvAnyInterface`
-- :py:obj:`pydantic.networks.IPvAnyNetwork`
+- :py:obj:`pydantic.networks.IPvAnyAddress` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.IPvAnyInterface` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.IPvAnyNetwork` (``>= 2.0.3``)
 
 Database connection types
 -------------------------
 
-- :py:obj:`pydantic.networks.AmqpDsn`
-- :py:obj:`pydantic.networks.CockroachDsn`
-- :py:obj:`pydantic.networks.KafkaDsn`
-- :py:obj:`pydantic.networks.MariaDBDsn`
-- :py:obj:`pydantic.networks.MongoDsn`
-- :py:obj:`pydantic.networks.MySQLDsn`
-- :py:obj:`pydantic.networks.PostgresDsn`
-- :py:obj:`pydantic.networks.RedisDsn`
+- :py:obj:`pydantic.networks.AmqpDsn` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.CockroachDsn` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.KafkaDsn` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.MariaDBDsn` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.MongoDsn` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.MySQLDsn` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.PostgresDsn` (``>= 2.0.3``)
+- :py:obj:`pydantic.networks.RedisDsn` (``>= 2.0.3``)
 
 UUID types
 ----------
 
-- :py:obj:`pydantic.types.UUID1`
-- :py:obj:`pydantic.types.UUID3`
-- :py:obj:`pydantic.types.UUID4`
-- :py:obj:`pydantic.types.UUID5`
+- :py:obj:`pydantic.types.UUID1` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.UUID3` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.UUID4` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.UUID5` (``>= 2.0.3``)
 
 Boolean type
 ------------
 
-- :py:obj:`pydantic.types.StrictBool`
+- :py:obj:`pydantic.types.StrictBool` (``>= 2.0.3``)
 
 Other types
 -----------
 
-- :py:obj:`pydantic.functional_validators.SkipValidation`
+- :py:obj:`pydantic.functional_validators.SkipValidation` (``>= 2.0.3``)

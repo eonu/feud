@@ -15,11 +15,12 @@ import warnings
 
 import feud.exceptions
 from feud import click
+from feud._internal import _sections
 from feud.config import Config
 from feud.core.command import *
 from feud.core.group import *
 
-__all__ = ["Group", "build", "command", "run"]
+__all__ = ["Group", "Section", "build", "command", "run"]
 
 Runner = t.Union[
     click.Command,
@@ -103,7 +104,8 @@ def run(
 
     Returns
     -------
-    Output of the called object.
+    typing.Any
+        Output of the called object.
 
     Examples
     --------
@@ -195,6 +197,13 @@ def run(
         args = obj
         obj = None
 
+    # retrieve program name
+    prog_name: str | None = click_kwargs.get("prog_name")
+    if prog_name is None:
+        from click.utils import _detect_program_name
+
+        prog_name = _detect_program_name()
+
     # get runner
     runner: click.Command | click.Group = build(
         obj,
@@ -204,6 +213,12 @@ def run(
         config=config,
         warn=warn,
     )
+
+    # add command and option sections
+    if click.is_rich:
+        _sections.add_option_sections(runner, context=[prog_name])
+        if isinstance(runner, click.Group):
+            _sections.add_command_sections(runner, context=[prog_name])
 
     return runner(args, **click_kwargs)
 
@@ -371,11 +386,12 @@ def build(
 
     Returns
     -------
-    :py:class:`click.Command`, :py:class:`click.Group` or :py:class:`.Group`
+    click.Command | click.Group | Group
+        The runnable object.
 
     Raises
     ------
-    feud.exceptions.CompilationError
+    CompilationError
         If no runnable object or current module can be determined.
 
     Examples
@@ -393,7 +409,7 @@ def build(
     # use current module if no runner provided
     if obj is None:
         frame = inspect.stack()[1]
-        obj = inspect.getmodule(frame[0]) or sys.modules.get("__main__")
+        obj = sys.modules.get("__main__", inspect.getmodule(frame[0]))
 
     if obj is None:
         msg = (

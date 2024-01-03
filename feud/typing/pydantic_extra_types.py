@@ -5,26 +5,64 @@
 
 """Officially supported types from the ``pydantic-extra-types`` package."""
 
+from __future__ import annotations
+
+__all__ = []
+
+from operator import attrgetter
+
+import packaging.version
+
+
+def split(string: str) -> str:
+    return string.split(".")[-1]
+
+
 try:
-    from pydantic_extra_types.color import Color
-    from pydantic_extra_types.coordinate import (
-        Coordinate,
-        Latitude,
-        Longitude,
+    import pydantic_extra_types
+
+    version: packaging.version.Version = packaging.version.parse(
+        pydantic_extra_types.__version__,
     )
-    from pydantic_extra_types.country import (
-        CountryAlpha2,
-        CountryAlpha3,
-        CountryNumericCode,
-        CountryOfficialName,
-        CountryShortName,
-    )
-    from pydantic_extra_types.mac_address import MacAddress
-    from pydantic_extra_types.payment import (
-        PaymentCardBrand,
-        PaymentCardNumber,
-    )
-    from pydantic_extra_types.phone_numbers import PhoneNumber
-    from pydantic_extra_types.routing_number import ABARoutingNumber
+
+    if version >= packaging.version.parse("2.1.0"):
+        import pydantic_extra_types.color
+        import pydantic_extra_types.coordinate
+        import pydantic_extra_types.country
+        import pydantic_extra_types.mac_address
+        import pydantic_extra_types.payment
+        import pydantic_extra_types.phone_numbers
+        import pydantic_extra_types.routing_number
+
+        types: list[str] = [
+            "color.Color",
+            "coordinate.Coordinate",
+            "coordinate.Latitude",
+            "coordinate.Longitude",
+            "country.CountryAlpha2",
+            "country.CountryAlpha3",
+            "country.CountryNumericCode",
+            "country.CountryOfficialName",
+            "country.CountryShortName",
+            "mac_address.MacAddress",
+            "payment.PaymentCardBrand",
+            "payment.PaymentCardNumber",
+            "phone_numbers.PhoneNumber",
+            "routing_number.ABARoutingNumber",
+        ]
+
+        globals().update(
+            {
+                split(attr): attrgetter(attr)(pydantic_extra_types)
+                for attr in types
+            }
+        )
+
+        __all__.extend(map(split, types))
+
+    if version >= packaging.version.parse("2.2.0"):
+        from pydantic_extra_types.ulid import ULID
+
+        __all__.extend(["ULID"])
 except ImportError:
     pass
