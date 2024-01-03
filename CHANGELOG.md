@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.0](https://github.com/eonu/feud/releases/tag/v0.3.0) - 2024-01-03
+
+### Bug Fixes
+
+- check `__main__` first for module discovery ([#131](https://github.com/eonu/feud/issues/131))
+- fix `click` & `pydantic` min. versions + fix `feud.typing` versions ([#133](https://github.com/eonu/feud/issues/133))
+- define `__all__` for `feud.typing` module ([#134](https://github.com/eonu/feud/issues/134))
+
+### Documentation
+
+- remove click admonition from `README.md` ([#129](https://github.com/eonu/feud/issues/129))
+- remove headings from projects table ([#137](https://github.com/eonu/feud/issues/137))
+
+### Features
+
+- define `feud.click.is_rich` for checking `rich-click` install ([#132](https://github.com/eonu/feud/issues/132))
+- add command and option sections ([#136](https://github.com/eonu/feud/issues/136))
+
 ## [v0.2.0](https://github.com/eonu/feud/releases/tag/v0.2.0) - 2023-12-27
 
 ### Features
