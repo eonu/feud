@@ -31,6 +31,9 @@ API reference
 
 .. autoclass:: feud.core.group.Group
     :members:
+    :special-members: __sections__
     :exclude-members: from_dict, from_iter, from_module
 
-    
+.. autopydantic_model:: feud.Section
+    :model-show-json: False
+    :model-show-config-summary: False
