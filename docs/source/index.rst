@@ -56,7 +56,7 @@ Contents
    sections/core/index
    sections/typing/index
    sections/decorators/index
-   sections/config/index
+   sections/config
    sections/exceptions
 
 Indices and tables

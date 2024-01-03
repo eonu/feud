@@ -360,6 +360,7 @@ but still organized in a sensible way.
 
 import feud
 from datetime import date
+from typing import Literal
 
 class Blog(feud.Group):
     """Manage and serve a blog."""
@@ -408,8 +409,10 @@ $ python blog.py --help
 ╭─ Options ──────────────────────────────────────────────────────────╮
 │ --help      Show this message and exit.                            │
 ╰────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────╮
+╭─ Command groups ───────────────────────────────────────────────────╮
 │ post         Manage blog posts.                                    │
+╰────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────╮
 │ serve        Start a local HTTP server.                            │
 ╰────────────────────────────────────────────────────────────────────╯
 ```

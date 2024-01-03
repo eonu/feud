@@ -16,7 +16,7 @@ import pydantic as pyd
 from feud._internal import _command
 from feud.exceptions import CompilationError
 
-__all__ = ["alias", "env", "rename"]
+__all__ = ["alias", "env", "rename", "section"]
 
 
 @pyd.validate_call
@@ -27,8 +27,6 @@ def alias(**aliases: str | list[str]) -> t.Callable:
     to be used at compile time to alias :py:class:`click.Option` objects.
 
     Aliases may only be defined for command-line options, not arguments.
-    This translates to keyword-only parameters, i.e. those
-    positioned after the ``*`` operator in a function signature.
 
     Parameters
     ----------
@@ -258,6 +256,56 @@ def rename(command: str | None = None, /, **params: str) -> t.Callable:
             raise CompilationError(msg)
 
         f.__feud_names__ = _command.NameDict(command=command, params=params)
+        return f
+
+    return decorator
+
+
+def section(**options: str) -> t.Callable:
+    """Partition command options into sections.
+
+    These sections are displayed on the group help page if ``rich-click``
+    is installed.
+
+    Parameters
+    ----------
+    **options:
+        Mapping of option names to section names.
+        Option names must be keyword-only parameters in the decorated
+        function signature.
+
+    Returns
+    -------
+    Function decorated with section metadata.
+
+    Examples
+    --------
+    >>> import feud
+    >>> @feud.section(
+    ...     opt1="Basic options",
+    ...     opt2="Advanced options",
+    ...     opt3="Basic options",
+    ... )
+    ... def my_func(arg1: int, *, opt1: str, opt2: bool, opt3: float):
+    ...     pass
+    """
+
+    def decorator(f: t.Callable) -> t.Callable:
+        # check provided names and parameters match
+        sig = inspect.signature(f)
+        specified = set(options.keys())
+        received = {
+            p.name for p in sig.parameters.values() if p.kind == p.KEYWORD_ONLY
+        }
+        if len(specified - received) > 0:
+            msg = (
+                f"Arguments provided to 'section' decorator must "
+                f"also be keyword parameters for function {f.__name__!r}. "
+                f"Received extra arguments: {specified - received!r}."
+            )
+            raise CompilationError(msg)
+
+        f.__feud_sections__ = options.copy()
         return f
 
     return decorator
