@@ -855,7 +855,7 @@ maintainers and the work they have done that Feud has built upon.
 <tr>
 <td>
 
-##### [Click](https://github.com/pallets/click)
+[**Click**](https://github.com/pallets/click)
 
 <sup>
 
@@ -875,7 +875,7 @@ generated CLI.
 <tr>
 <td>
 
-##### [Rich Click](https://github.com/ewels/rich-click)
+[**Rich Click**](https://github.com/ewels/rich-click)
 
 <sup>
 
@@ -894,7 +894,7 @@ A shim around Click that renders help output nicely using
 <tr>
 <td>
 
-##### [Pydantic](https://github.com/pydantic/pydantic)
+[**Pydantic**](https://github.com/pydantic/pydantic)
 
 <sup>
 
@@ -916,7 +916,7 @@ types which can also be used as type hints in Feud commands for input validation
 <tr>
 <td>
 
-##### [Typer](https://github.com/tiangolo/typer)
+[**Typer**](https://github.com/tiangolo/typer)
 
 <sup>
 
@@ -939,7 +939,7 @@ lacks support for more complex types such as those offered by Pydantic.
 <tr>
 <td>
 
-##### [Thor](https://github.com/rails/thor)
+[**Thor**](https://github.com/rails/thor)
 
 <sup>
 
