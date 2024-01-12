@@ -25,8 +25,8 @@ def doctest(c: Config) -> None:
     # skip:
     # - feud/click/context.py
     # - feud/decorators.py
-    # - feud/config.py
     files: list[str] = [
+        "feud/config.py",
         "feud/core/__init__.py",
         "feud/core/command.py",
         "feud/core/group.py",
