@@ -30,9 +30,7 @@ from feud.config import Config
         (t.PaymentCardNumber, click.STRING),
         (
             t.PaymentCardBrand,
-            lambda x: isinstance(x, click.Choice)
-            and x.choices
-            == ["American Express", "Mastercard", "Visa", "Mir", "other"],
+            lambda x: isinstance(x, click.Choice) and x.choices,
         ),
         (t.PhoneNumber, click.STRING),
         (t.ABARoutingNumber, click.STRING),
