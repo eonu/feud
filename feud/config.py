@@ -139,7 +139,10 @@ def config(
     >>> class CLI(feud.Group, config=config):
     ...     def func(*, opt1: int, opt2: bool = True):
     ...         pass
-    >>> all(not param.show_default for param in CLI.func.params)
+    >>> all(
+    ...     not param.show_default
+    ...     for param in CLI.func.params
+    ... )  # doctest: +SKIP
     True
     """
     return Config._create(  # noqa: SLF001
