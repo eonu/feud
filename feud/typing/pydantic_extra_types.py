@@ -42,7 +42,6 @@ try:
             "country.CountryAlpha2",
             "country.CountryAlpha3",
             "country.CountryNumericCode",
-            "country.CountryOfficialName",
             "country.CountryShortName",
             "mac_address.MacAddress",
             "payment.PaymentCardBrand",
@@ -50,6 +49,9 @@ try:
             "phone_numbers.PhoneNumber",
             "routing_number.ABARoutingNumber",
         ]
+
+        if version < packaging.version.parse("2.4.0"):
+            types.append("country.CountryOfficialName")
 
         globals().update(
             {
@@ -64,10 +66,5 @@ try:
         from pydantic_extra_types.ulid import ULID
 
         __all__.extend(["ULID"])
-
-    if version >= packaging.version.parse("2.4.0"):
-        __all__.pop(
-            __all__.index("pydantic_extra_types.country.CountryOfficialName")
-        )
 except ImportError:
     pass

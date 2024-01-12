@@ -59,7 +59,7 @@ Country types
 - :py:obj:`pydantic_extra_types.country.CountryAlpha2` (``>= 2.1.0``)
 - :py:obj:`pydantic_extra_types.country.CountryAlpha3` (``>= 2.1.0``)
 - :py:obj:`pydantic_extra_types.country.CountryNumericCode` (``>= 2.1.0``)
-- :py:obj:`pydantic_extra_types.country.CountryOfficialName` (``>= 2.1.0``)
+- :py:obj:`pydantic_extra_types.country.CountryOfficialName` (``>= 2.1.0, <2.4.0``)
 - :py:obj:`pydantic_extra_types.country.CountryShortName` (``>= 2.1.0``)
 
 Phone number type
