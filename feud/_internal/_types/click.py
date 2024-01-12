@@ -60,6 +60,13 @@ BASE_TYPES = {
 }
 
 try:
+    import packaging.version
+    import pydantic_extra_types
+
+    version: packaging.version.Version = packaging.version.parse(
+        pydantic_extra_types.__version__,
+    )
+
     from pydantic_extra_types.color import Color
     from pydantic_extra_types.coordinate import (
         Coordinate,
@@ -70,7 +77,6 @@ try:
         CountryAlpha2,
         CountryAlpha3,
         CountryNumericCode,
-        CountryOfficialName,
         CountryShortName,
     )
     from pydantic_extra_types.mac_address import MacAddress
@@ -89,13 +95,22 @@ try:
         CountryAlpha2: click.STRING,
         CountryAlpha3: click.STRING,
         CountryNumericCode: click.STRING,
-        CountryOfficialName: click.STRING,
         CountryShortName: click.STRING,
         MacAddress: click.STRING,
         PaymentCardNumber: click.STRING,
         PhoneNumber: click.STRING,
         ABARoutingNumber: click.STRING,
     }
+
+    if version >= packaging.version.parse("2.2.0"):
+        from pydantic_extra_types.ulid import ULID
+
+        EXTRA_TYPES[ULID] = click.STRING
+
+    if version < packaging.version.parse("2.4.0"):
+        from pydantic_extra_types.country import CountryOfficialName
+
+        EXTRA_TYPES[CountryOfficialName] = click.STRING
 except ImportError:
     EXTRA_TYPES = {}
 
