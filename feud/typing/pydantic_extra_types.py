@@ -66,6 +66,8 @@ try:
         __all__.extend(["ULID"])
 
     if version >= packaging.version.parse("2.4.0"):
-        __all__.pop(__all__.index("country.CountryOfficialName"))
+        __all__.pop(
+            __all__.index("pydantic_extra_types.country.CountryOfficialName")
+        )
 except ImportError:
     pass
