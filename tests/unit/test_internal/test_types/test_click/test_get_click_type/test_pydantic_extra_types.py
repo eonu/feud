@@ -25,7 +25,7 @@ from feud.config import Config
         (t.CountryAlpha3, click.STRING),
         (t.CountryNumericCode, click.STRING),
         (t.CountryShortName, click.STRING),
-        (t.CountryOfficialName, click.STRING),
+        # (t.CountryOfficialName, click.STRING),  not present in >=2.4.0
         (t.MacAddress, click.STRING),
         (t.PaymentCardNumber, click.STRING),
         (
