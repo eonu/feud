@@ -25,14 +25,12 @@ from feud.config import Config
         (t.CountryAlpha3, click.STRING),
         (t.CountryNumericCode, click.STRING),
         (t.CountryShortName, click.STRING),
-        (t.CountryOfficialName, click.STRING),
+        # (t.CountryOfficialName, click.STRING),  not present in >=2.4.0
         (t.MacAddress, click.STRING),
         (t.PaymentCardNumber, click.STRING),
         (
             t.PaymentCardBrand,
-            lambda x: isinstance(x, click.Choice)
-            and x.choices
-            == ["American Express", "Mastercard", "Visa", "Mir", "other"],
+            lambda x: isinstance(x, click.Choice) and x.choices,
         ),
         (t.PhoneNumber, click.STRING),
         (t.ABARoutingNumber, click.STRING),

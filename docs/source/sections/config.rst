@@ -9,11 +9,11 @@ Configuration
     :backlinks: none
     :depth: 3
 
-:doc:`../core/command` are defined by :py:func:`.command`,
+:doc:`core/command` are defined by :py:func:`.command`,
 which accepts various Feud configuration key-word arguments such as 
 ``negate_flags`` or ``show_help_defaults`` directly.
 
-Similarly, :doc:`../core/group` can be directly configured with Feud 
+Similarly, :doc:`core/group` can be directly configured with Feud 
 configuration key-word arguments provided when subclassing :py:class:`.Group`.
 
 However, in some cases it may be useful to have a reusable configuration 

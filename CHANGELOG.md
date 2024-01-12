@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.1](https://github.com/eonu/feud/releases/tag/v0.3.1) - 2024-01-12
+
+### Documentation
+
+- fix broken core/command docs links ([#139](https://github.com/eonu/feud/issues/139))
+- update package description ([#141](https://github.com/eonu/feud/issues/141))
+
 ## [v0.3.0](https://github.com/eonu/feud/releases/tag/v0.3.0) - 2024-01-03
 
 ### Bug Fixes

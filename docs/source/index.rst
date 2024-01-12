@@ -41,7 +41,7 @@ Feud
 ----
 
 Designing a *good* CLI can quickly spiral into chaos without the help of
-an intuitive CLI builder.
+an intuitive CLI framework.
 
 **Feud builds on** `Click <https://click.palletsprojects.com/en/8.1.x/>`__ **for
 parsing and** `Pydantic <https://docs.pydantic.dev/latest/>`__
