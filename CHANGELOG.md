@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.2](https://github.com/eonu/feud/releases/tag/v0.3.2) - 2024-04-01
+
+### Documentation
+
+- specify virtual env location in `.readthedocs.yaml` ([#143](https://github.com/eonu/feud/issues/143))
+
 ## [v0.3.1](https://github.com/eonu/feud/releases/tag/v0.3.1) - 2024-01-12
 
 ### Documentation

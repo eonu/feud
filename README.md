@@ -46,9 +46,6 @@
 
 ## About
 
-> [!WARNING]  
-> _Writing command-line interfaces can get messy!_
-
 Designing a _good_ CLI can quickly spiral into chaos without the help of
 an intuitive CLI framework.
 
