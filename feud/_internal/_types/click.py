@@ -111,6 +111,26 @@ try:
         from pydantic_extra_types.country import CountryOfficialName
 
         EXTRA_TYPES[CountryOfficialName] = click.STRING
+
+    if version >= packaging.version.parse("2.4.0"):
+        from pydantic_extra_types.isbn import ISBN
+
+        EXTRA_TYPES[ISBN] = click.STRING
+
+    if version >= packaging.version.parse("2.7.0"):
+        from pydantic_extra_types.language_code import (
+            LanguageAlpha2,
+            LanguageName,
+        )
+
+        EXTRA_TYPES[LanguageAlpha2] = click.STRING
+        EXTRA_TYPES[LanguageName] = click.STRING
+
+    if version >= packaging.version.parse("2.9.0"):
+        from pydantic_extra_types.semantic_version import SemanticVersion
+
+        EXTRA_TYPES[SemanticVersion] = click.STRING
+
 except ImportError:
     EXTRA_TYPES = {}
 
