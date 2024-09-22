@@ -62,6 +62,22 @@ Country types
 - :py:obj:`pydantic_extra_types.country.CountryOfficialName` (``>= 2.1.0, <2.4.0``)
 - :py:obj:`pydantic_extra_types.country.CountryShortName` (``>= 2.1.0``)
 
+ISBN type
+---------
+
+- :py:obj:`pydantic_extra_types.isbn.ISBN` (``>= 2.4.0``)
+
+Language types
+--------------
+
+- :py:obj:`pydantic_extra_types.language_code.LanguageAlpha2` (``>= 2.7.0``)
+- :py:obj:`pydantic_extra_types.language_code.LanguageName` (``>= 2.7.0``)
+
+MAC address type
+----------------
+
+- :py:obj:`pydantic_extra_types.mac_address.MacAddress` (``>= 2.1.0``)
+
 Phone number type
 -----------------
 
@@ -73,15 +89,15 @@ Payment types
 - :py:obj:`pydantic_extra_types.payment.PaymentCardBrand` (``>= 2.1.0``)
 - :py:obj:`pydantic_extra_types.payment.PaymentCardNumber` (``>= 2.1.0``)
 
-MAC address type
-----------------
-
-- :py:obj:`pydantic_extra_types.mac_address.MacAddress` (``>= 2.1.0``)
-
 Routing number type
 -------------------
 
 - :py:obj:`pydantic_extra_types.routing_number.ABARoutingNumber` (``>= 2.1.0``)
+
+Semantic version type
+---------------------
+
+- :py:obj:`pydantic_extra_types.semantic_version.SemanticVersion` (``>= 2.9.0``)
 
 ULID type
 ---------
