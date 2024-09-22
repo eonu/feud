@@ -57,7 +57,7 @@ class CommandState:
     description: str | None = None
 
     def decorate(  # noqa: PLR0915
-        self: CommandState,
+        self: t.Self,
         func: t.Callable,
     ) -> click.Command:
         meta_vars: dict[str, str] = {}
@@ -164,7 +164,7 @@ class CommandState:
 
         return command
 
-    def get_meta_var(self: CommandState, param: click.Parameter) -> str:
+    def get_meta_var(self: t.Self, param: click.Parameter) -> str:
         match param:
             case click.Argument():
                 return param.make_metavar()

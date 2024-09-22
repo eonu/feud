@@ -10,7 +10,7 @@ groups using :py:class:`.Group`.
 from __future__ import annotations
 
 import inspect
-from typing import Any
+import typing as t
 
 import pydantic as pyd
 
@@ -42,16 +42,16 @@ class Config(pyd.BaseModel):
 
     #: Validation settings for
     #: :py:func:`pydantic.validate_call_decorator.validate_call`.
-    pydantic_kwargs: dict[str, Any] = {}
+    pydantic_kwargs: dict[str, t.Any] = {}
 
     #: Styling settings for ``rich-click``.
     #:
     #: See all available options
     #: `here <https://github.com/ewels/rich-click/blob/e6a3add46c591d49079d440917700dfe28cf0cfe/src/rich_click/rich_help_configuration.py#L50>`__
     #: (as of ``rich-click`` v1.7.2).
-    rich_click_kwargs: dict[str, Any] = {"show_arguments": True}
+    rich_click_kwargs: dict[str, t.Any] = {"show_arguments": True}
 
-    def __init__(self: Config, **kwargs: Any) -> Config:
+    def __init__(self: t.Self, **kwargs: t.Any) -> None:
         caller: str = inspect.currentframe().f_back.f_code.co_name
         if caller != Config._create.__name__:
             msg = (
@@ -63,11 +63,11 @@ class Config(pyd.BaseModel):
 
     @classmethod
     def _create(
-        cls: type[Config], base: Config | None = None, **kwargs: Any
+        cls: type[Config], base: Config | None = None, **kwargs: t.Any
     ) -> Config:
         config_kwargs = base.model_dump(exclude_unset=True) if base else {}
         for field in cls.model_fields:
-            value: Any | None = kwargs.get(field)
+            value: t.Any | None = kwargs.get(field)
             if value is not None:
                 config_kwargs[field] = value
         return cls(**config_kwargs)
@@ -79,8 +79,8 @@ def config(
     show_help_defaults: bool | None = None,
     show_help_datetime_formats: bool | None = None,
     show_help_envvars: bool | None = None,
-    pydantic_kwargs: dict[str, Any] | None = None,
-    rich_click_kwargs: dict[str, Any] | None = None,
+    pydantic_kwargs: dict[str, t.Any] | None = None,
+    rich_click_kwargs: dict[str, t.Any] | None = None,
 ) -> Config:
     """Create a reusable configuration for :py:func:`.command` or
     :py:class:`.Group` objects.
