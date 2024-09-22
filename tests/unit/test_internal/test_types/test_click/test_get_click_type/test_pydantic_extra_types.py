@@ -34,6 +34,11 @@ from feud.config import Config
         ),
         (t.PhoneNumber, click.STRING),
         (t.ABARoutingNumber, click.STRING),
+        (t.ULID, click.STRING),
+        (t.ISBN, click.STRING),
+        (t.LanguageAlpha2, click.STRING),
+        (t.LanguageName, click.STRING),
+        (t.SemanticVersion, click.STRING),
     ],
 )
 def test_pydantic_extra(

@@ -65,6 +65,25 @@ try:
     if version >= packaging.version.parse("2.2.0"):
         from pydantic_extra_types.ulid import ULID
 
-        __all__.extend(["ULID"])
+        __all__.append("ULID")
+
+    if version >= packaging.version.parse("2.4.0"):
+        from pydantic_extra_types.isbn import ISBN
+
+        __all__.append("ISBN")
+
+    if version >= packaging.version.parse("2.7.0"):
+        from pydantic_extra_types.language_code import (
+            LanguageAlpha2,
+            LanguageName,
+        )
+
+        __all__.extend(["LanguageAlpha2", "LanguageName"])
+
+    if version >= packaging.version.parse("2.9.0"):
+        from pydantic_extra_types.semantic_version import SemanticVersion
+
+        __all__.append("SemanticVersion")
+
 except ImportError:
     pass
