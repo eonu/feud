@@ -66,7 +66,7 @@ class CommandState:
         var_positional: str | None = None
         params: list[click.Parameter] = []
 
-        sig: inspect.signature = inspect.signature(func)
+        sig: inspect.signature = inspect.signature(func, eval_str=True)
 
         for i, (param_name, param_spec) in enumerate(sig.parameters.items()):
             # store names of positional arguments
@@ -248,7 +248,7 @@ def build_command_state(  # noqa: PLR0915
 
     state.description: str | None = _docstring.get_description(doc)
 
-    sig: inspect.Signature = inspect.signature(func)
+    sig: inspect.Signature = inspect.signature(func, eval_str=True)
 
     for param, spec in sig.parameters.items():
         meta = ParameterSpec()
