@@ -93,4 +93,24 @@ if version >= packaging.version.parse("2.5.0"):
 
     __all__.extend(types)
 
+if version >= packaging.version.parse("2.6.0"):
+    types: list[str] = ["NatsDsn"]
+
+    __all__.extend(types)
+
+if version >= packaging.version.parse("2.7.0"):
+    types: list[str] = ["ClickHouseDsn"]
+
+    __all__.extend(types)
+
+if version >= packaging.version.parse("2.7.1"):
+    types: list[str] = ["FtpUrl", "WebsocketUrl", "AnyWebsocketUrl"]
+
+    __all__.extend(types)
+
+if version >= packaging.version.parse("2.9.0"):
+    types: list[str] = ["SnowflakeDsn"]
+
+    __all__.extend(types)
+
 globals().update({attr: getattr(pydantic, attr) for attr in __all__})
