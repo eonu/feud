@@ -246,13 +246,13 @@ def build_command_state(  # noqa: PLR0915
     else:
         doc = docstring_parser.parse_from_object(func)
 
-    state.description: str | None = _docstring.get_description(doc)
+    state.description = _docstring.get_description(doc)
 
     sig: inspect.Signature = inspect.signature(func, eval_str=True)
 
     for param, spec in sig.parameters.items():
         meta = ParameterSpec()
-        meta.hint: type = spec.annotation
+        meta.hint = spec.annotation
 
         # get renamed parameter if @feud.rename used
         name: str = state.names["params"].get(param, param)
