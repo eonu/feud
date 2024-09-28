@@ -22,7 +22,7 @@ import pydantic as pyd
 
 import feud.exceptions
 from feud import click
-from feud._internal import _group, _metaclass
+from feud._internal import _command, _group, _metaclass
 from feud.config import Config
 
 __all__ = ["Group", "Section"]
@@ -83,6 +83,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
         The following function names should **NOT** be used in a group:
 
+        - :py:func:`~add_commands`
         - :py:func:`~commands`
         - :py:func:`~compile`
         - :py:func:`~deregister`
@@ -184,8 +185,7 @@ class Group(metaclass=_metaclass.GroupBase):
         click_group: click.Group = _group.get_group(cls)
 
         # add commands to the group
-        for name in cls.__feud_commands__:
-            command: click.Command = getattr(cls, name)
+        for command in cls.commands():
             click_group.add_command(command)
 
         # compile all subgroups
@@ -240,7 +240,14 @@ class Group(metaclass=_metaclass.GroupBase):
         return [
             feud.Section(
                 name="Command groups",
-                items=cls.subgroups(name=True),
+                items=[
+                    *cls.subgroups(name=True),
+                    *[
+                        command.name
+                        for command in cls.commands()
+                        if isinstance(command, click.Group)
+                    ],
+                ],
             )
         ]
 
@@ -398,7 +405,7 @@ class Group(metaclass=_metaclass.GroupBase):
         )
 
     @classmethod
-    def _descendants(cls: type[Group]) -> t.Generator[type[Group]]:
+    def _descendants(cls: type[Group]) -> t.Iterator[type[Group]]:
         for group in cls.__feud_subgroups__:
             yield group
             yield from group._descendants()  # noqa: SLF001
@@ -793,6 +800,7 @@ class Group(metaclass=_metaclass.GroupBase):
             chain.from_iterable(
                 group._descendants()  # noqa: SLF001
                 for group in groups
+                # placeholder
             )
         )
         subgroups = [group for group in groups if group not in non_root]
@@ -810,3 +818,122 @@ class Group(metaclass=_metaclass.GroupBase):
             group.register(subgroups)
 
         return group
+
+    @classmethod
+    def add_commands(
+        cls: type[Group],
+        commands: list[t.Callable | click.Command] | None = None,
+        /,
+        **kwargs: t.Callable | click.Command,
+    ) -> None:
+        """Add a command to the group.
+
+        Provided commands may be functions or :py:class:`click.Command`
+        objects (which may be generated using :py:func:`.command`).
+
+        If a function is provided, it will be converted into a
+        :py:class:`click.Command` using the group's :py:class:`.Config`.
+
+        Parameters
+        ----------
+        commands:
+            Commands to add to the group.
+
+            Commands will keep their original name, but will be
+            assigned as a member to the group class using the name of the
+            original function (if decorated by :py:func:`.command`).
+
+        **kwargs:
+            Command to add to the group.
+
+            Commands will be renamed according to the specified keys,
+            but will be assigned as a member to the group class using
+            the name of the original function
+            (if decorated by :py:func:`.command`).
+
+        Examples
+        --------
+        Registering a function and a :py:class:`click.Command`.
+
+        >>> import feud
+        >>> class CLI(feud.Group):
+        ...     pass
+        >>> def func(arg: int) -> int:
+        ...     return arg
+        >>> @feud.command
+        ... def command(arg: int) -> int:
+        ...     return arg
+        >>> CLI.add_commands([func, command])
+        >>> CLI.commands(name=True)
+        ['func', 'command']
+
+        Registering a function and a :py:class:`click.Command`
+        (with renaming).
+
+        >>> import feud
+        >>> class CLI(feud.Group):
+        ...     pass
+        >>> def func(arg: int) -> int:
+        ...     return arg
+        >>> @feud.command
+        ... def command(arg: int) -> int:
+        ...     return arg
+        >>> CLI.add_commands(renamed1=func, renamed2=command)
+        >>> CLI.commands(name=True)
+        ['renamed1', 'renamed2']
+        """
+        commands = commands or []
+        cmds: dict[str, t.Callable | click.Command] = {}
+
+        for command in commands:
+            if isinstance(command, click.Command):
+                # use command name
+                name = command.name
+                if func := getattr(command, "__func__", None):
+                    # prioritize original function name if available
+                    name = func.__name__
+                # set command
+                cmds[name] = copy.copy(command)
+            else:
+                # build command using group config
+                # (use function name as command name)
+                name = command.__name__
+                cmds[name] = _command.get_command(
+                    command,
+                    config=cls.__feud_config__,
+                    click_kwargs={"name": name},
+                )
+
+        for name, command in kwargs.items():
+            if isinstance(command, click.Command):
+                # rename the command using the dict key
+                cmd = copy.copy(command)
+                cmd.name = name
+                # prioritize original function name if available
+                if func := getattr(command, "__func__", None):
+                    # prioritize original function name if available
+                    cmds[func.__name__] = cmd
+                else:
+                    cmds[name] = cmd
+            else:
+                # override @feud.rename
+                if rename := getattr(command, "__feud_names__", None):
+                    rename["command"] = name
+                # build command using group config
+                # (use dict key as command name)
+                cmds[command.__name__] = _command.get_command(
+                    command,
+                    config=cls.__feud_config__,
+                    click_kwargs={"name": name},
+                )
+
+        for name, command in cmds.items():
+            # set command as class member
+            setattr(cls, name, command)
+
+            # remove command if already present
+            if name in cls.__feud_commands__:
+                cls.__feud_commands__.remove(name)
+
+            # update commands
+            cls.__feud_commands__.append(name)
