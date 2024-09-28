@@ -61,6 +61,7 @@ build-backend = 'poetry.core.masonry.api'
 
 [tool.poetry.dependencies]
 python = "^3.11"
+packaging = "^24.0"
 pydantic = "^2.0.3"
 click = "^8.1.0"
 docstring-parser = "^0.15"

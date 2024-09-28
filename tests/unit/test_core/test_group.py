@@ -12,6 +12,7 @@ import pytest
 
 import feud
 from feud import click
+from feud.core.group import Section
 
 
 def assert_help(
@@ -1375,3 +1376,170 @@ Commands:
         ["-r", "/usr", "command", "bin/sh"],
         standalone_mode=False,
     ) == Path("/usr/bin/sh")
+
+
+def test_sections() -> None:
+    class CLI(feud.Group):
+        def command(*, arg: int) -> int:
+            return arg
+
+    class Subgroup(feud.Group):
+        pass
+
+    CLI.register(Subgroup)
+
+    sections: list[Section] = CLI.__sections__()
+    assert len(sections) == 1
+    assert sections[0].items == ["subgroup"]
+
+
+def test_add_commands_list() -> None:
+    class CLI(feud.Group, invoke_without_command=True):
+        @staticmethod
+        @feud.alias(root="-r")
+        def __main__(ctx: click.Context, *, root: Path = Path(".")) -> None:
+            ctx.obj = {"root": root}
+            return root
+
+        @staticmethod
+        def existing(ctx: click.Context, *, path: Path) -> Path:
+            return ctx.obj["root"] / path
+
+    def command(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path
+
+    def _command(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path
+
+    @feud.rename("renamed")
+    def renamed_command(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path
+
+    @feud.command
+    @feud.rename("compiled-command")
+    @feud.alias(path="-p")
+    def compiled(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path
+
+    CLI.add_commands([command, _command, renamed_command, compiled])
+
+    cmds = {
+        "existing": "existing",
+        "command": "command",
+        "_command": "_command",
+        "renamed_command": "renamed",
+        "compiled": "compiled-command",
+    }
+
+    # check registered commands
+    assert set(CLI.__feud_commands__) == set(cmds)
+    assert all(hasattr(CLI, cmd) for cmd in cmds)
+    assert set(CLI.commands(name=True)) == set(cmds.values())
+
+    # test various commands
+    for cmd in cmds.values():
+        assert CLI(
+            ["-r", "/usr", cmd, "--path", "local/bin"], standalone_mode=False
+        ) == Path("/usr/local/bin")
+
+    # test command with aliased option
+    assert CLI(
+        ["-r", "/usr", "compiled-command", "-p", "local/bin"],
+        standalone_mode=False,
+    ) == Path("/usr/local/bin")
+
+    # override existing command
+    def existing(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path / "overwritten"
+
+    CLI.add_commands([existing])
+
+    # check command is registered
+    assert CLI.__feud_commands__ == [*list(cmds)[1:], "existing"]
+    assert hasattr(CLI, "existing")
+    assert set(CLI.commands(name=True)) == set(cmds.values())
+
+    # check command was actually overwritten
+    assert CLI(
+        ["-r", "/usr", "existing", "--path", "local/bin"],
+        standalone_mode=False,
+    ) == Path("/usr/local/bin/overwritten")
+
+
+def test_add_commands_dict() -> None:
+    class CLI(feud.Group, invoke_without_command=True):
+        @staticmethod
+        @feud.alias(root="-r")
+        def __main__(ctx: click.Context, *, root: Path = Path(".")) -> None:
+            ctx.obj = {"root": root}
+            return root
+
+        @staticmethod
+        def existing(ctx: click.Context, *, path: Path) -> Path:
+            return ctx.obj["root"] / path
+
+    def command(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path
+
+    def _command(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path
+
+    @feud.rename("renamed")
+    def renamed_command(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path
+
+    @feud.command
+    @feud.rename("compiled-command")
+    @feud.alias(path="-p")
+    def compiled(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path
+
+    commands = {
+        "a": command,
+        "b": _command,
+        "c": renamed_command,
+        "d": compiled,
+    }
+
+    CLI.add_commands(**commands)
+
+    cmds = {
+        "existing": "existing",
+        "command": "a",
+        "_command": "b",
+        "renamed_command": "c",
+        "compiled": "d",
+    }
+
+    # check registered commands
+    assert set(CLI.__feud_commands__) == set(cmds)
+    assert all(hasattr(CLI, cmd) for cmd in cmds)
+    assert set(CLI.commands(name=True)) == set(cmds.values())
+
+    # test various commands
+    for cmd in cmds.values():
+        assert CLI(
+            ["-r", "/usr", cmd, "--path", "local/bin"], standalone_mode=False
+        ) == Path("/usr/local/bin")
+
+    # test command with aliased option
+    assert CLI(
+        ["-r", "/usr", "d", "-p", "local/bin"], standalone_mode=False
+    ) == Path("/usr/local/bin")
+
+    # override existing command
+    def existing(ctx: click.Context, *, path: Path) -> Path:
+        return ctx.obj["root"] / path / "overwritten"
+
+    CLI.add_commands(existing=existing)
+
+    # check command is registered
+    assert CLI.__feud_commands__ == [*list(cmds)[1:], "existing"]
+    assert hasattr(CLI, "existing")
+    assert set(CLI.commands(name=True)) == set(cmds.values())
+
+    # check command was actually overwritten
+    assert CLI(
+        ["-r", "/usr", "existing", "--path", "local/bin"],
+        standalone_mode=False,
+    ) == Path("/usr/local/bin/overwritten")
