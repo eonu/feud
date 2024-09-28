@@ -57,7 +57,7 @@ class CommandState:
     description: str | None = None
 
     def decorate(  # noqa: PLR0915
-        self: CommandState,
+        self: t.Self,
         func: t.Callable,
     ) -> click.Command:
         meta_vars: dict[str, str] = {}
@@ -66,7 +66,7 @@ class CommandState:
         var_positional: str | None = None
         params: list[click.Parameter] = []
 
-        sig: inspect.signature = inspect.signature(func)
+        sig: inspect.signature = inspect.signature(func, eval_str=True)
 
         for i, (param_name, param_spec) in enumerate(sig.parameters.items()):
             # store names of positional arguments
@@ -164,7 +164,7 @@ class CommandState:
 
         return command
 
-    def get_meta_var(self: CommandState, param: click.Parameter) -> str:
+    def get_meta_var(self: t.Self, param: click.Parameter) -> str:
         match param:
             case click.Argument():
                 return param.make_metavar()
@@ -246,13 +246,13 @@ def build_command_state(  # noqa: PLR0915
     else:
         doc = docstring_parser.parse_from_object(func)
 
-    state.description: str | None = _docstring.get_description(doc)
+    state.description = _docstring.get_description(doc)
 
-    sig: inspect.Signature = inspect.signature(func)
+    sig: inspect.Signature = inspect.signature(func, eval_str=True)
 
     for param, spec in sig.parameters.items():
         meta = ParameterSpec()
-        meta.hint: type = spec.annotation
+        meta.hint = spec.annotation
 
         # get renamed parameter if @feud.rename used
         name: str = state.names["params"].get(param, param)

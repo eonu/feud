@@ -449,6 +449,97 @@ def test_full_signature(
     assert e.default is True
 
 
+def test_full_signature_string_hints(
+    capsys: pytest.CaptureFixture,
+) -> None:
+    @feud.command
+    def command(
+        a: "float",
+        /,
+        b: "str",
+        *c: "t.PositiveInt",
+        d: "int",
+        e: "bool" = True,
+        **f: "float",
+    ) -> None:
+        """Does something.
+
+        Parameters
+        ----------
+        a:
+            Test 1.
+        b:
+            Test 2.
+        *c:
+            Test 3.
+        d:
+            Test 4.
+        e:
+            Test 5.
+        **f:
+            Test 6.
+        """
+        return a, b, c, d, e, f
+
+    # check params (**f should be ignored)
+    params = command.params
+    assert len(params) == 5
+
+    a = command.params[0]
+    assert isinstance(a, click.Argument)
+    assert a.name == "a"
+    assert a.type == click.FLOAT
+    assert a.opts == ["a"]
+    assert a.secondary_opts == []
+    assert a.nargs == 1
+    assert a.required
+    assert a.default is None
+
+    b = command.params[1]
+    assert isinstance(b, click.Argument)
+    assert b.name == "b"
+    assert b.type == click.STRING
+    assert b.opts == ["b"]
+    assert b.secondary_opts == []
+    assert b.nargs == 1
+    assert b.required
+    assert b.default is None
+
+    c = command.params[2]
+    assert isinstance(c, click.Argument)
+    assert c.name == "c"
+    assert isinstance(c.type, click.IntRange)
+    assert c.type.min == 0
+    assert c.type.min_open
+    assert c.opts == ["c"]
+    assert c.secondary_opts == []
+    assert c.nargs == -1
+    assert not c.required
+    assert c.default is None
+
+    d = command.params[3]
+    assert isinstance(d, click.Option)
+    assert d.name == "d"
+    assert d.help == "Test 4."
+    assert d.type == click.INT
+    assert d.opts == ["--d"]
+    assert d.secondary_opts == []
+    assert d.nargs == 1
+    assert d.required
+    assert d.default is None
+
+    e = command.params[4]
+    assert isinstance(e, click.Option)
+    assert e.name == "e"
+    assert e.help == "Test 5."
+    assert e.type == click.BOOL
+    assert e.opts == ["--e"]
+    assert e.secondary_opts == ["--no-e"]
+    assert e.nargs == 1
+    assert not e.required
+    assert e.default is True
+
+
 def test_argument_default() -> None:
     @feud.command
     def f(
