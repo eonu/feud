@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.1](https://github.com/eonu/feud/releases/tag/v0.4.1) - 2024-10-17
+
+### Documentation
+
+- remove references to `feud.wiki` ([#159](https://github.com/eonu/feud/issues/159))
+- fix `@feud.rename` docs example typo ([#160](https://github.com/eonu/feud/issues/160))
+
 ## [v0.4.0](https://github.com/eonu/feud/releases/tag/v0.4.0) - 2024-09-28
 
 ### Features
