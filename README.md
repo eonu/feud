@@ -817,7 +817,7 @@ Without Rich-formatted output
 
 ## Documentation
 
-- [API reference](https://docs.feud.wiki):
+- [API reference](https://feud.readthedocs.io):
   Library documentation for public modules, classes and functions.
 
 <!--
