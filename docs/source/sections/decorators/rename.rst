@@ -81,7 +81,7 @@ We can use the :py:func:`.rename` decorator to rename both the command and param
         to:
             Ending number.
         """
-        print(sum(range(from, to + 1)))
+        print(sum(range(from_, to + 1)))
 
     if __name__ == "__main__":
         feud.run(sum_)
