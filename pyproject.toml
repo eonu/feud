@@ -8,7 +8,7 @@ description = "Build powerful CLIs with simple idiomatic Python, driven by type 
 readme = "README.md"
 homepage = "https://github.com/eonu/feud"
 repository = "https://github.com/eonu/feud"
-documentation = "https://docs.feud.wiki"
+documentation = "https://feud.readthedocs.io"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
