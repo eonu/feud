@@ -917,8 +917,9 @@ class Group(metaclass=_metaclass.GroupBase):
                     cmds[name] = cmd
             else:
                 # override @feud.rename
-                if rename := getattr(command, "__feud_names__", None):
-                    rename["command"] = name
+                meta = getattr(command, "__feud__", None)
+                if meta and meta.names["command"]:
+                    meta.names["command"] = name
                 # build command using group config
                 # (use dict key as command name)
                 cmds[command.__name__] = _command.get_command(

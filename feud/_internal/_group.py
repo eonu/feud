@@ -4,7 +4,7 @@
 # This source code is part of the Feud project (https://feud.wiki).
 
 from feud import click
-from feud._internal import _command
+from feud._internal import _command, _meta
 
 
 def get_group(__cls: type, /) -> click.Group:  # type[Group]
@@ -16,13 +16,7 @@ def get_group(__cls: type, /) -> click.Group:  # type[Group]
         config=__cls.__feud_config__,
         click_kwargs=__cls.__feud_click_kwargs__,
         is_group=True,
-        aliases=getattr(func, "__feud_aliases__", {}),
-        envs=getattr(func, "__feud_envs__", {}),
-        names=getattr(
-            func,
-            "__feud_names__",
-            _command.NameDict(command=None, params={}),
-        ),
+        meta=getattr(func, "__feud__", _meta.FeudMeta()),
         overrides={
             override.name: override
             for override in getattr(func, "__click_params__", [])

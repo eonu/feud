@@ -14,7 +14,7 @@ import docstring_parser
 
 import feud.exceptions
 from feud import click
-from feud._internal import _decorators, _docstring, _inflect, _types
+from feud._internal import _decorators, _docstring, _inflect, _meta, _types
 from feud.config import Config
 from feud.typing import custom
 
@@ -34,19 +34,12 @@ class ParameterSpec:
     kwargs: dict[str, t.Any] = dataclasses.field(default_factory=dict)
 
 
-class NameDict(t.TypedDict):
-    command: str | None
-    params: dict[str, str]
-
-
 @dataclasses.dataclass
 class CommandState:
     config: Config
     click_kwargs: dict[str, t.Any]
     is_group: bool
-    aliases: dict[str, str | list[str]]  # key: parameter name
-    envs: dict[str, str]  # key: parameter name
-    names: NameDict
+    meta: _meta.FeudMeta
     overrides: dict[str, click.Parameter]  # key: parameter name
     pass_context: bool = False
     # below keys are parameter name
@@ -106,7 +99,7 @@ class CommandState:
                 sensitive = hide_input or envvar
 
             # get renamed parameter if @feud.rename used
-            name: str = self.names["params"].get(param_name, param_name)
+            name: str = self.meta.names["params"].get(param_name, param_name)
 
             # set parameter name
             param.name = name
@@ -125,7 +118,7 @@ class CommandState:
                 params.append(param)
 
         # rename command if @feud.rename used
-        if command_rename := self.names["command"]:
+        if command_rename := self.meta.names["command"]:
             self.click_kwargs = {**self.click_kwargs, "name": command_rename}
 
         # set help to docstring description if not provided
@@ -138,7 +131,7 @@ class CommandState:
         command = _decorators.validate_call(
             func,
             name=self.click_kwargs["name"],
-            param_renames=self.names["params"],
+            param_renames=self.meta.names["params"],
             meta_vars=meta_vars,
             sensitive_vars=sensitive_vars,
             positional=positional,
@@ -255,7 +248,7 @@ def build_command_state(  # noqa: PLR0915
         meta.hint = spec.annotation
 
         # get renamed parameter if @feud.rename used
-        name: str = state.names["params"].get(param, param)
+        name: str = state.meta.names["params"].get(param, param)
 
         if pass_context(sig) and param == CONTEXT_PARAM:
             # skip handling for click.Context argument
@@ -322,7 +315,7 @@ def build_command_state(  # noqa: PLR0915
             ]
 
             # add aliases - if specified by feud.alias decorator
-            for alias in state.aliases.get(param, []):
+            for alias in state.meta.aliases.get(param, []):
                 meta.args.append(
                     get_alias(
                         alias,
@@ -332,7 +325,7 @@ def build_command_state(  # noqa: PLR0915
                 )
 
             # add env var - if specified by feud.env decorator
-            if env := state.envs.get(param):
+            if env := state.meta.envs.get(param):
                 meta.kwargs["envvar"] = env
                 meta.kwargs["show_envvar"] = config.show_help_envvars
 
@@ -395,11 +388,7 @@ def get_command(
         config=config,
         click_kwargs=click_kwargs,
         is_group=False,
-        aliases=getattr(func, "__feud_aliases__", {}),
-        envs=getattr(func, "__feud_envs__", {}),
-        names=getattr(
-            func, "__feud_names__", NameDict(command=None, params={})
-        ),
+        meta=getattr(func, "__feud__", _meta.FeudMeta()),
         overrides={
             override.name: override
             for override in getattr(func, "__click_params__", [])

@@ -10,6 +10,7 @@ from collections import defaultdict
 from typing import TypedDict
 
 from feud import click
+from feud._internal import _meta
 
 
 class CommandGroup(TypedDict):
@@ -69,8 +70,11 @@ def add_option_sections(
 
 
 def get_opts(option: str, *, command: click.Command) -> list[str]:
+    func = command.__func__
     name_map = lambda name: name  # noqa: E731
-    if names := getattr(command.__func__, "__feud_names__", None):
+    meta: _meta.FeudMeta | None = getattr(func, "__feud__", None)
+    if meta and meta.names:
+        names = meta.names
         name_map = lambda name: names["params"].get(name, name)  # noqa: E731
     return next(
         param.opts
@@ -80,8 +84,10 @@ def get_opts(option: str, *, command: click.Command) -> list[str]:
 
 
 def update_command(command: click.Command, context: list[str]) -> None:
-    if func := getattr(command, "__func__", None):  # noqa: SIM102
-        if options := getattr(func, "__feud_sections__", None):
+    if func := getattr(command, "__func__", None):
+        meta: _meta.FeudMeta | None = getattr(func, "__feud__", None)
+        if meta and meta.sections:
+            options = meta.sections
             sections = defaultdict(list)
             for option, section_name in options.items():
                 opts: list[str] = get_opts(option, command=command)
