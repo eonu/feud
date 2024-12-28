@@ -196,6 +196,16 @@ from feud.config import Config
         (t.conset(int, max_length=1), click.INT),
         (t.constr(max_length=1), click.STRING),
         (t.Annotated[int, pyd.AfterValidator(lambda x: x + 1)], click.INT),
+        (t.Base64UrlBytes, None),
+        (t.Base64UrlStr, click.STRING),
+        (t.JsonValue, None),
+        (t.NatsDsn, None),
+        (t.ClickHouseDsn, None),
+        (t.FtpUrl, None),
+        (t.WebsocketUrl, None),
+        (t.AnyWebsocketUrl, None),
+        (t.SnowflakeDsn, None),
+        (t.SocketPath, lambda x: isinstance(x, click.Path)),
     ],
 )
 def test_pydantic(
