@@ -39,6 +39,7 @@ from feud.config import Config
         (t.LanguageAlpha2, click.STRING),
         (t.LanguageName, click.STRING),
         (t.SemanticVersion, click.STRING),
+        (t.S3Path, click.STRING),
     ],
 )
 def test_pydantic_extra(

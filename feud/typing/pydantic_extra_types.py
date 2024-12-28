@@ -85,5 +85,10 @@ try:
 
         __all__.append("SemanticVersion")
 
+    if version >= packaging.version.parse("2.10.0"):
+        from pydantic_extra_types.s3 import S3Path
+
+        __all__.append("S3Path")
+
 except ImportError:
     pass
