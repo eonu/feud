@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Application Frameworks",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: User Interfaces",
@@ -67,7 +68,8 @@ click = "^8.1.0"
 docstring-parser = "^0.15"
 Pydantic = { version = "^2.0.3", optional = true, extras = ["email"] }
 rich-click = { version = "^1.6.1", optional = true }
-pydantic-extra-types = { version = "^2.1.0", optional = true, extras = ["all"] }
+# TODO: change to extras=["all"] (https://github.com/pydantic/pydantic-extra-types/issues/239)
+pydantic-extra-types = { version = "^2.1.0", optional = true, extras = ["phonenumbers", "pycountry", "semver", "python_ulid"] }
 
 [tool.poetry.extras]
 rich = ["rich-click"]
