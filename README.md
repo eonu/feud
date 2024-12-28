@@ -5,7 +5,7 @@
   <p align="center"><b>Not all arguments are bad.</b></p>
 </p>
 
-<img src="https://svgur.com/i/zk4.svg" align="right" width="100px">
+<img src="https://raw.githubusercontent.com/eonu/feud/master/docs/source/_static/images/logo/logo.png" align="right" width="100px">
 
 <p align="center">
   <em>Build powerful CLIs with simple idiomatic Python, driven by type hints.</em>
@@ -962,6 +962,6 @@ Feud is released under the [MIT](https://opensource.org/licenses/MIT) license.
 ---
 
 <p align="center">
-  <b>Feud</b> &copy; 2023-2025, Edwin Onuonga - Released under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.<br/>
+  <b>Feud</b> &copy; 2023, Edwin Onuonga - Released under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.<br/>
   <em>Authored and maintained by Edwin Onuonga.</em>
 </p>
