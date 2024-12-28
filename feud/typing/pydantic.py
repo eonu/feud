@@ -113,4 +113,9 @@ if version >= packaging.version.parse("2.9.0"):
 
     __all__.extend(types)
 
+if version >= packaging.version.parse("2.10.0"):
+    types: list[str] = ["SocketPath"]
+
+    __all__.extend(types)
+
 globals().update({attr: getattr(pydantic, attr) for attr in __all__})
