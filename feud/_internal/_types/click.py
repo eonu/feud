@@ -9,6 +9,7 @@ import collections
 import datetime
 import decimal
 import enum
+import fractions
 import functools as ft
 import inspect
 import pathlib
@@ -54,6 +55,7 @@ BASE_TYPES = {
     int: click.INT,
     float: click.FLOAT,
     decimal.Decimal: click.FLOAT,
+    fractions.Fraction: click.FLOAT,
     bool: click.BOOL,
     uuid.UUID: click.UUID,
     **{path_type: click.Path() for path_type in PATH_TYPES},
