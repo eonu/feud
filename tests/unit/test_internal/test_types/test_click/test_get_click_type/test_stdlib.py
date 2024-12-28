@@ -28,6 +28,7 @@ from feud.config import Config
         ],
         (t.UUID, click.UUID),
         (t.Decimal, click.FLOAT),
+        (t.Fraction, click.FLOAT),
         (
             t.date,
             lambda x: isinstance(x, _types.click.DateTime)

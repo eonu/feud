@@ -12,8 +12,8 @@ The following Python standard library types can be used as type hints for Feud c
 .. tip::
 
     Types listed on this page from the :py:mod:`collections`, :py:mod:`datetime` :py:mod:`decimal`, 
-    :py:mod:`enum`, :py:mod:`pathlib` and :py:mod:`uuid` standard library modules are easily accessible
-    from the :py:mod:`feud.typing` module.
+    :py:mod:`enum`, :py:mod:`fractions`, :py:mod:`pathlib`, :py:mod:`uuid` and :py:mod:`typing` 
+    standard library modules are easily accessible from the :py:mod:`feud.typing` module.
 
     It is recommended to import the :py:mod:`feud.typing` module with an alias such as ``t`` for convenient short-hand use, e.g.
 
@@ -261,6 +261,7 @@ Number types can be used to indicate integers, floats or decimal numbers.
 - :py:obj:`int` should be used to specify integer inputs.
 - :py:obj:`float` should be used to specify fixed precision-floating point inputs.
 - :py:obj:`decimal.Decimal` should be used to specify arbitrary-precision floating point inputs.
+- :py:obj:`fractions.Fraction` should be used to specify fractions.
 
 .. seealso:: 
 
