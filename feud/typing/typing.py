@@ -14,6 +14,7 @@ types: list[str] = [
     "Any",
     "Deque",
     "FrozenSet",
+    "Hashable",
     "List",
     "Literal",
     "NamedTuple",
