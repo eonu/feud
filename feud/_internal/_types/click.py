@@ -133,6 +133,12 @@ try:
 
         EXTRA_TYPES[SemanticVersion] = click.STRING
 
+    if version >= packaging.version.parse("2.10.0"):
+        from pydantic_extra_types.s3 import S3Path
+
+        # NOTE: pathlib.Path isn't ideal for S3 paths
+        EXTRA_TYPES[S3Path] = click.STRING
+
 except ImportError:
     EXTRA_TYPES = {}
 

@@ -83,6 +83,11 @@ Phone number type
 
 - :py:obj:`pydantic_extra_types.phone_numbers.PhoneNumber` (``>= 2.1.0``)
 
+Path types
+----------
+
+- :py:obj:`pydantic_extra_types.s3.S3Path` (``>= 2.10.0``)
+
 Payment types
 -------------
 
