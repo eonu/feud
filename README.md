@@ -166,9 +166,9 @@ for even beginner Python developers to quickly create sophisticated CLIs.
 
 The above function is written in idiomatic Python, adhering to language
 standards and using basic core language features such as type hints and
-docstrings to declare all of the relevant information about the CLI,
-but relying on Feud to carry out the heavy lifting of converting these
-language elements into a fully-fledged CLI.
+docstrings to declare the relevant information about the CLI, but relying 
+on Feud to carry out the heavy lifting of converting these language elements 
+into a fully-fledged CLI.
 
 #### Grouping commands
 
@@ -953,7 +953,7 @@ All contributions to this repository are greatly appreciated. Contribution guide
 
 > <img src="https://i.postimg.cc/jq3MZSTD/avatar.png" align="left"/>
 > <b>We're living in an imperfect world!</b><br/>
-> <sup>Feud is in a public beta-test phase, likely with <em>lots</em> of bugs. Please <a href="https://github.com/eonu/feud/issues/new/choose">leave feedback</a> if you come across anything strange!</sup>
+> <sup>Feud is still in a test phase, likely with <em>lots</em> of bugs. Please <a href="https://github.com/eonu/feud/issues/new/choose">leave feedback</a> if you come across anything strange!</sup>
 
 ## Licensing
 
