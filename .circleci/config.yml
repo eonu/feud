@@ -28,9 +28,9 @@ jobs:
           pkg-manager: poetry
           args: --only base
       - run:
-        name: Typechecking (MyPy)
-        command: |
-          poetry run tox -e types
+          name: Typechecking (MyPy)
+          command: |
+            poetry run tox -e types
   tests:
     parameters:
       version:
@@ -66,6 +66,7 @@ workflows:
   checks:
     jobs:
       - linting
+      - typechecks
       - tests:
           matrix:
             parameters:
