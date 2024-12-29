@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -7,7 +7,7 @@
 
 from __future__ import annotations
 
-__all__ = []
+__all__: list[str] = []
 
 from operator import attrgetter
 
@@ -84,6 +84,11 @@ try:
         from pydantic_extra_types.semantic_version import SemanticVersion
 
         __all__.append("SemanticVersion")
+
+    if version >= packaging.version.parse("2.10.0"):
+        from pydantic_extra_types.s3 import S3Path
+
+        __all__.append("S3Path")
 
 except ImportError:
     pass

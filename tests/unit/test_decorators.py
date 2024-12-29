@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -13,6 +13,7 @@ import pytest
 import feud
 from feud import click
 from feud import typing as t
+from feud._internal import _meta
 
 
 def assert_help(
@@ -292,6 +293,7 @@ def test_all_decorators(capsys: pytest.CaptureFixture) -> None:
     @feud.rename("cmd", opt1="opt-1", opt2="opt-2", opt3="opt_3")
     @feud.env(opt1="OPT1", opt2="OPT2")
     @feud.alias(opt3="-o")
+    @feud.section(opt1="odd", opt2="even", opt3="odd")
     def command(
         *, opt1: t.PositiveInt, opt2: bool, opt3: t.NegativeFloat
     ) -> t.Path:
@@ -307,6 +309,17 @@ def test_all_decorators(capsys: pytest.CaptureFixture) -> None:
             Third option.
         """
         return opt1, opt2, opt3
+
+    # check decorated function metadata
+    assert command.__feud__ == _meta.FeudMeta(
+        aliases={"opt3": ["-o"]},
+        envs={"opt1": "OPT1", "opt2": "OPT2"},
+        names={
+            "command": "cmd",
+            "params": {"opt1": "opt-1", "opt2": "opt-2", "opt3": "opt_3"},
+        },
+        sections={"opt1": "odd", "opt2": "even", "opt3": "odd"},
+    )
 
     cmd = feud.command(command)
 

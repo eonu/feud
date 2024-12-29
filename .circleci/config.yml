@@ -8,7 +8,7 @@ jobs:
   linting:
     executor:
       name: python/default
-      tag: "3.11"
+      tag: "3.13"
     steps:
       - checkout
       - python/install-packages:
@@ -18,6 +18,19 @@ jobs:
           name: Linting
           command: |
             poetry run tox -e lint
+  typechecks:
+    executor:
+      name: python/default
+      tag: "3.13"
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+          args: --only base
+      - run:
+          name: Typechecking (MyPy)
+          command: |
+            poetry run tox -e types
   tests:
     parameters:
       version:
@@ -30,10 +43,10 @@ jobs:
       - python/install-packages:
           pkg-manager: poetry
           args: --only base
-      - run:
-          name: Docstring tests
-          command: |
-            poetry run tox -e tests.doctest
+      # - run:
+      #     name: Docstring tests
+      #     command: |
+      #       poetry run tox -e tests.doctest
       - run:
           name: Unit tests
           command: |
@@ -46,17 +59,18 @@ jobs:
       name: python/default
     steps:
       - coveralls/upload:
-          carryforward: 3.11, 3.12
+          carryforward: 3.11, 3.12, 3.13
           parallel_finished: true
 
 workflows:
   checks:
     jobs:
       - linting
+      - typechecks
       - tests:
           matrix:
             parameters:
-              version: ["3.11", "3.12"]
+              version: ["3.11", "3.12", "3.13"]
       - coverage:
           requires:
             - tests

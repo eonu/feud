@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -33,7 +33,7 @@ Source code modified from pydantic (https://github.com/pydantic/pydantic).
 
 __all__ = ["VERSION", "version_info"]
 
-VERSION = "0.4.1"
+VERSION = "1.0.0"
 
 
 def version_info() -> str:

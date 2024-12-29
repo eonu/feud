@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -39,6 +39,7 @@ from feud.config import Config
         (t.LanguageAlpha2, click.STRING),
         (t.LanguageName, click.STRING),
         (t.SemanticVersion, click.STRING),
+        (t.S3Path, click.STRING),
     ],
 )
 def test_pydantic_extra(

@@ -5,7 +5,7 @@
   <p align="center"><b>Not all arguments are bad.</b></p>
 </p>
 
-<img src="https://svgur.com/i/zk4.svg" align="right" width="100px">
+<img src="https://raw.githubusercontent.com/eonu/feud/master/docs/source/_static/images/logo/logo.png" align="right" width="100px">
 
 <p align="center">
   <em>Build powerful CLIs with simple idiomatic Python, driven by type hints.</em>
@@ -166,9 +166,9 @@ for even beginner Python developers to quickly create sophisticated CLIs.
 
 The above function is written in idiomatic Python, adhering to language
 standards and using basic core language features such as type hints and
-docstrings to declare all of the relevant information about the CLI,
-but relying on Feud to carry out the heavy lifting of converting these
-language elements into a fully-fledged CLI.
+docstrings to declare the relevant information about the CLI, but relying 
+on Feud to carry out the heavy lifting of converting these language elements 
+into a fully-fledged CLI.
 
 #### Grouping commands
 
@@ -757,6 +757,24 @@ Repeat for confirmation: ***
 </tr>
 </table>
 
+### Integrations
+
+As Feud commands and groups compile to Click objects under the hood, 
+this opens up the ability to interact with all integrations that Click
+supports.
+
+- To convert a `feud.Group` into a `click.Group`, use the `.compile()` method defined on `feud.Group`.
+- The `@feud.command` decorator converts a function into a `click.Command`.
+
+Once you have a `click.Command` or `click.Group` produced by Feud,
+it is possible to use it with Click extensions such as:
+
+- [`click-man`](https://github.com/click-contrib/click-man): Automate generation of manual pages for Click applications.
+- [`click-completion`](https://github.com/click-contrib/click-completion): Add or enhance `bash`, `fish`, `zsh` and `powershell` completion in Click.
+- [`sphinx-click`](https://github.com/click-contrib/sphinx-click): A Sphinx plugin to automatically document Click-based applications.
+
+For more examples of Click extensions, see the [`click-contrib`](https://github.com/click-contrib/) project.
+
 ## Installation
 
 You can install Feud using `pip`.
@@ -953,7 +971,7 @@ All contributions to this repository are greatly appreciated. Contribution guide
 
 > <img src="https://i.postimg.cc/jq3MZSTD/avatar.png" align="left"/>
 > <b>We're living in an imperfect world!</b><br/>
-> <sup>Feud is in a public beta-test phase, likely with <em>lots</em> of bugs. Please <a href="https://github.com/eonu/feud/issues/new/choose">leave feedback</a> if you come across anything strange!</sup>
+> <sup>Feud is still in a test phase, likely with <em>lots</em> of bugs. Please <a href="https://github.com/eonu/feud/issues/new/choose">leave feedback</a> if you come across anything strange!</sup>
 
 ## Licensing
 
@@ -962,6 +980,6 @@ Feud is released under the [MIT](https://opensource.org/licenses/MIT) license.
 ---
 
 <p align="center">
-  <b>Feud</b> &copy; 2023-2025, Edwin Onuonga - Released under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.<br/>
+  <b>Feud</b> &copy; 2023, Edwin Onuonga - Released under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.<br/>
   <em>Authored and maintained by Edwin Onuonga.</em>
 </p>

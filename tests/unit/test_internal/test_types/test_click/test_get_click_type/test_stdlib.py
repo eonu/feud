@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -28,6 +28,7 @@ from feud.config import Config
         ],
         (t.UUID, click.UUID),
         (t.Decimal, click.FLOAT),
+        (t.Fraction, click.FLOAT),
         (
             t.date,
             lambda x: isinstance(x, _types.click.DateTime)

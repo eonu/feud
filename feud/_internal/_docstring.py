@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -53,7 +53,7 @@ def get_description(
             doc = docstring_parser.parse_from_object(func)
     elif isinstance(obj, docstring_parser.Docstring):
         doc = obj
-    elif isinstance(obj, t.Callable):
+    elif callable(obj):
         doc = docstring_parser.parse_from_object(obj)
 
     ret = None

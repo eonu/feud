@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -8,6 +8,7 @@
 - ``collections``
 - ``datetime``
 - ``decimal``
+- ``fractions``
 - ``enum``
 - ``pathlib``
 - ``uuid``
@@ -19,6 +20,7 @@ import collections
 import datetime
 import decimal
 import enum
+import fractions
 import pathlib
 import uuid
 from itertools import chain
@@ -28,6 +30,7 @@ types: dict[ModuleType, list[str]] = {
     collections: ["deque"],
     datetime: ["date", "datetime", "time", "timedelta"],
     decimal: ["Decimal"],
+    fractions: ["Fraction"],
     enum: ["Enum", "IntEnum", "StrEnum"],
     pathlib: ["Path"],
     uuid: ["UUID"],

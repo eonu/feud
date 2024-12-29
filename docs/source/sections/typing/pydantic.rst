@@ -94,6 +94,7 @@ Path types
 - :py:obj:`pydantic.types.DirectoryPath` (``>= 2.0.3``)
 - :py:obj:`pydantic.types.FilePath` (``>= 2.0.3``)
 - :py:obj:`pydantic.types.NewPath` (``>= 2.0.3``)
+- :py:obj:`pydantic.types.SocketPath` (``>= 2.10.0``)
 
 Decimal type
 ------------

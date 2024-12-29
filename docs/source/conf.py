@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -18,9 +18,9 @@ import sys
 sys.path.insert(0, os.path.abspath("../.."))
 
 project = "feud"
-copyright = "2023-2025, Feud Developers"  # noqa: A001
+copyright = "2023, Feud Developers"  # noqa: A001
 author = "Edwin Onuonga (eonu)"
-release = "0.4.1"
+release = "1.0.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

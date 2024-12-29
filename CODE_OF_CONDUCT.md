@@ -50,6 +50,6 @@ We are thankful for their work and all the communities who have paved the way wi
 ---
 
 <p align="center">
-  <b>Feud</b> &copy; 2023-2025, Edwin Onuonga - Released under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.<br/>
+  <b>Feud</b> &copy; 2023, Edwin Onuonga - Released under the <a href="https://opensource.org/licenses/MIT">MIT</a> license.<br/>
   <em>Authored and maintained by Edwin Onuonga.</em>
 </p>

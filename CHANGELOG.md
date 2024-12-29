@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.0](https://github.com/eonu/feud/releases/tag/v1.0.0) - 2024-12-29
+
+### Bug Fixes
+
+- unify decorated function metadata ([#170](https://github.com/eonu/feud/issues/170))
+
+### Documentation
+
+- remove beta references ([#172](https://github.com/eonu/feud/issues/172))
+- add click extension information ([#173](https://github.com/eonu/feud/issues/173))
+
+### Features
+
+- support python v3.13, add `mise.toml`, remove `doctest` ([#165](https://github.com/eonu/feud/issues/165))
+- add `fractions.Fraction` to `feud.typing` ([#167](https://github.com/eonu/feud/issues/167))
+- add `pydantic_extra_types.S3Path` to `feud.typing` ([#166](https://github.com/eonu/feud/issues/166))
+- add `pydantic.SocketPath` to `feud.typing` ([#169](https://github.com/eonu/feud/issues/169))
+- add `mypy` support and type stubs ([#171](https://github.com/eonu/feud/issues/171))
+
 ## [v0.4.1](https://github.com/eonu/feud/releases/tag/v0.4.1) - 2024-10-17
 
 ### Documentation

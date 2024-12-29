@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -11,17 +11,17 @@ from invoke.collection import Collection
 from invoke.config import Config
 from invoke.tasks import task
 
-from make import cov, docs, lint, release, tests
+from make import cov, docs, lint, release, tests, types
 
 
 @task
 def install(c: Config) -> None:
-    """Install package with pre-commit hooks and core, dev, docs, & test
-    dependencies.
+    """Install package with pre-commit hooks and core, dev, docs, test
+    and types dependencies.
     """
     # install dependencies
     # NOTE: only including docs/tests dependencies to please editors
-    c.run("poetry install --sync --only base,main,dev,docs,tests -E all")
+    c.run("poetry install --sync --only base,main,dev,docs,tests,types -E all")
     # install pre-commit hooks
     c.run("pre-commit install --install-hooks")
 
@@ -60,6 +60,6 @@ for t in (install, clean):
     namespace.add_task(t)
 
 # register namespaces
-for module in (docs, tests, cov, lint, release):
+for module in (docs, tests, types, cov, lint, release):
     collection = Collection.from_module(module)
     namespace.add_collection(collection)

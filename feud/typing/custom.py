@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -78,7 +78,7 @@ def concounter(
     >>> feud.run(func, ["-vvv"], standalone_mode=False)
     3
     """
-    return t.Annotated[
+    return t.Annotated[  # type: ignore[return-value]
         conint(
             strict=strict,
             gt=gt,

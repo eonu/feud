@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Feud Developers.
+# Copyright (c) 2023 Feud Developers.
 # Distributed under the terms of the MIT License (see the LICENSE file).
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
@@ -192,9 +192,9 @@ def run(
         args is None
         and isinstance(obj, t.Iterable)
         and not isinstance(obj, dict)
-        and all(isinstance(item, str) for item in obj)
+        and all(isinstance(item, str) for item in obj)  # type: ignore[union-attr]
     ):
-        args = obj
+        args = obj  # type: ignore[assignment]
         obj = None
 
     # retrieve program name
@@ -205,7 +205,7 @@ def run(
         prog_name = _detect_program_name()
 
     # get runner
-    runner: click.Command | click.Group = build(
+    runner: click.Command | click.Group = build(  # type: ignore[assignment]
         obj,
         name=name,
         help=help,
@@ -233,7 +233,7 @@ def get_runner(
     config: Config | None = None,
     convert_func: bool = True,
     warn: bool = True,
-) -> click.Command | Group:
+) -> click.Command | type[Group]:
     """Generate a :py:class:`click.Command` or :py:class:`.Group` from any
     runnable object.
     """
@@ -290,25 +290,33 @@ def get_runner(
             # set convert_func=False to leave @feud.command to group metaclass
             items[k] = get_runner(v, convert_func=False, warn=False, **kwargs)
         return Group.from_dict(
-            items, name=name, help=help, epilog=epilog, config=config
+            items,  # type: ignore[arg-type]
+            name=name,
+            help=help,
+            epilog=epilog,
+            config=config,
         )
     if isinstance(obj, t.Iterable):
-        items: list[click.Command | type[Group]] = []
-        for v in obj:
+        items: list[click.Command | type[Group]] = []  # type: ignore[no-redef]
+        for v in obj:  # type: ignore[union-attr]
             if isinstance(v, (dict, t.Iterable)):
                 msg = (
                     "Groups cannot be constructed from dict or iterable "
                     "objects nested within iterable objects."
                 )
                 raise feud.exceptions.CompilationError(msg)
-            kwargs: dict[str, t.Any] = {}
+            kwargs: dict[str, t.Any] = {}  # type: ignore[no-redef]
             if isinstance(v, types.ModuleType):
                 kwargs["config"] = config
             # set convert_func=False to leave @feud.command to group metaclass
             runner = get_runner(v, convert_func=False, warn=False, **kwargs)
-            items.append(runner)
+            items.append(runner)  # type: ignore[attr-defined]
         return Group.from_iter(
-            items, name=name, help=help, epilog=epilog, config=config
+            items,  # type: ignore[arg-type]
+            name=name,
+            help=help,
+            epilog=epilog,
+            config=config,
         )
     if isinstance(obj, types.ModuleType):
         return Group.from_module(
@@ -316,7 +324,7 @@ def get_runner(
         )
 
     if convert_func:
-        kwargs: dict[str, t.Any] = {
+        kwargs: dict[str, t.Any] = {  # type: ignore[no-redef]
             "name": name,
             "help": help,
             "epilog": epilog,
@@ -327,7 +335,7 @@ def get_runner(
             **{k: v for k, v in kwargs.items() if v is not None},
         )
 
-    return obj
+    return obj  # type: ignore[return-value]
 
 
 def build(
@@ -418,7 +426,7 @@ def build(
         )
         raise feud.CompilationError(msg)
 
-    runner: click.Command | Group = get_runner(
+    runner: click.Command | Group = get_runner(  # type: ignore[assignment]
         obj,
         name=name,
         help=help,
