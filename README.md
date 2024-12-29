@@ -815,8 +815,7 @@ As Feud commands and groups compile to Click objects under the hood,
 this opens up the ability to interact with all integrations that Click
 supports.
 
-- To convert a `feud.Group` into a `click.Group` object, use the
-`.compile()` method defined on `feud.Group`.
+- To convert a `feud.Group` into a `click.Group`, use the `.compile()` method defined on `feud.Group`.
 - The `@feud.command` decorator converts a function into a `click.Command`.
 
 Once you have a `click.Command` or `click.Group` produced by Feud,
