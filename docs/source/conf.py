@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("../.."))
 project = "feud"
 copyright = "2023, Feud Developers"  # noqa: A001
 author = "Edwin Onuonga (eonu)"
-release = "0.4.1"
+release = "1.0.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
