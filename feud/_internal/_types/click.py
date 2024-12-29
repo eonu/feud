@@ -17,9 +17,9 @@ import types
 import typing as t
 import uuid
 
+import annotated_types as ta
 import click
 import pydantic as pyd
-from annotated_types import Interval
 
 from feud.config import Config
 
@@ -50,7 +50,7 @@ DATETIME_TYPES = (
 
 TIMEDELTA_TYPES = (datetime.timedelta,)
 
-BASE_TYPES = {
+BASE_TYPES: dict[type, click.ParamType] = {
     str: click.STRING,
     int: click.INT,
     float: click.FLOAT,
@@ -60,6 +60,8 @@ BASE_TYPES = {
     uuid.UUID: click.UUID,
     **{path_type: click.Path() for path_type in PATH_TYPES},
 }
+
+EXTRA_TYPES: dict[type, click.ParamType | tuple[click.ParamType, ...]]
 
 try:
     import packaging.version
@@ -82,9 +84,7 @@ try:
         CountryShortName,
     )
     from pydantic_extra_types.mac_address import MacAddress
-    from pydantic_extra_types.payment import (
-        PaymentCardNumber,
-    )
+    from pydantic_extra_types.payment import PaymentCardNumber
     from pydantic_extra_types.phone_numbers import PhoneNumber
     from pydantic_extra_types.routing_number import ABARoutingNumber
 
@@ -110,7 +110,9 @@ try:
         EXTRA_TYPES[ULID] = click.STRING
 
     if version < packaging.version.parse("2.4.0"):
-        from pydantic_extra_types.country import CountryOfficialName
+        from pydantic_extra_types.country import (  # type: ignore[attr-defined]
+            CountryOfficialName,
+        )
 
         EXTRA_TYPES[CountryOfficialName] = click.STRING
 
@@ -142,7 +144,7 @@ try:
 except ImportError:
     EXTRA_TYPES = {}
 
-COLLECTION_TYPES = (
+COLLECTION_TYPES: tuple[type, ...] = (
     tuple,
     list,
     set,
@@ -152,8 +154,11 @@ COLLECTION_TYPES = (
 
 DEFAULT_TYPE = None
 
-PathType = t.Union[*PATH_TYPES]
-ClickType = t.Union[*BASE_TYPES.values(), type(DEFAULT_TYPE)]
+PathType = t.Union[*PATH_TYPES]  # type: ignore[valid-type]
+ClickType = t.Union[  # type: ignore[valid-type]
+    *BASE_TYPES.values(),
+    type(DEFAULT_TYPE),
+]
 AnnotatedArgDict = t.Dict[int, t.Any]
 
 
@@ -164,7 +169,7 @@ class DateTime(click.DateTime):
         datetime_type: type,
         show_default_format: bool,
         **kwargs: t.Any,
-    ) -> DateTime:
+    ) -> None:
         self._datetime_type = datetime_type
         self._show_default_format = show_default_format
         self.name = datetime_type.__name__
@@ -197,7 +202,7 @@ class Union(click.ParamType):
         *args: t.Any,
         types: list[click.ParamType],
         **kwargs: t.Any,
-    ) -> DateTime:
+    ) -> None:
         self.types = types
         super().__init__(*args, **kwargs)
 
@@ -205,7 +210,7 @@ class Union(click.ParamType):
     def _get_metavar(
         click_type: click.ParamType | None,
         param: click.Parameter,
-    ) -> str:
+    ) -> str | None:
         if click_type:
             return click_type.get_metavar(param) or click_type.name.upper()
         return None
@@ -220,7 +225,11 @@ class Union(click.ParamType):
         return " | ".join(unique_metavars)
 
 
-def get_click_type(hint: t.Any, *, config: Config) -> ClickType | None:
+def get_click_type(
+    hint: t.Any,
+    *,
+    config: Config,
+) -> ClickType | None:  # type: ignore[valid-type]
     base_type, base_args, _, _ = get_base_type(hint)
     origin_type = t.get_origin(base_type)
 
@@ -235,7 +244,11 @@ def get_click_type(hint: t.Any, *, config: Config) -> ClickType | None:
     return resolve_type(hint, config=config)
 
 
-def resolve_type(hint: t.Any, *, config: Config) -> ClickType:
+def resolve_type(
+    hint: t.Any,
+    *,
+    config: Config,
+) -> ClickType:  # type: ignore[valid-type]
     base_type, base_args, parent_type, parent_args = get_base_type(hint)
     if t.get_origin(parent_type) is t.Annotated:
         click_type = resolve_annotated(base_type, parent_args=parent_args)
@@ -257,7 +270,7 @@ def resolve_type(hint: t.Any, *, config: Config) -> ClickType:
                 base_args.values(),
             )
         )
-        return Union(types=base_types)
+        return Union(types=base_types)  # type: ignore[arg-type]
     if inspect.isclass(base_type):
         if issubclass(base_type, enum.Enum):
             return click.Choice([str(e.value) for e in base_type])
@@ -306,7 +319,7 @@ def get_base_type(
     *,
     parent_args: AnnotatedArgDict | None = None,
     parent_type: t.Any | None = None,
-) -> tuple[t.Any, AnnotatedArgDict, t.Any, AnnotatedArgDict]:
+) -> tuple[t.Any, AnnotatedArgDict, t.Any | None, AnnotatedArgDict | None]:
     """Retrieve the inner type and arguments of a type.
 
     Can be annotated or non-annotated. Also returns outer type and arguments.
@@ -390,8 +403,11 @@ def is_collection_type(hint: t.Any) -> tuple[bool, t.Any | None]:
 
 
 def resolve_collection(
-    hint: t.Any, *, args: AnnotatedArgDict, config: Config
-) -> ClickType | None:
+    hint: t.Any,
+    *,
+    args: AnnotatedArgDict,
+    config: Config,
+) -> ClickType | None:  # type: ignore[valid-type]
     """Resolve a Click type for the provided collection type.
 
     See `is_collection_type` for more information about collection types.
@@ -430,10 +446,16 @@ def resolve_collection(
 
 
 def resolve_annotated(
-    base_type: t.Any, *, parent_args: AnnotatedArgDict
-) -> ClickType | None:
+    base_type: t.Any,
+    *,
+    parent_args: AnnotatedArgDict | None,
+) -> ClickType | None:  # type: ignore[valid-type]
+    if parent_args is None:
+        return None
+
     arg_list = list(parent_args.values())  # noqa: F841
-    two_field_subtype = t.Annotated[*arg_list[:2]]
+    two_field_subtype = t.Annotated[*arg_list[:2]]  # type: ignore[valid-type]
+
     # integer types
     if two_field_subtype == pyd.PositiveInt:
         return click.IntRange(min=0, min_open=True)
@@ -443,6 +465,7 @@ def resolve_annotated(
         return click.IntRange(max=0, max_open=True)
     if two_field_subtype == pyd.NonPositiveInt:
         return click.IntRange(max=0, max_open=False)
+
     # float types
     if two_field_subtype == pyd.PositiveFloat:
         return click.FloatRange(min=0, min_open=True)
@@ -452,6 +475,7 @@ def resolve_annotated(
         return click.FloatRange(max=0, max_open=True)
     if two_field_subtype == pyd.NonPositiveFloat:
         return click.FloatRange(max=0, max_open=False)
+
     # int / float range types
     if is_pyd_conint(base_type, parent_args):
         return get_click_range_type(parent_args, range_type=click.IntRange)
@@ -459,6 +483,7 @@ def resolve_annotated(
         return get_click_range_type(parent_args, range_type=click.FloatRange)
     if is_pyd_condecimal(base_type, parent_args):
         return get_click_range_type(parent_args, range_type=click.FloatRange)
+
     # file / directory types
     if two_field_subtype == pyd.FilePath:
         return click.Path(exists=True, dir_okay=False)
@@ -466,20 +491,21 @@ def resolve_annotated(
         return click.Path(exists=True, file_okay=False)
     if base_type in PATH_TYPES:
         return click.Path()
+
     return None
 
 
 def is_pyd_conint(base_type: t.Any, parent_args: AnnotatedArgDict) -> bool:
-    return base_type is int and isinstance(parent_args.get(2), Interval)
+    return base_type is int and isinstance(parent_args.get(2), ta.Interval)
 
 
 def is_pyd_confloat(base_type: t.Any, parent_args: AnnotatedArgDict) -> bool:
-    return base_type is float and isinstance(parent_args.get(2), Interval)
+    return base_type is float and isinstance(parent_args.get(2), ta.Interval)
 
 
 def is_pyd_condecimal(base_type: t.Any, parent_args: AnnotatedArgDict) -> bool:
     return base_type is decimal.Decimal and isinstance(
-        parent_args.get(2), Interval
+        parent_args.get(2), ta.Interval
     )
 
 
@@ -492,11 +518,18 @@ def is_namedtuple(hint: t.Any) -> bool:
 
 
 def get_click_range_type(
-    args: tuple, *, range_type: type[click.IntRange] | type[click.FloatRange]
-) -> click.IntRange | click.FloatRange:
-    min_, max_ = None, None
+    args: AnnotatedArgDict,
+    *,
+    range_type: type[click.IntRange] | type[click.FloatRange],
+) -> click.IntRange | click.FloatRange | None:
+    min_: ta.SupportsGe | ta.SupportsGt | None = None
+    max_: ta.SupportsLe | ta.SupportsLt | None = None
+
     min_open, max_open = False, False
-    interval: Interval = args.get(2)
+
+    interval: ta.Interval | None = args.get(2)
+    if interval is None:
+        return None
     if interval.gt is not None:
         min_ = interval.gt
         min_open = True
@@ -509,4 +542,10 @@ def get_click_range_type(
     if interval.le is not None:
         max_ = interval.le
         max_open = False
-    return range_type(min=min_, max=max_, min_open=min_open, max_open=max_open)
+
+    return range_type(
+        min=min_,  # type: ignore[arg-type]
+        max=max_,  # type: ignore[arg-type]
+        min_open=min_open,
+        max_open=max_open,
+    )

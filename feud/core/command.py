@@ -120,4 +120,4 @@ def command(
             __func, config=cfg, click_kwargs=click_kwargs
         )
 
-    return decorate(func) if func else decorate
+    return decorate(func) if func else decorate  # type: ignore[return-value]

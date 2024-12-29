@@ -7,7 +7,7 @@
 
 from __future__ import annotations
 
-__all__ = []
+__all__: list[str] = []
 
 from operator import attrgetter
 
@@ -19,20 +19,20 @@ def split(string: str) -> str:
 
 
 try:
-    import pydantic_extra_types
+    import pydantic_extra_types  # type: ignore[import-not-found]
 
     version: packaging.version.Version = packaging.version.parse(
         pydantic_extra_types.__version__,
     )
 
     if version >= packaging.version.parse("2.1.0"):
-        import pydantic_extra_types.color
-        import pydantic_extra_types.coordinate
-        import pydantic_extra_types.country
-        import pydantic_extra_types.mac_address
-        import pydantic_extra_types.payment
-        import pydantic_extra_types.phone_numbers
-        import pydantic_extra_types.routing_number
+        import pydantic_extra_types.color  # type: ignore[import-not-found]
+        import pydantic_extra_types.coordinate  # type: ignore[import-not-found]
+        import pydantic_extra_types.country  # type: ignore[import-not-found]
+        import pydantic_extra_types.mac_address  # type: ignore[import-not-found]
+        import pydantic_extra_types.payment  # type: ignore[import-not-found]
+        import pydantic_extra_types.phone_numbers  # type: ignore[import-not-found]
+        import pydantic_extra_types.routing_number  # type: ignore[import-not-found]
 
         types: list[str] = [
             "color.Color",
@@ -63,17 +63,21 @@ try:
         __all__.extend(map(split, types))
 
     if version >= packaging.version.parse("2.2.0"):
-        from pydantic_extra_types.ulid import ULID
+        from pydantic_extra_types.ulid import (  # type: ignore[import-not-found]
+            ULID,
+        )
 
         __all__.append("ULID")
 
     if version >= packaging.version.parse("2.4.0"):
-        from pydantic_extra_types.isbn import ISBN
+        from pydantic_extra_types.isbn import (  # type: ignore[import-not-found]
+            ISBN,
+        )
 
         __all__.append("ISBN")
 
     if version >= packaging.version.parse("2.7.0"):
-        from pydantic_extra_types.language_code import (
+        from pydantic_extra_types.language_code import (  # type: ignore[import-not-found]
             LanguageAlpha2,
             LanguageName,
         )
@@ -81,12 +85,16 @@ try:
         __all__.extend(["LanguageAlpha2", "LanguageName"])
 
     if version >= packaging.version.parse("2.9.0"):
-        from pydantic_extra_types.semantic_version import SemanticVersion
+        from pydantic_extra_types.semantic_version import (  # type: ignore[import-not-found]
+            SemanticVersion,
+        )
 
         __all__.append("SemanticVersion")
 
     if version >= packaging.version.parse("2.10.0"):
-        from pydantic_extra_types.s3 import S3Path
+        from pydantic_extra_types.s3 import (  # type: ignore[import-not-found]
+            S3Path,
+        )
 
         __all__.append("S3Path")
 

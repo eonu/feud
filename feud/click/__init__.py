@@ -13,7 +13,7 @@ try:
 
     is_rich = True
 except (ImportError, ModuleNotFoundError):
-    from click import *
+    from click import *  # type: ignore[no-redef, assignment]
 
     is_rich = False
 

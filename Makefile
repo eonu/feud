@@ -17,3 +17,8 @@ base: .check-poetry
 dev: .check-poetry
 	poetry install --sync --only base
 	poetry run invoke install
+
+# clean temporary repository files
+.PHONY: clean
+clean: .check-poetry
+	poetry run invoke clean

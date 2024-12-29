@@ -3,12 +3,19 @@
 # SPDX-License-Identifier: MIT
 # This source code is part of the Feud project (https://feud.wiki).
 
+from __future__ import annotations
+
+import typing as t
+
 from feud import click
 from feud._internal import _command, _meta
 
+if t.TYPE_CHECKING:
+    from feud.core.group import Group
 
-def get_group(__cls: type, /) -> click.Group:  # type[Group]
-    func: callable = __cls.__main__
+
+def get_group(__cls: type[Group], /) -> click.Group:  # type[Group]
+    func: t.Callable = __cls.__main__
     if isinstance(func, staticmethod):
         func = func.__func__
 
@@ -29,7 +36,7 @@ def get_group(__cls: type, /) -> click.Group:  # type[Group]
     )
 
     # generate click.Group and attach original function reference
-    command = state.decorate(func)
-    command.__func__ = func
-    command.__group__ = __cls
+    command: click.Group = state.decorate(func)  # type: ignore[assignment]
+    command.__func__ = func  # type: ignore[attr-defined]
+    command.__group__ = __cls  # type: ignore[attr-defined]
     return command

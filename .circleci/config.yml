@@ -8,7 +8,7 @@ jobs:
   linting:
     executor:
       name: python/default
-      tag: "3.11"
+      tag: "3.13"
     steps:
       - checkout
       - python/install-packages:
@@ -18,6 +18,19 @@ jobs:
           name: Linting
           command: |
             poetry run tox -e lint
+  typechecks:
+    executor:
+      name: python/default
+      tag: "3.13"
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+          args: --only base
+      - run:
+        name: Typechecking (MyPy)
+        command: |
+          poetry run tox -e types
   tests:
     parameters:
       version:
