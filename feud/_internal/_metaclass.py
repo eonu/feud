@@ -13,15 +13,18 @@ from feud._internal import _command
 from feud.config import Config
 from feud.core.command import command
 
+if t.TYPE_CHECKING:
+    from feud.core.group import Group
+
 
 class GroupBase(abc.ABCMeta):
     def __new__(
         __cls: type[GroupBase],  # noqa: N804
         cls_name: str,
-        bases: tuple[type, ...],
+        bases: tuple[type[Group], ...],
         namespace: dict[str, t.Any],
         **kwargs: t.Any,
-    ) -> type:  # type[Group], but circular import
+    ) -> type[Group]:
         """Metaclass for creating groups.
 
         Parameters
@@ -124,7 +127,12 @@ class GroupBase(abc.ABCMeta):
                         func, config=namespace["__feud_config__"]
                     )
 
-        group = super().__new__(__cls, cls_name, bases, namespace)
+        group: type[Group] = super().__new__(  # type: ignore[assignment]
+            __cls,
+            cls_name,
+            bases,
+            namespace,
+        )
 
         if bases:
             # use class-level docstring as help if provided

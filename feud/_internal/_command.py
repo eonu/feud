@@ -29,8 +29,8 @@ class ParameterType(enum.Enum):
 @dataclasses.dataclass
 class ParameterSpec:
     type: ParameterType | None = None  # noqa: A003
-    hint: type | None = None
-    args: t.Iterable[t.Any] = dataclasses.field(default_factory=list)
+    hint: type | None = None  # type: ignore[valid-type]
+    args: t.Sequence[str] = dataclasses.field(default_factory=list)
     kwargs: dict[str, t.Any] = dataclasses.field(default_factory=dict)
 
 
@@ -52,14 +52,14 @@ class CommandState:
     def decorate(  # noqa: PLR0915
         self: t.Self,
         func: t.Callable,
-    ) -> click.Command:
+    ) -> click.Command | click.Group:
         meta_vars: dict[str, str] = {}
         sensitive_vars: dict[str, bool] = {}
         positional: list[str] = []
         var_positional: str | None = None
         params: list[click.Parameter] = []
 
-        sig: inspect.signature = inspect.signature(func, eval_str=True)
+        sig: inspect.Signature = inspect.signature(func, eval_str=True)
 
         for i, (param_name, param_spec) in enumerate(sig.parameters.items()):
             # store names of positional arguments
@@ -81,7 +81,9 @@ class CommandState:
                 continue
             if param_name in self.overrides:
                 param: click.Parameter = self.overrides[param_name]
-                sensitive = param.hide_input or param.envvar
+                sensitive |= bool(param.envvar)
+                if isinstance(param, click.Option):
+                    sensitive |= param.hide_input
             elif param_name in self.arguments:
                 spec = self.arguments[param_name]
                 spec.kwargs["type"] = _types.click.get_click_type(
@@ -96,7 +98,7 @@ class CommandState:
                 param = click.Option(spec.args, **spec.kwargs)
                 hide_input = spec.kwargs.get("hide_input")
                 envvar = spec.kwargs.get("envvar")
-                sensitive = hide_input or envvar
+                sensitive |= hide_input or bool(envvar)
 
             # get renamed parameter if @feud.rename used
             name: str = self.meta.names["params"].get(param_name, param_name)
@@ -105,7 +107,7 @@ class CommandState:
             param.name = name
 
             # get meta vars and identify sensitive parameters for validate_call
-            meta_vars[name] = self.get_meta_var(param)
+            meta_vars[name] = self.get_meta_var(param) or name
             sensitive_vars[name] = sensitive
 
             # add the parameter
@@ -140,7 +142,7 @@ class CommandState:
         )
 
         if self.pass_context:
-            command = click.pass_context(command)
+            command = click.pass_context(command)  # type: ignore[assignment, arg-type]
 
         if click.is_rich:
             # apply rich-click styling
@@ -151,18 +153,20 @@ class CommandState:
             )(command)
 
         constructor = click.group if self.is_group else click.command
-        command = constructor(**self.click_kwargs)(command)
+        compiled: click.Command | click.Group = constructor(
+            **self.click_kwargs,
+        )(command)
+        compiled.params = params
 
-        command.params = params
+        return compiled
 
-        return command
-
-    def get_meta_var(self: t.Self, param: click.Parameter) -> str:
+    def get_meta_var(self: t.Self, param: click.Parameter) -> str | None:
         match param:
             case click.Argument():
                 return param.make_metavar()
             case click.Option():
                 return param.opts[0]
+        return None
 
 
 def pass_context(sig: inspect.Signature) -> bool:
@@ -174,7 +178,7 @@ def pass_context(sig: inspect.Signature) -> bool:
     return param_name == CONTEXT_PARAM
 
 
-def get_option(name: str, *, hint: type, negate_flags: bool) -> str:
+def get_option(name: str, *, hint: t.Any, negate_flags: bool) -> str:
     """Convert a name into a command-line option.
 
     Additionally negates the option if a boolean flag is provided
@@ -193,7 +197,7 @@ def get_option(name: str, *, hint: type, negate_flags: bool) -> str:
     return option
 
 
-def get_alias(alias: str, *, hint: type, negate_flags: bool) -> str:
+def get_alias(alias: str, *, hint: t.Any, negate_flags: bool) -> str:
     """Negate an alias for a boolean flag and returns a joint declaration
     if ``negate_flags`` is ``True``.
 
@@ -400,5 +404,5 @@ def get_command(
 
     # generate click.Command and attach original function reference
     command = state.decorate(func)
-    command.__func__ = func
+    command.__func__ = func  # type: ignore[attr-defined]
     return command

@@ -52,7 +52,10 @@ class Config(pyd.BaseModel):
     rich_click_kwargs: dict[str, t.Any] = {"show_arguments": True}
 
     def __init__(self: t.Self, **kwargs: t.Any) -> None:
-        caller: str = inspect.currentframe().f_back.f_code.co_name
+        caller: str | None = None
+        frame = inspect.currentframe()
+        if frame and frame.f_back:
+            caller = frame.f_back.f_code.co_name
         if caller != Config._create.__name__:
             msg = (
                 "The feud.Config class should not be instantiated directly, "

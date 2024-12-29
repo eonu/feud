@@ -130,7 +130,9 @@ def alias(**aliases: str | list[str]) -> t.Callable:
         if meta := getattr(f, "__feud__", None):
             meta.aliases = aliases_
         else:
-            f.__feud__ = _meta.FeudMeta(aliases=aliases_)
+            f.__feud__ = _meta.FeudMeta(  # type: ignore[attr-defined]
+                aliases=aliases_,
+            )
 
         return f
 
@@ -202,7 +204,9 @@ def env(**envs: str) -> t.Callable:
         if meta := getattr(f, "__feud__", None):
             meta.envs = envs
         else:
-            f.__feud__ = _meta.FeudMeta(envs=envs)
+            f.__feud__ = _meta.FeudMeta(  # type: ignore[attr-defined]
+                envs=envs,
+            )
 
         return f
 
@@ -270,7 +274,9 @@ def rename(command: str | None = None, /, **params: str) -> t.Callable:
         if meta := getattr(f, "__feud__", None):
             meta.names = names
         else:
-            f.__feud__ = _meta.FeudMeta(names=names)
+            f.__feud__ = _meta.FeudMeta(  # type: ignore[attr-defined]
+                names=names,
+            )
 
         return f
 
@@ -326,7 +332,9 @@ def section(**options: str) -> t.Callable:
         if meta := getattr(f, "__feud__", None):
             meta.sections = sections
         else:
-            f.__feud__ = _meta.FeudMeta(sections=sections)
+            f.__feud__ = _meta.FeudMeta(  # type: ignore[attr-defined]
+                sections=sections,
+            )
 
         return f
 

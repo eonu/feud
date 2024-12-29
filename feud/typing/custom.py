@@ -78,7 +78,7 @@ def concounter(
     >>> feud.run(func, ["-vvv"], standalone_mode=False)
     3
     """
-    return t.Annotated[
+    return t.Annotated[  # type: ignore[return-value]
         conint(
             strict=strict,
             gt=gt,

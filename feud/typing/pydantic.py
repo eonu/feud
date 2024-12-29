@@ -7,7 +7,7 @@
 
 from __future__ import annotations
 
-__all__ = []
+__all__: list[str] = []
 
 import packaging.version
 import pydantic
@@ -84,38 +84,24 @@ if version >= packaging.version.parse("2.0.3"):
     )
 
 if version >= packaging.version.parse("2.4.0"):
-    types: list[str] = ["Base64UrlBytes", "Base64UrlStr"]
-
-    __all__.extend(types)
+    __all__.extend(["Base64UrlBytes", "Base64UrlStr"])
 
 if version >= packaging.version.parse("2.5.0"):
-    types: list[str] = ["JsonValue"]
-
-    __all__.extend(types)
+    __all__.extend(["JsonValue"])
 
 if version >= packaging.version.parse("2.6.0"):
-    types: list[str] = ["NatsDsn"]
-
-    __all__.extend(types)
+    __all__.extend(["NatsDsn"])
 
 if version >= packaging.version.parse("2.7.0"):
-    types: list[str] = ["ClickHouseDsn"]
-
-    __all__.extend(types)
+    __all__.extend(["ClickHouseDsn"])
 
 if version >= packaging.version.parse("2.7.1"):
-    types: list[str] = ["FtpUrl", "WebsocketUrl", "AnyWebsocketUrl"]
-
-    __all__.extend(types)
+    __all__.extend(["FtpUrl", "WebsocketUrl", "AnyWebsocketUrl"])
 
 if version >= packaging.version.parse("2.9.0"):
-    types: list[str] = ["SnowflakeDsn"]
-
-    __all__.extend(types)
+    __all__.extend(["SnowflakeDsn"])
 
 if version >= packaging.version.parse("2.10.0"):
-    types: list[str] = ["SocketPath"]
-
-    __all__.extend(types)
+    __all__.extend(["SocketPath"])
 
 globals().update({attr: getattr(pydantic, attr) for attr in __all__})

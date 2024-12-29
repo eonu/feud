@@ -7,29 +7,18 @@ from __future__ import annotations
 
 import dataclasses
 from collections import defaultdict
-from typing import TypedDict
 
 from feud import click
 from feud._internal import _meta
 
 
-class CommandGroup(TypedDict):
-    name: str
-    commands: list[str]
+def add_command_sections(group: click.Group, context: list[str]) -> None:
+    from rich_click.utils import CommandGroupDict
 
-
-class OptionGroup(TypedDict):
-    name: str
-    options: list[str]
-
-
-def add_command_sections(
-    group: click.Group, context: list[str]
-) -> click.Group:
     if feud_group := getattr(group, "__group__", None):
-        command_groups: dict[str, list[CommandGroup]] = {
+        command_groups: dict[str, list[CommandGroupDict]] = {
             " ".join(context): [
-                CommandGroup(
+                CommandGroupDict(
                     name=section.name,
                     commands=[
                         item if isinstance(item, str) else item.name()
@@ -41,7 +30,7 @@ def add_command_sections(
         }
 
         for sub in group.commands.values():
-            if isinstance(sub, click.Group):
+            if sub.name and isinstance(sub, click.Group):
                 add_command_sections(sub, context=[*context, sub.name])
 
         settings = group.context_settings
@@ -57,10 +46,12 @@ def add_command_sections(
 
 def add_option_sections(
     obj: click.Command | click.Group, context: list[str]
-) -> click.Command | click.Group:
+) -> None:
     if isinstance(obj, click.Group):
         update_command(obj, context=context)
         for sub in obj.commands.values():
+            if sub.name is None:
+                continue
             if isinstance(sub, click.Group):
                 add_option_sections(sub, context=[*context, sub.name])
             else:
@@ -70,7 +61,7 @@ def add_option_sections(
 
 
 def get_opts(option: str, *, command: click.Command) -> list[str]:
-    func = command.__func__
+    func = command.__func__  # type: ignore[attr-defined]
     name_map = lambda name: name  # noqa: E731
     meta: _meta.FeudMeta | None = getattr(func, "__feud__", None)
     if meta and meta.names:
@@ -84,6 +75,8 @@ def get_opts(option: str, *, command: click.Command) -> list[str]:
 
 
 def update_command(command: click.Command, context: list[str]) -> None:
+    from rich_click.utils import OptionGroupDict
+
     if func := getattr(command, "__func__", None):
         meta: _meta.FeudMeta | None = getattr(func, "__feud__", None)
         if meta and meta.sections:
@@ -92,9 +85,9 @@ def update_command(command: click.Command, context: list[str]) -> None:
             for option, section_name in options.items():
                 opts: list[str] = get_opts(option, command=command)
                 sections[section_name].append(opts[0])
-            option_groups: dict[str, list[OptionGroup]] = {
+            option_groups: dict[str, list[OptionGroupDict]] = {
                 " ".join(context): [
-                    OptionGroup(name=name, options=options)
+                    OptionGroupDict(name=name, options=options)
                     for name, options in sections.items()
                 ]
             }
