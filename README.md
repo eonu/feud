@@ -809,6 +809,25 @@ Without Rich-formatted output
 </tr>
 </table>
 
+### Integrations
+
+As Feud commands and groups compile to Click objects under the hood, 
+this opens up the ability to interact with all integrations that Click
+supports.
+
+- To convert a `feud.Group` into a `click.Group` object, simply call the
+`.compile()` method defined on `feud.Group`.
+- The `@feud.command` decorator converts a function into a `click.Command`.
+
+Once you have a `click.Command` or `click.Group` produced by Feud,
+it is possible to use it with Click extensions such as:
+
+- [`click-man`](https://github.com/click-contrib/click-man): Automate generation of manual pages for Click applications.
+- [`click-completion`](https://github.com/click-contrib/click-completion): Add or enhance `bash`, `fish`, `zsh` and `powershell` completion in Click.
+- [`sphinx-click`](https://github.com/click-contrib/sphinx-click): A Sphinx plugin to automatically document Click-based applications.
+
+For more examples of Click extensions, see the [`click-contrib`](https://github.com/click-contrib/) project.
+
 ## Build status
 
 | `master`                                                                                                                                                                                       | `dev`                                                                                                                                                                                            |
