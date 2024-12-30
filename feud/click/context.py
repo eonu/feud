@@ -34,7 +34,7 @@ class Context(click.Context):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls: type[Context], _source: t.Any, _handler: t.Any
+        cls, _source: t.Any, _handler: t.Any
     ) -> core_schema.CoreSchema:
         """Override pydantic schema to validate as typing.Any."""
         return core_schema.any_schema()

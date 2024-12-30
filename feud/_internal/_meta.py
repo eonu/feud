@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TypedDict
 
-__all__ = ["NameDict", "FeudMeta"]
+__all__ = ["FeudMeta", "NameDict"]
 
 
 class NameDict(TypedDict):

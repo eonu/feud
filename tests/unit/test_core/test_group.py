@@ -1152,7 +1152,7 @@ Options:
 
 
 def test_main_help_both_docstrings_with_override(
-    capsys: pytest.CaptureFixture
+    capsys: pytest.CaptureFixture,
 ) -> None:
     class Test(feud.Group, help="Overridden."):
         """This is a class-level docstring."""
