@@ -39,10 +39,10 @@ if version >= packaging.version.parse("2.0.3"):
             "FutureDate",
             "FutureDatetime",
             "HttpUrl",
-            "ImportString",
             "IPvAnyAddress",
             "IPvAnyInterface",
             "IPvAnyNetwork",
+            "ImportString",
             "Json",
             "KafkaDsn",
             "MariaDBDsn",
@@ -96,7 +96,7 @@ if version >= packaging.version.parse("2.7.0"):
     __all__.extend(["ClickHouseDsn"])
 
 if version >= packaging.version.parse("2.7.1"):
-    __all__.extend(["FtpUrl", "WebsocketUrl", "AnyWebsocketUrl"])
+    __all__.extend(["AnyWebsocketUrl", "FtpUrl", "WebsocketUrl"])
 
 if version >= packaging.version.parse("2.9.0"):
     __all__.extend(["SnowflakeDsn"])

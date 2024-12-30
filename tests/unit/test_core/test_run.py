@@ -17,7 +17,7 @@ from feud import typing as t
 from feud._internal import _docstring
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-from fixtures import module  # noqa: E402
+from fixtures import module
 
 overrides: dict[str, t.Any] = {
     "name": "overridden",

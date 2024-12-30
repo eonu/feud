@@ -85,7 +85,7 @@ tox = "4.11.3"
 pre-commit = ">=3"
 
 [tool.poetry.group.lint.dependencies]
-ruff = "0.1.3"
+ruff = "0.8.4"
 pydoclint = "0.3.8"
 
 [tool.poetry.group.docs.dependencies]
@@ -105,8 +105,8 @@ pytest-cov = "^4.1.0"
 mypy = "1.14.0"
 
 [tool.ruff]
-required-version = "0.1.3"
-select = [
+required-version = "0.8.4"
+lint.select = [
     "F",    # pyflakes: https://pypi.org/project/pyflakes/
     "E",    # pycodestyle (error): https://pypi.org/project/pycodestyle/
     "W",    # pycodestyle (warning): https://pypi.org/project/pycodestyle/
@@ -149,7 +149,7 @@ select = [
     "PERF", # perflint: https://pypi.org/project/perflint/
     "RUF",  # ruff
 ]
-ignore = [
+lint.ignore = [
     "ANN401",  # https://beta.ruff.rs/docs/rules/any-type/
     "B905",    # https://beta.ruff.rs/docs/rules/zip-without-explicit-strict/
     "TD003",   # https://beta.ruff.rs/docs/rules/missing-todo-link/
@@ -161,18 +161,18 @@ ignore = [
     "COM812",  # ruff format conflict
     "ISC001",  # ruff format conflict
     "ERA001",  # Found commented-out code
+    "UP006",   # Use deque/frozenset/set/list/tuple instead of Deque/FrozenSet/Set/List/Tuple
 ]
-ignore-init-module-imports = true # allow unused imports in __init__.py
 line-length = 79
-typing-modules = ["feud.typing"]
+lint.typing-modules = ["feud.typing"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
-[tool.ruff.flake8-annotations]
+[tool.ruff.lint.flake8-annotations]
 allow-star-arg-any = true
 
-[tool.ruff.extend-per-file-ignores]
+[tool.ruff.lint.extend-per-file-ignores]
 "__init__.py" = ["PLC0414", "F403", "F401", "F405"]
 "feud/typing/*.py" = ["PLC0414", "F403", "F401"]
 "tests/**/*.py" = ["D100", "D100", "D101", "D102", "D103", "D104"]          # temporary

@@ -51,7 +51,7 @@ class Config(pyd.BaseModel):
     #: (as of ``rich-click`` v1.7.2).
     rich_click_kwargs: dict[str, t.Any] = {"show_arguments": True}
 
-    def __init__(self: t.Self, **kwargs: t.Any) -> None:
+    def __init__(self, **kwargs: t.Any) -> None:
         caller: str | None = None
         frame = inspect.currentframe()
         if frame and frame.f_back:
@@ -65,9 +65,7 @@ class Config(pyd.BaseModel):
         super().__init__(**kwargs)
 
     @classmethod
-    def _create(
-        cls: type[Config], base: Config | None = None, **kwargs: t.Any
-    ) -> Config:
+    def _create(cls, base: Config | None = None, **kwargs: t.Any) -> Config:
         config_kwargs = base.model_dump(exclude_unset=True) if base else {}
         for field in cls.model_fields:
             value: t.Any | None = kwargs.get(field)

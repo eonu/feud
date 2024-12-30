@@ -94,7 +94,7 @@ def test_get_description_function_multi_line_doc_with_f(mode: Mode) -> None:
 
 @pytest.mark.parametrize("mode", list(Mode))
 def test_get_description_function_single_line_doc_with_params(
-    mode: Mode
+    mode: Mode,
 ) -> None:
     def f(*, opt: int) -> None:
         """Line 1.
@@ -120,7 +120,7 @@ def test_get_description_function_single_line_doc_with_params(
 
 @pytest.mark.parametrize("mode", list(Mode))
 def test_get_description_function_multi_line_doc_with_params(
-    mode: Mode
+    mode: Mode,
 ) -> None:
     def f(*, opt: int) -> None:
         """Line 1.

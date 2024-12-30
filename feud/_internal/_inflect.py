@@ -6,7 +6,7 @@
 import re
 import unicodedata
 
-__all__ = ["sanitize", "optionize", "negate_option", "negate_alias"]
+__all__ = ["negate_alias", "negate_option", "optionize", "sanitize"]
 
 
 def transliterate(string: str) -> str:
@@ -90,7 +90,7 @@ def parameterize(string: str, separator: str = "-") -> str:
     if separator:
         re_sep = re.escape(separator)
         # No more than one of the separator in a row.
-        string = re.sub(r"%s{2,}" % re_sep, separator, string)
+        string = re.sub(rf"{re_sep}{{2,}}", separator, string)
         # Remove leading/trailing separator.
         string = re.sub(rf"(?i)^{re_sep}|{re_sep}$", "", string)
 

@@ -164,7 +164,7 @@ AnnotatedArgDict = t.Dict[int, t.Any]
 
 class DateTime(click.DateTime):
     def __init__(
-        self: t.Self,
+        self,
         *args: t.Any,
         datetime_type: type,
         show_default_format: bool,
@@ -176,7 +176,7 @@ class DateTime(click.DateTime):
         super().__init__(*args, **kwargs)
 
     def get_metavar(
-        self: t.Self,
+        self,
         param: click.Parameter,  # noqa: ARG002
     ) -> str:
         return (
@@ -186,7 +186,7 @@ class DateTime(click.DateTime):
         )
 
     def _try_to_convert_date(
-        self: t.Self,
+        self,
         value: t.Any,
         format: str,  # noqa: A002, ARG002
     ) -> t.Any | None:
@@ -198,7 +198,7 @@ class DateTime(click.DateTime):
 
 class Union(click.ParamType):
     def __init__(
-        self: t.Self,
+        self,
         *args: t.Any,
         types: list[click.ParamType],
         **kwargs: t.Any,
@@ -215,7 +215,7 @@ class Union(click.ParamType):
             return click_type.get_metavar(param) or click_type.name.upper()
         return None
 
-    def get_metavar(self: t.Self, param: click.Parameter) -> str:
+    def get_metavar(self, param: click.Parameter) -> str:
         metavars = [
             metavar
             for click_type in self.types
@@ -453,7 +453,7 @@ def resolve_annotated(
     if parent_args is None:
         return None
 
-    arg_list = list(parent_args.values())  # noqa: F841
+    arg_list = list(parent_args.values())
     two_field_subtype = t.Annotated[*arg_list[:2]]  # type: ignore[valid-type]
 
     # integer types
