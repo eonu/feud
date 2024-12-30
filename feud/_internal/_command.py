@@ -28,7 +28,7 @@ class ParameterType(enum.Enum):
 
 @dataclasses.dataclass
 class ParameterSpec:
-    type: ParameterType | None = None  # noqa: A003
+    type: ParameterType | None = None
     hint: type | None = None  # type: ignore[valid-type]
     args: t.Sequence[str] = dataclasses.field(default_factory=list)
     kwargs: dict[str, t.Any] = dataclasses.field(default_factory=dict)
@@ -50,7 +50,7 @@ class CommandState:
     description: str | None = None
 
     def decorate(  # noqa: PLR0915
-        self: t.Self,
+        self,
         func: t.Callable,
     ) -> click.Command | click.Group:
         meta_vars: dict[str, str] = {}
@@ -160,7 +160,7 @@ class CommandState:
 
         return compiled
 
-    def get_meta_var(self: t.Self, param: click.Parameter) -> str | None:
+    def get_meta_var(self, param: click.Parameter) -> str | None:
         match param:
             case click.Argument():
                 return param.make_metavar()

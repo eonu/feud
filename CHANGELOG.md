@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.1](https://github.com/eonu/feud/releases/tag/v1.0.1) - 2024-12-30
+
+### Bug Fixes
+
+- support annotated `pydantic.Field` range types ([#177](https://github.com/eonu/feud/issues/177))
+
+### Styling
+
+- update `ruff` to v0.8.4 and remove `self`/`cls` annotations ([#176](https://github.com/eonu/feud/issues/176))
+
 ## [v1.0.0](https://github.com/eonu/feud/releases/tag/v1.0.0) - 2024-12-29
 
 ### Bug Fixes

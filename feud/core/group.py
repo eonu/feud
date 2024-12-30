@@ -146,11 +146,7 @@ class Group(metaclass=_metaclass.GroupBase):
         return cls.__compile__()(args, **kwargs)
 
     @classmethod
-    def __compile__(
-        cls: type[Group],
-        *,
-        parent: click.Group | None = None,
-    ) -> click.Group:
+    def __compile__(cls, *, parent: click.Group | None = None) -> click.Group:
         """Compile the group into a :py:class:`click.Group`.
 
         .. warning::
@@ -203,7 +199,7 @@ class Group(metaclass=_metaclass.GroupBase):
         pass
 
     @classmethod
-    def __sections__(cls: type[Group]) -> list[feud.Section]:
+    def __sections__(cls) -> list[feud.Section]:
         """Sections to partition commands and subgroups into.
 
         These sections are displayed on the group help page if ``rich-click``
@@ -252,7 +248,7 @@ class Group(metaclass=_metaclass.GroupBase):
         ]
 
     @classmethod
-    def name(cls: type[Group]) -> str:
+    def name(cls) -> str:
         """Return the name of the group.
 
         Returns
@@ -271,7 +267,7 @@ class Group(metaclass=_metaclass.GroupBase):
         return cls.__feud_click_kwargs__["name"]
 
     @classmethod
-    def compile(cls: type[Group]) -> click.Group:  # noqa: A003
+    def compile(cls) -> click.Group:
         """Compile the group into a :py:class:`click.Group`.
 
         Returns
@@ -292,7 +288,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
     @classmethod
     def commands(
-        cls: type[Group], *, name: bool = False
+        cls, *, name: bool = False
     ) -> list[click.Command] | list[str]:
         """Commands defined in the group.
 
@@ -325,9 +321,7 @@ class Group(metaclass=_metaclass.GroupBase):
         return commands
 
     @classmethod
-    def subgroups(
-        cls: type[Group], *, name: bool = False
-    ) -> list[type[Group]] | list[str]:
+    def subgroups(cls, *, name: bool = False) -> list[type[Group]] | list[str]:
         """Registered subgroups.
 
         Parameters
@@ -363,7 +357,7 @@ class Group(metaclass=_metaclass.GroupBase):
         return list(cls.__feud_subgroups__)
 
     @classmethod
-    def descendants(cls: type[Group]) -> OrderedDict[type[Group], OrderedDict]:
+    def descendants(cls) -> OrderedDict[type[Group], OrderedDict]:
         """Directed acyclic graph of subgroup descendants.
 
         Returns
@@ -405,17 +399,15 @@ class Group(metaclass=_metaclass.GroupBase):
         )
 
     @classmethod
-    def _descendants(cls: type[Group]) -> t.Iterator[type[Group]]:
+    def _descendants(cls) -> t.Iterator[type[Group]]:
         for group in cls.__feud_subgroups__:
             yield group
             yield from group._descendants()  # noqa: SLF001
 
     @classmethod
-    def _check_descendants(
-        cls: type[Group], __target: type[Group] | None = None, /
-    ) -> None:
-        group: type[Group] = __target or cls
-        if cls is __target:
+    def _check_descendants(cls, target: type[Group] | None = None, /) -> None:
+        group: type[Group] = target or cls
+        if cls is target:
             msg = f"Group {cls.__name__!r} cannot be a subgroup of itself."
             raise feud.RegistrationError(msg)
         if cls in group._descendants():  # noqa: SLF001
@@ -427,7 +419,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
     @classmethod
     def register(
-        cls: type[Group],
+        cls,
         sub: type[Group] | list[type[Group]],
         /,
     ) -> None:
@@ -506,7 +498,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
     @classmethod
     def deregister(
-        cls: type[Group],
+        cls,
         sub: type[Group] | list[type[Group]] | None = None,
         /,
     ) -> None:
@@ -596,7 +588,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
     @classmethod
     def from_dict(
-        cls: type[Group],
+        cls,
         obj: dict[str, click.Command | type[Group] | t.Callable],
         /,
         **kwargs: t.Any,
@@ -684,7 +676,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
     @classmethod
     def from_iter(
-        cls: type[Group],
+        cls,
         obj: t.Iterable[click.Command | type[Group] | t.Callable],
         /,
         **kwargs: t.Any,
@@ -752,7 +744,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
     @classmethod
     def from_module(
-        cls: type[Group],
+        cls,
         obj: types.ModuleType,
         /,
         **kwargs: t.Any,
@@ -841,7 +833,7 @@ class Group(metaclass=_metaclass.GroupBase):
 
     @classmethod
     def add_commands(
-        cls: type[Group],
+        cls,
         commands: list[t.Callable | click.Command] | None = None,
         /,
         **kwargs: t.Callable | click.Command,

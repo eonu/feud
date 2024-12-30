@@ -164,7 +164,7 @@ AnnotatedArgDict = t.Dict[int, t.Any]
 
 class DateTime(click.DateTime):
     def __init__(
-        self: t.Self,
+        self,
         *args: t.Any,
         datetime_type: type,
         show_default_format: bool,
@@ -176,7 +176,7 @@ class DateTime(click.DateTime):
         super().__init__(*args, **kwargs)
 
     def get_metavar(
-        self: t.Self,
+        self,
         param: click.Parameter,  # noqa: ARG002
     ) -> str:
         return (
@@ -186,7 +186,7 @@ class DateTime(click.DateTime):
         )
 
     def _try_to_convert_date(
-        self: t.Self,
+        self,
         value: t.Any,
         format: str,  # noqa: A002, ARG002
     ) -> t.Any | None:
@@ -198,7 +198,7 @@ class DateTime(click.DateTime):
 
 class Union(click.ParamType):
     def __init__(
-        self: t.Self,
+        self,
         *args: t.Any,
         types: list[click.ParamType],
         **kwargs: t.Any,
@@ -215,7 +215,7 @@ class Union(click.ParamType):
             return click_type.get_metavar(param) or click_type.name.upper()
         return None
 
-    def get_metavar(self: t.Self, param: click.Parameter) -> str:
+    def get_metavar(self, param: click.Parameter) -> str:
         metavars = [
             metavar
             for click_type in self.types
@@ -453,9 +453,8 @@ def resolve_annotated(
     if parent_args is None:
         return None
 
-    arg_list = list(parent_args.values())  # noqa: F841
+    arg_list = list(parent_args.values())
     two_field_subtype = t.Annotated[*arg_list[:2]]  # type: ignore[valid-type]
-
     # integer types
     if two_field_subtype == pyd.PositiveInt:
         return click.IntRange(min=0, min_open=True)
@@ -476,13 +475,12 @@ def resolve_annotated(
     if two_field_subtype == pyd.NonPositiveFloat:
         return click.FloatRange(max=0, max_open=False)
 
-    # int / float range types
-    if is_pyd_conint(base_type, parent_args):
-        return get_click_range_type(parent_args, range_type=click.IntRange)
-    if is_pyd_confloat(base_type, parent_args):
-        return get_click_range_type(parent_args, range_type=click.FloatRange)
-    if is_pyd_condecimal(base_type, parent_args):
-        return get_click_range_type(parent_args, range_type=click.FloatRange)
+    # int / float / decimal range types
+    if interval := get_interval(parent_args):
+        if base_type is int:
+            return get_click_range_type(interval, click.IntRange)
+        if base_type in (float, decimal.Decimal):
+            return get_click_range_type(interval, click.FloatRange)
 
     # file / directory types
     if two_field_subtype == pyd.FilePath:
@@ -495,39 +493,35 @@ def resolve_annotated(
     return None
 
 
-def is_pyd_conint(base_type: t.Any, parent_args: AnnotatedArgDict) -> bool:
-    return base_type is int and isinstance(parent_args.get(2), ta.Interval)
-
-
-def is_pyd_confloat(base_type: t.Any, parent_args: AnnotatedArgDict) -> bool:
-    return base_type is float and isinstance(parent_args.get(2), ta.Interval)
-
-
-def is_pyd_condecimal(base_type: t.Any, parent_args: AnnotatedArgDict) -> bool:
-    return base_type is decimal.Decimal and isinstance(
-        parent_args.get(2), ta.Interval
-    )
-
-
-def is_namedtuple(hint: t.Any) -> bool:
-    if hint is None:
-        return False
-    if not inspect.isclass(hint):
-        return False
-    return issubclass(hint, tuple) and hasattr(hint, "_fields")
+def get_interval(parent_args: AnnotatedArgDict) -> ta.Interval | None:
+    for v in parent_args.values():
+        if isinstance(v, ta.Interval):
+            return v
+        if isinstance(v, pyd.fields.FieldInfo):
+            interval = {bound: None for bound in ("ge", "gt", "le", "lt")}
+            for meta in v.metadata:
+                match meta:
+                    case ta.Ge():
+                        interval["ge"] = meta.ge  # type: ignore[assignment]
+                    case ta.Gt():
+                        interval["gt"] = meta.gt  # type: ignore[assignment]
+                    case ta.Le():
+                        interval["le"] = meta.le  # type: ignore[assignment]
+                    case ta.Lt():
+                        interval["lt"] = meta.lt  # type: ignore[assignment]
+            if any(interval.values()):
+                return ta.Interval(**interval)
+    return None
 
 
 def get_click_range_type(
-    args: AnnotatedArgDict,
-    *,
+    interval: ta.Interval,
     range_type: type[click.IntRange] | type[click.FloatRange],
 ) -> click.IntRange | click.FloatRange | None:
     min_: ta.SupportsGe | ta.SupportsGt | None = None
     max_: ta.SupportsLe | ta.SupportsLt | None = None
 
     min_open, max_open = False, False
-
-    interval: ta.Interval | None = args.get(2)
     if interval is None:
         return None
     if interval.gt is not None:
@@ -549,3 +543,11 @@ def get_click_range_type(
         min_open=min_open,
         max_open=max_open,
     )
+
+
+def is_namedtuple(hint: t.Any) -> bool:
+    if hint is None:
+        return False
+    if not inspect.isclass(hint):
+        return False
+    return issubclass(hint, tuple) and hasattr(hint, "_fields")

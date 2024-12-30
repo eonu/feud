@@ -176,7 +176,26 @@ from feud.config import Config
             and x.max_open is True,
         ),
         (
+            t.Annotated[
+                t.Decimal,
+                pyd.Field(lt=t.Decimal("3.14"), ge=t.Decimal("0.01")),
+            ],
+            lambda x: isinstance(x, click.FloatRange)
+            and x.min == t.Decimal("0.01")
+            and x.min_open is False
+            and x.max == t.Decimal("3.14")
+            and x.max_open is True,
+        ),
+        (
             t.confloat(lt=3.14, ge=0.01),
+            lambda x: isinstance(x, click.FloatRange)
+            and x.min == 0.01
+            and x.min_open is False
+            and x.max == 3.14
+            and x.max_open is True,
+        ),
+        (
+            t.Annotated[float, pyd.Field(lt=3.14, ge=0.01)],
             lambda x: isinstance(x, click.FloatRange)
             and x.min == 0.01
             and x.min_open is False
@@ -186,6 +205,14 @@ from feud.config import Config
         (t.confrozenset(int, max_length=1), click.INT),
         (
             t.conint(lt=3, ge=0),
+            lambda x: isinstance(x, click.IntRange)
+            and x.min == 0
+            and x.min_open is False
+            and x.max == 3
+            and x.max_open is True,
+        ),
+        (
+            t.Annotated[int, pyd.Field(lt=3, ge=0)],
             lambda x: isinstance(x, click.IntRange)
             and x.min == 0
             and x.min_open is False
